@@ -1,0 +1,15 @@
+{
+	"name": "lsmsa-sgo-website",
+	"dependencies": {
+		"express": "*",
+		"jade": "*",
+		"passport": "*",
+		"passport-google-oauth": "*",
+		"mongoose": "*",
+		"connect-flash": "*",
+		"morgan": "*",
+		"body-parser": "*",
+		"cookie-parser": "*",
+		"express-session": "*"
+	}
+}

@@ -1,0 +1,5 @@
+mixin list(list)
+	ul
+		each val in list
+			li(class!=attributes.class)
+				a(href= val.link)= val.name
