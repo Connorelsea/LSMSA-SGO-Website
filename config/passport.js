@@ -20,7 +20,9 @@ module.exports = function(passport) {
 	passport.use(new GoogleStrategy({
 		clientID     : auth.googleAuth.clientID,
 		clientSecret : auth.googleAuth.clientSecret,
-		callbackURL  : auth.googleAuth.callbackURL
+		callbackURL  : auth.googleAuth.callbackURL,
+		realm        : "http://www.lsmsa.edu/",
+		hd           : "lsmsa.edu"
 	},
 	function(token, refreshToken, profile, done) {
 
@@ -40,23 +42,17 @@ module.exports = function(passport) {
 
 				else {
 
-					if ( profile.emails[0].value.indexOf("lsmsa.edu") > -1 ) {
+					var newUser = new User()
 
-						var newUser = new User()
+					newUser.google.id    = profile.id
+					newUser.google.token = token
+					newUser.google.name  = profile.displayName
+					newUser.google.email = profile.emails[0].value
 
-						newUser.google.id    = profile.id
-						newUser.google.token = token
-						newUser.google.name  = profile.displayName
-						newUser.google.email = profile.emails[0].value
-
-						newUser.save(function(err) {
-							if (err) throw err
-							return done(null, newUser)
-						})
-					}
-					else {
-						done(new Error("Invalid Domain. Must use LSMSA email address."))
-					}
+					newUser.save(function(err) {
+						if (err) throw err
+						return done(null, newUser)
+					})
 				}
 
 			}

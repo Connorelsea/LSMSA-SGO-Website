@@ -12,12 +12,16 @@ var mainNavigation = [
 		link : "/issues"
 	},
 	{
-		name : "News"
+		name : "News",
 		link : "/news"
 	},
 	{
-		name : "Events"
+		name : "Events",
 		link : "/events"
+	},
+	{
+		name : "Login",
+		link : "/login"
 	}
 ]
 

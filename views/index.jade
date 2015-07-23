@@ -2,7 +2,12 @@ doctype html
 html(lang="en")
 	head
 		title= title
+		include mixins.jade
 	body
 		div.bar#barOne
 			header
-				img(src= "images/logo.png")
+				div.image
+					img(src= "images/logo.png")
+				div.nav
+					nav
+						+list(mainNavigation)

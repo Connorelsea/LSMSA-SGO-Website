@@ -5,11 +5,12 @@ var express      = require("express"),
     morgan       = require("morgan"),
     cookieParser = require("cookie-parser"),
     bodyParser   = require("body-parser"),
-    session      = require("express-session")
+    session      = require("express-session"),
+    sass         = require("node-sass")
+    sassMiddle   = require("node-sass-middleware")
 
 // Database Configuration and Setup
-
-var databaseConfig = require("./config/database.js")
+var databaseConfig = require("./config/database.js").databaseConfig
 mongoose.connect(databaseConfig.url)
 
 // Express Application Setup
@@ -23,6 +24,12 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.set("view engine", "jade")
+
+app.use(sassMiddle({
+	src   : __dirname + "/sass",
+	dest  : __dirname + "/public/css",
+	debug : true
+}))
 
 // Passport and Session Setup
 
