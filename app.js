@@ -38,12 +38,28 @@ app.use(passport.initialize())
 app.use(passport.session())
 app.use(flash())
 
+
 require("./config/passport.js")(passport)
 
 // Setup Routes
 
 require("./routes/index.js")(app, passport)
 require("./routes/auth.js") (app, passport)
+
+// Error Handling
+
+app.use(function(err, req, res, next) {
+
+	console.log("ERROR HAPPENED HERE")
+
+	if(err)
+		res.redirect("/failure")
+
+    if (err.code === 500) {
+        res.redirect("/failure")
+    }
+
+});
 
 // Launch Application
 

@@ -20,9 +20,7 @@ module.exports = function(passport) {
 	passport.use(new GoogleStrategy({
 		clientID     : auth.googleAuth.clientID,
 		clientSecret : auth.googleAuth.clientSecret,
-		callbackURL  : auth.googleAuth.callbackURL,
-		realm        : "http://www.lsmsa.edu/",
-		hd           : "lsmsa.edu"
+		callbackURL  : auth.googleAuth.callbackURL
 	},
 	function(token, refreshToken, profile, done) {
 
@@ -32,32 +30,38 @@ module.exports = function(passport) {
 			},
 			function(err, user) {
 
-				if (err) {
-					return done(err)
-				}
-
-				if (user) {
-					return done(null, user)
-				}
-
+				if (err) return done(err)
+				if (user) return done(null, user)
 				else {
 
-					var newUser = new User()
+					var id    = profile.id,
+					    token = token,
+					    name  = profile.displayName,
+					    email = profile.emails[0].value
 
-					newUser.google.id    = profile.id
-					newUser.google.token = token
-					newUser.google.name  = profile.displayName
-					newUser.google.email = profile.emails[0].value
+					/* If their email is not from LSMSA, do not allow */
+					if (email.indexOf("lsmsa.edu") > -1) {
 
-					newUser.save(function(err) {
-						if (err) throw err
-						return done(null, newUser)
-					})
+						var newUser = new User()
+
+						newUser.google.id    = id
+						newUser.google.token = token
+						newUser.google.name  = name
+						newUser.google.email = email
+
+						newUser.save(function(err) {
+							if (err) throw err
+							return done(null, newUser)
+						})
+
+					} else {
+						done(new Error("Invalid_Email"));
+					}
+
 				}
 
 			}
 		)
 
-	}
-	))
+	}))
 }

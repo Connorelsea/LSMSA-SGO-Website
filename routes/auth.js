@@ -1,5 +1,7 @@
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
+var info = require("../info/index.js")
+
 module.exports = function(app, passport) {
 
 	app.get("/profile", function(req, res) {
@@ -8,9 +10,16 @@ module.exports = function(app, passport) {
 		})
 	})
 
+	app.get("/failure", function(req, res) {
+		res.render("failure.jade", {
+			error_loginFailed: info.error_loginFailed
+		})
+	})
+
 	app.get("/logout", function(req, res) {
-		req.session.destroy()
 		req.logout()
+		req.session.destroy()
+		res.clearCookie("connect.sid")
 		res.redirect("/")
 	})
 
@@ -24,7 +33,10 @@ module.exports = function(app, passport) {
 		"/auth/google",
 		passport.authenticate(
 			"google",
-			{ scope : ["profile", "email"] }
+			{
+				scope  : ["profile", "email"],
+				prompt : "select_account"
+			}
 		)
 	)
 
