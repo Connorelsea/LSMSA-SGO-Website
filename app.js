@@ -5,13 +5,7 @@ var express      = require("express"),
     morgan       = require("morgan"),
     cookieParser = require("cookie-parser"),
     bodyParser   = require("body-parser"),
-    session      = require("express-session"),
-    sass         = require("node-sass")
-    sassMiddle   = require("node-sass-middleware")
-
-// Database Configuration and Setup
-var databaseConfig = require("./config/database.js").databaseConfig
-mongoose.connect(databaseConfig.url)
+    session      = require("express-session")
 
 // Express Application Setup
 
@@ -25,12 +19,6 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 app.set("view engine", "jade")
 
-app.use(sassMiddle({
-	src   : __dirname + "/sass",
-	dest  : __dirname + "/public/css",
-	debug : true
-}))
-
 // Passport and Session Setup
 
 app.use(session({ secret: " " }))
@@ -38,8 +26,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 app.use(flash())
 
-
-require("./config/passport.js")(passport)
+require("./config/passportSQL.js")(passport)
 
 // Setup Routes
 
@@ -49,11 +36,6 @@ require("./routes/auth.js") (app, passport)
 // Error Handling
 
 app.use(function(err, req, res, next) {
-
-	console.log("ERROR HAPPENED HERE")
-
-	if(err)
-		res.redirect("/failure")
 
     if (err.code === 500) {
         res.redirect("/failure")

@@ -1,3 +1,5 @@
 node_modules
 config/database.js
 config/auth.js
+.idea
+.idea/
