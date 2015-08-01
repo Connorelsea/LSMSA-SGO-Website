@@ -4,10 +4,19 @@ html(lang="en")
 		title= title
 		include mixins.jade
 	body
-		div.bar#barOne
-			header
-				div.image
-					img(src= "images/logo.png")
-				div.nav
-					nav
-						+list(mainNavigation)
+		div.bar
+			div.innerBar
+				header
+					div.image
+						img(src= "images/logo.png")
+					div.nav
+						nav
+							+list(mainNavigation)
+		div.bar
+			div.innerBar
+				div.action
+					div.header
+						h1 Make a difference
+					div.sub
+						a(href="#issue").primary Issue Board
+						a(href="#about").secondary About

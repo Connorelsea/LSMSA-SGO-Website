@@ -21,12 +21,18 @@ app.set("view engine", "jade")
 
 // Passport and Session Setup
 
-app.use(session({ secret: " " }))
+require("./config/passportSQL.js")(passport)
+
+var info = require("./config/auth")
+
+app.use(session({
+	secret : info.cookie.secret,
+	maxAge : 360 * 5
+}))
+
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(flash())
-
-require("./config/passportSQL.js")(passport)
 
 // Setup Routes
 

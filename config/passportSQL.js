@@ -14,15 +14,26 @@ var connection = mysql.createConnection({
 module.exports = function(passport) {
 
 	passport.serializeUser(function(user, done) {
+
         console.log("PASSPORT.seralizeUser")
-		done(null, user.id)
+        console.log("PASSPORT USER ID = " + user.googleID)
+
+		done(null, user.googleID)
 	})
 
 	passport.deserializeUser(function(id, done) {
+
         console.log("PASSPORT.deseralizeUser")
-		connection.query("SELECT * FROM users WHERE id = ?", [id], function(err, rows) {
-			done(err, rows[0])
-		})
+        console.log("PASSPORT ID = " + id)
+
+		connection.query(
+			"SELECT * FROM users WHERE googleID = ?",
+			[id],
+			function(err, rows) {
+				console.log("ERROR = " + err)
+				done(err, rows[0])
+			}
+		)
 
 	})
 
@@ -33,39 +44,53 @@ module.exports = function(passport) {
 	},
 	function(token, refreshToken, profile, done) {
 
-		connection.query("SELECT * FROM users WHERE id = ? ", [profile.id], function(err, rows) {
+		console.log("PASSPORT.USE(new GoogleStrategy)")
 
-			if (err) {
-                console.log(err);
-                return done(err)
-            }
+		connection.query(
+			"SELECT * FROM users WHERE googleID = ? ",
+			[profile.id],
+			function(err, rows) {
 
-			// User not found, create new user
-			if (!rows.length) {
-                console.log("ROWS ! LENGTH HERE HERE HERE HERE")
+				if (err) {
+	                console.log(err);
+	                return done(err)
+	            }
 
-				var user = {
-					id    : profile.id,
-					token : token,
-					name  : profile.displayName,
-					email : profile.email
-				}
+				// User not found, create new user
+				if (!rows.length) {
+					console.log("PASSPORT SQL: User not found, creating new user.")
 
-				var insertQuery = "INSERT INTO users (id, token, name, email) values (?, ?, ?, ?)"
-
-				connection.query(
-					insertQuery,
-					[user.id, user.token, user.name, user.email], 
-					function(err, rows) {
-						user.sqlid = rows.insertId
-						return done(null, user)
+					var user = {
+						id    : profile.id,
+						token : token,
+						name  : profile.displayName,
+						email : profile.email
 					}
-				)
 
+					console.log("PASSPORT SQL: Attempting to insert user")
+
+					var insertQuery = "INSERT INTO users (googleID, token, name, email) values (?, ?, ?, ?)"
+
+					connection.query(
+						insertQuery,
+						[user.id, user.token, user.name, user.email], 
+						function(err, rows) {
+
+							if (err) {
+								console.log("PASSPORT SQL: Error during add user query!")
+							}
+
+							return done(null, user)
+						}
+					)
+
+				} // End of if(!rows.length)
+
+				console.log("HERE = " + rows[0])
+
+				return done(null, rows[0])
 			}
-
-			return done(null, rows[0])
-		})
+		)
 
 	}))
 }

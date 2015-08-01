@@ -3,19 +3,22 @@ var dbconfig = require('../config/database');
 
 var connection = mysql.createConnection(dbconfig.connection);
 
-connection.query('CREATE DATABASE ' + dbconfig.database);
+console.log("Running ")
+var create = "CREATE DATABASE " + dbconfig.database + ";";
 
-connection.query('\
-CREATE TABLE `' + dbconfig.database + '`.`' + dbconfig.users_table + '` ( \
-    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT, \
-    `profileID` VARCHAR(60) NOT NULL, \
-    `token`     VARCHAR(60) NOT NULL, \
-    `name`      VARCHAR(60) NOT NULL, \
-    `email`     VARCHAR(60) NOT NULL, \
-        PRIMARY KEY (`id`), \
-    UNIQUE INDEX `id_UNIQUE` (`id` ASC), \
-)');
+var use    = "USE " + dbconfig.database + ";";
 
-console.log('Success: Database Created!')
+var query  = "CREATE TABLE " + dbconfig.tb_users + "(" +
+	         "googleID VARCHAR(60),"  +
+	         "token    VARCHAR(100)," +
+	         "name     VARCHAR(60),"  +
+	         "email    VARCHAR(60)"  +
+	         ");";
+
+connection.query(create);
+connection.query(use);
+connection.query(query);
+
+console.log('Success: Database Created!');
 
 connection.end();

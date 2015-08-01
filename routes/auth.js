@@ -24,9 +24,7 @@ module.exports = function(app, passport) {
 	})
 
 	app.get("/login", function(req, res) {
-		res.render("login.jade", {
-			error: false
-		})
+		res.redirect("/auth/google")
 	})
 
 	app.get(
@@ -45,7 +43,7 @@ module.exports = function(app, passport) {
 		passport.authenticate(
 			"google",
 			{
-				successRedirect: "/profile",
+				successRedirect: "/",
 				failureRedirect: "/failure"
 			}
 		)
