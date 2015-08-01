@@ -5,7 +5,9 @@ var express      = require("express"),
     morgan       = require("morgan"),
     cookieParser = require("cookie-parser"),
     bodyParser   = require("body-parser"),
-    session      = require("express-session")
+    session      = require("express-session"),
+    stylus       = require("stylus"),
+    nib          = require("nib")
 
 // Express Application Setup
 
@@ -17,7 +19,20 @@ app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-app.set("view engine", "jade")
+function compile(str, path) {
+  return stylus(str)
+    .set('filename', path)
+    .use(nib())
+}
+
+app.set('views', __dirname + '/views')
+app.set('view engine', 'jade')
+
+app.use(stylus.middleware(
+  { src: __dirname + '/public'
+  , compile: compile
+  }
+))
 
 // Passport and Session Setup
 

@@ -3,7 +3,10 @@ html(lang="en")
 	head
 		title= title
 		include mixins.jade
+		link(rel='stylesheet', href='/css/index.css')
+
 	body
+
 		div.bar
 			div.innerBar
 				header
@@ -12,11 +15,44 @@ html(lang="en")
 					div.nav
 						nav
 							+list(mainNavigation)
-		div.bar
-			div.innerBar
-				div.action
-					div.header
-						h1 Make a difference
-					div.sub
-						a(href="#issue").primary Issue Board
-						a(href="#about").secondary About
+
+		div.bar.accentBar
+
+		div.contentBody
+
+			div.background
+				img(src="")
+				div.primaryCover
+				div.secondaryCover
+				div.tertiaryCover
+
+			div.foreground
+
+				div.bar
+					div.innerBar
+
+						div.action
+							div.header
+								h1 Make a difference
+							div.sub
+								a(href="#issue").button.primary Issue Board
+								a(href="#about").button.secondary About
+
+				div.bar
+					div.innerBar
+
+						div.news
+
+							div.story
+								p Stuff goes in here
+
+							div.buttons
+								a(href="#").button.secondary Read More News
+								a(href="#").button.secondary Learn About Members
+								a(href="#").button.secondary View Upcoming Events
+
+
+				div.bar
+					div.innerBar
+
+						div.issues

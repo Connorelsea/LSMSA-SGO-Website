@@ -11,6 +11,8 @@
 		"body-parser": "*",
 		"cookie-parser": "*",
 		"express-session": "*",
-		"mysql": "*"
+		"mysql": "*",
+		"stylus": "*",
+		"nib": "*"
 	}
 }
