@@ -3,6 +3,7 @@ var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy
 var auth     = require("./auth")
 var database = require("./database")
 var mysql    = require("mysql")
+var color    = require("cli-color")
 
 var connection = mysql.createConnection({
 	host     : database.connection.host,
@@ -11,26 +12,37 @@ var connection = mysql.createConnection({
     database : database.database
 })
 
+function title() {
+	return color.bgWhite.redBright("Passport:");
+}
+
+function log(text) {
+	console.log(title() + " " + text);
+}
+
 module.exports = function(passport) {
 
 	passport.serializeUser(function(user, done) {
-
-        console.log("PASSPORT.seralizeUser")
-        console.log("PASSPORT USER ID = " + user.googleID)
-
+		log("Serialize: Creating session with id \"" + user.googleID  + "\"")
 		done(null, user.googleID)
 	})
 
 	passport.deserializeUser(function(id, done) {
 
-        console.log("PASSPORT.deseralizeUser")
-        console.log("PASSPORT ID = " + id)
+        log("Deserialize: Retrieving data on \"" + id + "\" from database")
 
 		connection.query(
 			"SELECT * FROM users WHERE googleID = ?",
 			[id],
 			function(err, rows) {
-				console.log("ERROR = " + err)
+
+				if(err) {
+					log("Deserialize: Fatal error during query")
+					done(err)
+				}
+
+				log("Deserialize: No errors occured during the query")
+				log("Deserialize: Returning user information")
 				done(err, rows[0])
 			}
 		)
@@ -44,7 +56,7 @@ module.exports = function(passport) {
 	},
 	function(token, refreshToken, profile, done) {
 
-		console.log("PASSPORT.USE(new GoogleStrategy)")
+		log("Middleware: Using Google Strategy")
 
 		connection.query(
 			"SELECT * FROM users WHERE googleID = ? ",
@@ -58,7 +70,7 @@ module.exports = function(passport) {
 
 				// User not found, create new user
 				if (!rows.length) {
-					console.log("PASSPORT SQL: User not found, creating new user.")
+					log("Middleware: User with id \"" + profile.id + "\" not found, attempting new user creation")
 
 					var user = {
 						id    : profile.id,
@@ -67,7 +79,7 @@ module.exports = function(passport) {
 						email : profile.email
 					}
 
-					console.log("PASSPORT SQL: Attempting to insert user")
+					log("Middleware: Attempting to insert user into database")
 
 					var insertQuery = "INSERT INTO users (googleID, token, name, email) values (?, ?, ?, ?)"
 
@@ -77,17 +89,19 @@ module.exports = function(passport) {
 						function(err, rows) {
 
 							if (err) {
-								console.log("PASSPORT SQL: Error during add user query!")
+								log("Middleware: Fatal error while inserting new user into database")
+								console.log("ERROR MESSAGE: " + err)
+								done(err)
 							}
 
+							log("Middleware: New user created successfully")
 							return done(null, user)
 						}
 					)
 
 				} // End of if(!rows.length)
 
-				console.log("HERE = " + rows[0])
-
+				log("Middleware: User with id \"" + profile.id + " already exists")
 				return done(null, rows[0])
 			}
 		)
