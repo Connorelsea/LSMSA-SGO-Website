@@ -7,7 +7,12 @@ var express      = require("express"),
     bodyParser   = require("body-parser"),
     session      = require("express-session"),
     stylus       = require("stylus"),
-    nib          = require("nib")
+    nib          = require("nib"),
+    mysql        = require("mysql")
+
+// Setup MySQL databases
+
+require("./config/createdb")
 
 // Express Application Setup
 
@@ -70,4 +75,4 @@ app.use(function(err, req, res, next) {
 var port = process.env.PORT || 3000
 app.listen(port)
 
-console.log("Application is running on port " + port)
+console.log("Application: Now running on port " + port)
