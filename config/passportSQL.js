@@ -13,11 +13,11 @@ var connection = mysql.createConnection({
 })
 
 function title() {
-	return color.bgWhite.redBright("Passport:");
+	return color.bgWhite.red("Passport:");
 }
 
 function log(text) {
-	console.log(title() + " " + text);
+	console.log(title() + " " + color.black.bgWhite(text));
 }
 
 module.exports = function(passport) {

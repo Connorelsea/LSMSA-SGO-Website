@@ -1,2 +1,46 @@
-body
-	color: black;
+/*
+ * Import Nib & CSS Reset
+ */
+ 
+@import 'nib'
+global-reset()
+
+/*
+ * Global Colors
+ */
+ 
+_grey   = #EBEBEB
+_navy   = #1B2E5D
+_yellow = #FEBB47
+_green  = #40AB6F
+
+/*
+ * Global Styling
+ */
+
+.bar
+	width 100%
+	
+.innerBar
+	margin 0 auto
+	
+	width     1000px
+	max-width 1000px
+	min-width 1000px
+	
+/*
+ * Header and Navigation
+ */
+ 
+.barMain
+	background-color _grey
+
+header div
+	display inline-block
+	
+header .image img
+	width 400px
+
+header nav ul li
+	display inline-block
+	text-decoration none
