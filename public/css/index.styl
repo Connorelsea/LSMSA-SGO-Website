@@ -35,12 +35,111 @@ _green  = #40AB6F
 .barMain
 	background-color _grey
 
-header div
-	display inline-block
+// Header (Whole)
+
+header
+	display flex
+	flex-wrap nowrap
+	justify-content space-between
+	align-items center
+
+	padding-top 50px
+	padding-bottom 50px
+
+// Image/Logo
 	
 header .image img
 	width 400px
 
+// Navigation Bar	
+
 header nav ul li
 	display inline-block
+	padding-left 15px
+	
+	font-family "Arial"
+	font-weight bold
+	font-size 1em
+
+header nav ul li a
+	padding-bottom 5px
+	
+	color _navy
 	text-decoration none
+	text-transform uppercase
+	
+header nav ul li a:hover
+	transition all .3s ease
+	color lighten(_navy, 20%)
+
+header nav ul li div
+	display none
+
+header nav ul li a:hover div
+	background: #5f6975;
+	border-radius: 0px;
+	padding: 0;
+	position: absolute;
+	display block
+	
+// Accent bar below bar main
+
+.accentBar
+	height     16px
+	min-height 16px
+	max-height 16px
+	
+	background-color lighten(_grey, 40%)
+	
+/*
+ * Action Bar and Call to Action
+ */
+
+.actionBar .action
+	padding-top    150px
+	padding-bottom 150px
+	margin 0 auto
+	width 70%
+	
+.actionBar .action div
+	text-align center
+
+// "Make a difference" title
+
+.actionBar .header
+	font-size 2.4em
+	
+.actionBar .header *
+	display inline
+
+.actionBar .header .primary
+	font-style oblique
+
+.actionBar .header .secondary
+	font-weight bold
+
+// Buttons and interaction
+
+.actionBar .sub
+	margin-top 30px
+
+.actionBar .sub .button
+	padding 10px
+	margin  10px
+	
+	width 20%
+	display inline-block
+	
+	font-family "Arial"
+	font-size 1em
+	font-weight bold
+	text-decoration none
+	text-transform uppercase
+	border 3px solid _navy
+
+.actionBar .sub .secondary
+	color _navy
+
+.actionBar .sub .primary
+	background-color _navy
+	color white

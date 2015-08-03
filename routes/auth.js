@@ -24,7 +24,14 @@ module.exports = function(app, passport) {
 	})
 
 	app.get("/login", function(req, res) {
-		res.redirect("/auth/google")
+
+		if (req.user) {
+			console.log("User " + req.user.name + " already logged in.")
+			res.redirect("/")
+		} else {
+			res.redirect("/auth/google")
+		}
+		
 	})
 
 	app.get(

@@ -9,12 +9,22 @@ html(lang="en")
 
 		div.bar.barMain
 			div.innerBar
+
 				header
+
 					div.image
 						img(src= "images/logo.png")
+
 					div.nav
 						nav
-							+list(mainNavigation)
+
+							ul
+								each val in mainNavigation
+									li
+										if val.name == 'Login'
+											+createLoginButton(user)
+										else
+											a(href= val.link)= val.name
 
 		div.bar.accentBar
 
@@ -28,17 +38,18 @@ html(lang="en")
 
 			div.foreground
 
-				div.bar
+				div.bar.actionBar
 					div.innerBar
 
 						div.action
 							div.header
-								h1 Make a difference
+								h1.primary Make a 
+								h1.secondary Difference
 							div.sub
 								a(href="#issue").button.primary Issue Board
 								a(href="#about").button.secondary About
 
-				div.bar
+				div.bar.newsBar
 					div.innerBar
 
 						div.news
