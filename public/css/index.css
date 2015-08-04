@@ -170,9 +170,8 @@ header nav ul li div {
 }
 header nav ul li a:hover div {
   background: #5f6975;
-  -webkit-border-radius: 0px;
-  border-radius: 0px;
-  padding: 0;
+  padding: 10px;
+  right: 240px;
   position: absolute;
   display: block;
 }
