@@ -1,27 +1,51 @@
 var mainNavigation = [
 	{
 		name : "Home",
-		link : "/"
+		link : "/",
+		sub  : []
 	},
 	{
-		name : "Members",
-		link : "/members"
+		name : "About",
+		link : "/members",
+		sub  : [
+			{
+				name : "About",
+				link : "/about"
+			},
+			{
+				name : "Members",
+				link : "/members"
+			}
+		]
 	},
 	{
 		name : "Issues",
-		link : "/issues"
+		link : "/issues",
+		sub  : [
+			{
+				name : "Issue Board",
+				link : "/issues"
+			},
+			{
+				name : "Submit an Issue",
+				link : "/issues/submit"
+			}
+		]
 	},
 	{
 		name : "News",
-		link : "/news"
+		link : "/news",
+		sub  : []
 	},
 	{
 		name : "Events",
-		link : "/events"
+		link : "/events",
+		sub  : []
 	},
 	{
 		name : "Login",
-		link : "/login"
+		link : "/login",
+		sub  : []
 	}
 ]
 

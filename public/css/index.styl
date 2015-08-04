@@ -51,36 +51,69 @@ header
 header .image img
 	width 400px
 
-// Navigation Bar	
+// Navigation Bar
 
 header nav ul li
 	display inline-block
-	padding-left 15px
+	position relative
+	padding 13px
 	
 	font-family "Arial"
 	font-weight bold
 	font-size 1em
+	
+	transition: all 0.2s
+	
+header nav > ul > li
+	border-top 4px solid _grey
+	
+// header nav > ul > li:hover
+// 	border-top 4px solid lighten(_navy, 30%)
 
+header nav ul li:hover
+	background-color lighten(_grey, 50%)
+	
+header nav ul li:hover a
+	color lighten(_navy, 30%)
+	
 header nav ul li a
-	padding-bottom 5px
-	
-	color _navy
 	text-decoration none
-	text-transform uppercase
 	
-header nav ul li a:hover
-	transition all .3s ease
-	color lighten(_navy, 20%)
+header nav > ul > li > a
+	color _navy
+	text-transform uppercase
 
-header nav ul li div
+header nav ul li ul
+	padding 0
+	position absolute
+	top 40px
+	min-width 200px
 	display none
+	opacity 0
+	visibility hidden
+	transition opacity 0.2s
+	
+header nav ul li .login
+	right 0px
+	
+header nav ul li .sub
+	left 0px
 
-header nav ul li a:hover div
-	background: #5f6975;
-	padding: 10px;
-	right 240px
-	position: absolute;
-	display block
+header nav ul li:hover ul
+	display: block;
+	opacity: 1;
+	visibility: visible;
+	
+header nav ul li ul li
+	background: lighten(_grey, 50%)
+	display: block; 
+	color: darken(_grey, 50%)
+	
+header nav ul li ul li:hover
+	background: lighten(_navy, 10%)
+	
+header nav ul li ul:last-child
+	border-bottom 3px solid lighten(_navy, 30%)
 	
 // Accent bar below bar main
 

@@ -21,10 +21,27 @@ html(lang="en")
 							ul
 								each val in mainNavigation
 									li
+
 										if val.name == 'Login'
-											+createLoginButton(user)
+											if user
+												a(href="#") Profile
+												ul.login
+													li= user.name
+													li= user.email
+													li
+														a(href="/logout") Logout
+											else
+												a(href="/login") Login
+
 										else
 											a(href= val.link)= val.name
+
+											if val.sub.length > 0
+												ul.sub
+													each subval in val.sub
+														li
+															a(href= subval.link)= subval.name
+
 
 		div.bar.accentBar
 
