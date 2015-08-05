@@ -51,7 +51,14 @@ header
 header .image img
 	width 400px
 
-// Navigation Bar
+/* 
+ * Navigation Bar
+ */
+ 
+// Main List Items
+// These are the list items  that  are
+// displays horizontally at the top of
+// the web page.
 
 header nav ul li
 	display inline-block
@@ -67,18 +74,34 @@ header nav ul li
 	// the sub ul lists does not work.	
 	// transition: all 0.4s
 
+// Apply font bolding on the the uppermost
+// list items
+
 header nav > ul > li
 	font-weight bold
 
+// Change the background of the uppermost
+// list items on hover
+
 header nav ul li:hover
 	background-color lighten(_grey, 50%)
-	
+
+// Inside of a list item there is an a block.
+// This removes the text decoration and  sets
+// the  color  of  all top  most and  child a
+// blocks. 
+
 header nav ul li a
 	text-decoration none
 	color _navy
 
+// Changes only the uppermost list items
+// to uppercase
+
 header nav > ul > li > a
 	text-transform uppercase
+
+// Secondary Unordered Lists
 
 header nav ul li ul
 	padding 0
@@ -89,20 +112,27 @@ header nav ul li ul
 	visibility hidden
 
 	transition: visibility 0s linear 0.5s, opacity 0.5s linear;
-	
+
+// Hover of Secondary Unordered Lists
+
 header nav ul li:hover ul
 	display block
 	opacity 1
 	visibility visible
 	
 	transition-delay:0s;
-	
+
+// Moves login secondary unordered list to point
+// in the other direction so it looks better.
+
 header nav ul li .login
 	right 0px
 	
 header nav ul li .sub
 	left 0px
 	box-shadow 0 6px 4px -2px rgba(50, 50, 50, 0.40)
+
+// Secondary List Items
 
 header nav ul li ul li
 	display block
@@ -113,15 +143,27 @@ header nav ul li ul li
 	
 	background lighten(_grey, 50%)
 	
+// Hover of Secondary List Items
+	
 header nav ul li ul li:hover
 	background-color lighten(_navy, 90%)
 
+// Child links a
 header nav ul li ul li a
+	padding-left 8px
 	transition all 0.4s
 
 header nav ul li ul li:hover a
-	padding-left 10px
-	
+	padding-left 14px
+
+// Make child a blocks expand to fill
+// their entire given space
+header nav ul li ul a
+	display block
+
+// Blue border on the bottom of the 
+// last child of the sub list.
+
 header nav ul li ul:last-child
 	border-bottom 3px solid lighten(_navy, 30%)
 	border-width 0px
@@ -129,9 +171,9 @@ header nav ul li ul:last-child
 	
 header nav ul li:hover ul:last-child
  	border-width 3px
-	
-header nav ul li ul a
-	display block
+
+// Profile description
+// Edited size and line height
 	
 header nav ul li ul li .desc
 	font-size .7em
@@ -147,8 +189,17 @@ header nav ul li ul li .desc
 		
 	header nav ul li ul li
 		display block
+
+/*
+ * End of Navigation Bar
+ */
 	
-// Accent bar below bar main
+/*
+ * Accent Bar
+ *
+ * The accent bar is a transparent grey bar that sits
+ * below the main header and is purely stylistic.
+ */
 
 .accentBar
 	height     16px
