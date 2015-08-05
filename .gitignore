@@ -3,3 +3,4 @@ config/database.js
 config/auth.js
 .idea
 .idea/
+public/css/*.css
