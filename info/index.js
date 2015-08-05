@@ -6,7 +6,7 @@ var mainNavigation = [
 	},
 	{
 		name : "About",
-		link : "/members",
+		link : "/about",
 		sub  : [
 			{
 				name : "About",
@@ -15,6 +15,10 @@ var mainNavigation = [
 			{
 				name : "Members",
 				link : "/members"
+			},
+			{
+				name : "Constitution",
+				link : "/constitution"
 			}
 		]
 	},

@@ -63,7 +63,9 @@ header nav ul li
 	font-weight normal
 	font-size 1em
 	
-	transition: all 0.4s
+	// Removed because currently animating inline
+	// the sub ul lists does not work.	
+	// transition: all 0.4s
 
 header nav > ul > li
 	font-weight bold
@@ -86,12 +88,14 @@ header nav ul li ul
 	opacity 0
 	visibility hidden
 
-	transition all 0.4s
+	transition: visibility 0s linear 0.5s, opacity 0.5s linear;
 	
 header nav ul li:hover ul
 	display block
 	opacity 1
 	visibility visible
+	
+	transition-delay:0s;
 	
 header nav ul li .login
 	right 0px
@@ -99,17 +103,24 @@ header nav ul li .login
 header nav ul li .sub
 	left 0px
 	box-shadow 0 6px 4px -2px rgba(50, 50, 50, 0.40)
-	
+
 header nav ul li ul li
+	display block
+	
 	max-width 250px
 	min-width 250px
 	width     250px
 	
 	background lighten(_grey, 50%)
-	display block
 	
 header nav ul li ul li:hover
 	background-color lighten(_navy, 90%)
+
+header nav ul li ul li a
+	transition all 0.4s
+
+header nav ul li ul li:hover a
+	padding-left 10px
 	
 header nav ul li ul:last-child
 	border-bottom 3px solid lighten(_navy, 30%)
@@ -121,6 +132,21 @@ header nav ul li:hover ul:last-child
 	
 header nav ul li ul a
 	display block
+	
+header nav ul li ul li .desc
+	font-size .7em
+	line-height 1.5em
+	
+@media screen and (max-width: 1000px)
+	header nav ul li
+		display block
+	
+	header nav ul li ul
+		visibility visible
+		display block
+		
+	header nav ul li ul li
+		display block
 	
 // Accent bar below bar main
 
