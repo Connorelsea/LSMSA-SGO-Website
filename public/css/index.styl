@@ -31,13 +31,15 @@ _green  = #40AB6F
 	
 .contentBody
 	position relative
-	top 180px
+	top 100px
 	
 /*
  * Header and Navigation
  */
  
 .barMain
+	display flex
+
 	z-index 9999
 	top 0px
 	left 0px
@@ -45,8 +47,22 @@ _green  = #40AB6F
 	background-color _grey
 	outline 12px solid alpha(_grey, 0.5)
 	
-.barMainSmaller
+	height 180px
+	
+	transition height 0.4s
+
+// The barMainSmall class is added by JQuery
+// when the user scrolls, making the  entire
+// header bar smaller
+	 
+.barMainSmall
+	height 100px
 	min-height 100px
+
+// Flex box instructions for vertical alignment
+
+.barMain .innerBar
+	align-self center
 	
 // Header (Whole)
 
@@ -56,13 +72,19 @@ header
 	justify-content space-between
 	align-items center
 
-	padding-top 50px
-	padding-bottom 50px
-
 // Image/Logo
 	
-header .image img
+header .image .img
 	width 400px
+	
+	transition width 0.4s
+
+// This class is added when the user scrolls,
+// which makes the logo in the header smaller.
+
+.imageSmall
+	width 300px !important
+	min-width 300px
 
 /* 
  * Navigation Bar

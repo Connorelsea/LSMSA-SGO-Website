@@ -1,9 +1,14 @@
 doctype html
 html(lang="en")
+
 	head
 		title= title
 		include mixins.jade
+
 		link(rel='stylesheet', href='/css/index.css')
+
+		script(src="/scripts/jquery.js")
+		script(src="/scripts/animationHeader.js")
 
 	body
 
@@ -13,11 +18,12 @@ html(lang="en")
 				header
 
 					div.image
-						img(src= "images/logo.png")
+						img(src= "images/logo.png").img
 
 					div.nav
 						nav
 							+createMainNav(list, user)
+
 
 		div.contentBody
 
