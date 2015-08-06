@@ -1,7 +1,8 @@
 /*
  * Import Nib & CSS Reset
  */
- 
+
+@import 'fonts'
 @import 'nib'
 global-reset()
 
@@ -28,13 +29,25 @@ _green  = #40AB6F
 	max-width 1000px
 	min-width 1000px
 	
+.contentBody
+	position relative
+	top 180px
+	
 /*
  * Header and Navigation
  */
  
 .barMain
+	z-index 9999
+	top 0px
+	left 0px
+	position fixed
 	background-color _grey
-
+	outline 12px solid alpha(_grey, 0.5)
+	
+.barMainSmaller
+	min-height 100px
+	
 // Header (Whole)
 
 header
@@ -53,6 +66,11 @@ header .image img
 
 /* 
  * Navigation Bar
+ *
+ * This section includes all of  the  code  for
+ * the navigation bar, how it responds to media
+ * query changes, its animations, and things of
+ * that nature.
  */
  
 // Main List Items
@@ -66,7 +84,7 @@ header nav ul li
 	
 	padding 13px
 	
-	font-family "Arial"
+	font-family Futura
 	font-weight normal
 	font-size 1em
 	
@@ -149,7 +167,7 @@ header nav ul li ul li:hover
 	background-color lighten(_navy, 90%)
 
 // Child links a
-header nav ul li ul li a
+header nav ul li ul li *
 	padding-left 8px
 	transition all 0.4s
 
@@ -176,7 +194,7 @@ header nav ul li:hover ul:last-child
 // Edited size and line height
 	
 header nav ul li ul li .desc
-	font-size .7em
+	font-size .8em
 	line-height 1.5em
 	
 @media screen and (max-width: 1000px)
@@ -193,20 +211,7 @@ header nav ul li ul li .desc
 /*
  * End of Navigation Bar
  */
-	
-/*
- * Accent Bar
- *
- * The accent bar is a transparent grey bar that sits
- * below the main header and is purely stylistic.
- */
 
-.accentBar
-	height     16px
-	min-height 16px
-	max-height 16px
-	
-	background-color lighten(_grey, 40%)
 	
 /*
  * Action Bar and Call to Action
@@ -259,4 +264,25 @@ header nav ul li ul li .desc
 
 .actionBar .sub .primary
 	background-color _navy
-	color white
+	color white 
+	
+/*
+ * Dynamic Background & Moving Parts
+ * 
+ * This section of the code handles the moving
+ * background, its secondary pieces,  and  the
+ * rest of the features in that area.
+ */
+
+.background
+	position relative
+	
+	height     600px
+	min-height 600px
+	max-height 600px
+
+	background-image url("/images/mab.jpg")
+	background-size  cover
+
+.background > img
+	width 100%

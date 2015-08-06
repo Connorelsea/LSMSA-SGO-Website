@@ -4,18 +4,6 @@ mixin list(list)
 			li(class!=attributes.class)
 				a(href= val.link)= val.name
 
-mixin createLoginButton(user)
-
-	if user
-		a(href="/").login= user.name
-			div.info
-				h1 Welcome #{user.name}
-				p You are logged into the LSMSA SGO Website.
-				p Email: #{user.email}
-
-	else
-		a(href="/login") Login/Signup
-
 mixin createMainNav(list, user)
 	ul
 		each val in mainNavigation
@@ -27,7 +15,7 @@ mixin createMainNav(list, user)
 						ul.login
 							li= user.name
 							li
-								p.desc You are logged in under a verified LSMSA email account. The email you are logged in with currently is #{user.email}.
+								p.desc You are logged in under a verified LSMSA email account. Your account is currently under the email #{user.email}.
 							li
 								a(href="/logout") Logout
 					else
