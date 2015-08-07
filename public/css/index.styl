@@ -277,10 +277,12 @@ header nav ul li ul li .desc
 	margin-top 30px
 
 .actionBar .sub .button
+	width 20%
+
+.button
 	padding 10px
 	margin  10px
-	
-	width 20%
+
 	display inline-block
 	
 	font-family Futura
@@ -292,18 +294,18 @@ header nav ul li ul li .desc
 	
 	transition all 0.4s
 
-.actionBar .sub .primary
+.button.primary
 	background-color _grey
 	color _blue
 	
-.actionBar .sub .primary:hover
+.button.primary:hover
 	background-color alpha(_grey, 0.0)
 	color _grey
 
-.actionBar .sub .secondary
+.button.secondary
 	color _grey
 	
-.actionBar .sub .secondary:hover
+.button.secondary:hover
 	background-color _grey
 	color _blue
 	
@@ -319,11 +321,12 @@ header nav ul li ul li .desc
 	position relative
 	overflow hidden
 	
-	height     1000px
-	min-height 1000px
-	max-height 1000px
+	height     1200px
+	min-height 1200px
+	max-height 1200px
 
 	background-image url("/images/mab.jpg")
+	background-attachment fixed
 	background-size  cover
 
 .background > img
@@ -338,18 +341,22 @@ header nav ul li ul li .desc
 	
 	transform rotate(-4deg)
 
-	top 560px
+	top 550px
 	height 600px
 	
 .secondaryCover
 	background-color alpha(_grey, 0.3)
 	
-	transform rotate(-3deg)
+	transform rotate(-1deg)
 	
-	top 900px
-	height 200px
+	top 930px
+	height 400px
 	
-
+.tertiaryCover
+	background-color alpha(_grey, 1)
+	transform rotate(-1.5deg)		
+	top 1000px
+	height 300px
 	
 /*
  * Foreground
@@ -362,3 +369,46 @@ header nav ul li ul li .desc
 .foreground
 	position absolute
 	top topWidthNormal
+	
+/*
+ * News and Buttons
+ *
+ * Recent news story and more call to action
+ * buttons will go here.
+ */
+
+.news
+	display flex
+	justify-content space-around
+
+.story
+	width 450px
+
+.story > *
+	padding-bottom 10px
+
+.story h2
+	font-family Constantia
+	font-size 2em
+	color _grey
+ 	
+.story h5
+	font-family Futura
+	font-size 0.8em
+	font-weight bold
+	text-transform uppercase
+	color _grey
+
+.story p
+	font-family Constantia
+	font-size 1.2em
+	line-height 1.2em
+	color _grey
+	
+// Call to action buttons next to news
+
+.buttons *
+	font-size 0.8em
+	display block
+	text-align center
+	width 220px
