@@ -1,17 +1,43 @@
+var classes = [
+	{
+		parent : ".barMain",
+		addon  : "barMainSmall"
+	},
+	{
+		parent : "header .image .img",
+		addon  : "imageSmall"
+	}
+]
+
+var widthCorrection = function() {
+
+	var width    = $(window).width()
+	var newWidth = width + 200
+
+	$(".primaryCover").css({ "width" : newWidth })
+	$(".secondaryCover").css({ "width" : newWidth })
+
+}
+
+$(window).resize(widthCorrection);
+$(document).ready(widthCorrection);
+
 $(window).scroll(function() {
 
 	// If the user has scrolled down, change the
 	// main bar's class, making it smaller.
 
-	if ($(document).scrollTop() > 10) {
+	if ($(document).scrollTop() > 0) {
 
-		$(".barMain").addClass("barMainSmall");
-		$("header .image img").addClass("imageSmall");
+		for (i = 0; i < classes.length; ++i) {
+			$(classes[i].parent).addClass(classes[i].addon)
+		}
 
 	} else {
 
-		$(".barMain").removeClass("barMainSmall");
-		$("header .image img").removeClass("imageSmall");
+		for (i = 0; i < classes.length; ++i) {
+			$(classes[i].parent).removeClass(classes[i].addon)
+		}
 
 	}
 
