@@ -63,6 +63,8 @@ module.exports = function(passport) {
 
 		log("Middleware: Using Google Strategy.");
 
+		console.log(profile)
+
 		connection.query(
 			"SELECT * FROM users WHERE googleID = ? ",
 			[profile.id],
@@ -95,8 +97,9 @@ module.exports = function(passport) {
 	            // teacher
 
 	            log("Middleware: Verifying email domain...")
+	            var domain = profile._json.domain;
 
-	            if (domain !== "student.lsmsa.edu" || domain !== "lsmsa.edu") {
+	            if (domain !== "student.lsmsa.edu" && domain !== "lsmsa.edu") {
 
 	            		log("Middleware: Email domain " + domain + " not allowed.");
 
@@ -115,9 +118,7 @@ module.exports = function(passport) {
 				if (!rows.length) {
 
 					log("Middleware: User with id \"" + profile.id + "\" not found, attempting new user creation.")
-					log("Middleware: Verifying email domain...")
-
-					var domain = profile._json.domain;
+					log("Middleware: Verifying email domain...");
 
 					log("Middleware: LSMSA domain verified.");
 

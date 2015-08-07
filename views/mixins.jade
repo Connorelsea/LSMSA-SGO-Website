@@ -4,6 +4,8 @@ mixin list(list)
 			li(class!=attributes.class)
 				a(href= val.link)= val.name
 
+// Main Navigation
+// This creates the main navigation list and children.
 mixin createMainNav(list, user)
 	ul
 		each val in mainNavigation
@@ -29,3 +31,42 @@ mixin createMainNav(list, user)
 							each subval in val.sub
 								li
 									a(href= subval.link)= subval.name
+
+// Issue Box
+// Creates a singular issue based on the argument
+mixin createIssueBox()
+	div.issueBox
+
+		div.arrows
+			a(href="").uplink
+				img(src="").upimg
+			a(href="").downlink
+				img(src="").downimg
+
+		div.votes
+			div.top
+				div.score
+					p +17
+				div.stars
+					p Stars go here
+			div.bottom
+				p Issue Type
+
+		div.body
+
+			div.top
+				h2 User-Submitted Issue Title
+				a(href="").button.primary SGO Response 
+
+			div.bottom
+				h3 Submitted on date by anonymous
+
+		div.social
+
+			div.top
+				a(href="").link Read More...
+				a(href="").link Discuss...
+				a(href="").link Share...
+
+			div.bottom
+				p 20+ Responses

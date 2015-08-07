@@ -58,6 +58,11 @@ topWidthSmall  = 80px
 	height topWidthNormal
 	
 	transition height 0.4s
+	
+	// Flex box instructions for vertical alignment
+
+	.innerBar
+		align-self center
 
 // The barMainSmall class is added by JQuery
 // when the user scrolls, making the  entire
@@ -66,11 +71,6 @@ topWidthSmall  = 80px
 .barMainSmall
 	height topWidthSmall
 	min-height topWidthSmall
-
-// Flex box instructions for vertical alignment
-
-.barMain .innerBar
-	align-self center
 	
 // Header (Whole)
 
@@ -80,12 +80,11 @@ header
 	justify-content space-between
 	align-items center
 
-// Image/Logo
+	// Image/Logo
 	
-header .image .img
-	width 400px
-	
-	transition width 0.4s
+	.image .img
+		width 400px
+		transition width 0.4s
 
 // This class is added when the user scrolls,
 // which makes the logo in the header smaller.
@@ -121,18 +120,18 @@ header nav ul li
 	// Removed because currently animating inline
 	// the sub ul lists does not work.	
 	// transition: all 0.4s
+		
+	// Change the background of the uppermost
+	// list items on hover
+
+	&:hover
+		background-color lighten(_grey, 50%)
 
 // Apply font bolding on the the uppermost
 // list items
 
 header nav > ul > li
 	font-weight bold
-
-// Change the background of the uppermost
-// list items on hover
-
-header nav ul li:hover
-	background-color lighten(_grey, 50%)
 
 // Inside of a list item there is an a block.
 // This removes the text decoration and  sets
@@ -173,12 +172,14 @@ header nav ul li:hover ul
 // Moves login secondary unordered list to point
 // in the other direction so it looks better.
 
-header nav ul li .login
-	right 0px
+header nav ul li
 	
-header nav ul li .sub
-	left 0px
-	box-shadow 0 6px 4px -2px rgba(50, 50, 50, 0.40)
+	.login
+		right 0px
+		
+	.sub
+		left 0px
+		box-shadow 0 6px 4px -2px rgba(50, 50, 50, 0.40)
 
 // Secondary List Items
 
@@ -191,15 +192,15 @@ header nav ul li ul li
 	
 	background lighten(_grey, 50%)
 	
-// Hover of Secondary List Items
+	// Hover of Secondary List Items
 	
-header nav ul li ul li:hover
-	background-color lighten(_navy, 90%)
+	&:hover
+		background-color lighten(_navy, 90%)
 
-// Child links a
-header nav ul li ul li *
-	padding-left 8px
-	transition all 0.4s
+	// Child links a
+	*
+		padding-left 8px
+		transition all 0.4s
 
 header nav ul li ul li:hover a
 	padding-left 14px
@@ -252,8 +253,8 @@ header nav ul li ul li .desc
 	margin 0 auto
 	width 70%
 	
-.actionBar .action div
-	text-align center
+	div
+		text-align center
 
 // "Make a difference" title
 
@@ -298,16 +299,16 @@ header nav ul li ul li .desc
 	background-color _grey
 	color _blue
 	
-.button.primary:hover
-	background-color alpha(_grey, 0.0)
-	color _grey
+	&:hover
+		background-color alpha(_grey, 0.0)
+		color _grey
 
 .button.secondary
 	color _grey
 	
-.button.secondary:hover
-	background-color _grey
-	color _blue
+	&:hover
+		background-color _grey
+		color _blue
 	
 /*
  * Dynamic Background & Moving Parts
@@ -329,8 +330,8 @@ header nav ul li ul li .desc
 	background-attachment fixed
 	background-size  cover
 
-.background > img
-	width 100%
+	> img
+		width 100%
 
 .background .cover
 	margin-left -200px
@@ -350,7 +351,7 @@ header nav ul li ul li .desc
 	
 	transform rotate(-1deg)
 	
-	top 1080px
+	top 1130px
 	height 500px
 	
 .tertiaryCover
@@ -444,49 +445,51 @@ header nav ul li ul li .desc
 // Issue Header items
 // This includes the title and the buttons
 
-.issues .inner
-	padding 20px
-
-.issues .header
-	display flex
-	justify-content space-between
-
-// Issue header title
-
-.issues .title
-	font-family Futura
-	font-size 1.8em
-	text-transform uppercase
-	color _navy
+.issues
 	
-.issues .title .secondary
-	font-weight bold
+	.inner
+		padding 20px
 
-// Issue header buttons
+	.header
+		display flex
+		justify-content space-between
 
-.issues .buttons
-	display flex
-	flex-direction row
+	// Issue header title
 
-.issues .button
-	margin 0px
-	margin-left 15px
+	.title
+		font-family Futura
+		font-size 1.8em
+		text-transform uppercase
+		color _navy
 	
-	width 150px
-	border-radius 20px
-	border-color _navy
+	.title .secondary
+		font-weight bold
+
+	// Issue header buttons
+		
+	.buttons
+		display flex
+		flex-direction row
+
+	.button
+		margin 0px
+		margin-left 15px
+		
+		width 150px
+		border-radius 20px
+		border-color _navy
+		
+	.button.primary
+		background-color _navy
+		color _grey
+		
+	.button.primary:hover
+		background-color _grey
+		color _navy
 	
-.issues .button.primary
-	background-color _navy
-	color _grey
+	.button.secondary
+		color _navy
 	
-.issues .button.primary:hover
-	background-color _grey
-	color _navy
-	
-.issues .button.secondary
-	color _navy
-	
-.issues .button.secondary:hover
-	background-color _navy
-	color _grey
+	.button.secondary:hover
+		background-color _navy
+		color _grey

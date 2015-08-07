@@ -56,8 +56,8 @@ $(window).scroll(function() {
 		"transform" : "translate(0px, -" + primaryScroll + "%) rotate(" + primaryRotate + "deg)"
 	})
 	
-	var secondaryScroll = scroll / 10;
-	var secondaryRotate = -1 + (scroll / -100)
+	var secondaryScroll = scroll / 8;
+	var secondaryRotate = -1 + (scroll / -80)
 
 	$(".secondaryCover").css({
 		"transform" : "translate(0px, -" + secondaryScroll + "%) rotate(" + secondaryRotate + "deg)"
