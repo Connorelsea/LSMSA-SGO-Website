@@ -321,9 +321,9 @@ header nav ul li ul li .desc
 	position relative
 	overflow hidden
 	
-	height     1200px
-	min-height 1200px
-	max-height 1200px
+	height     1350px
+	min-height 1350px
+	max-height 1350px
 
 	background-image url("/images/mab.jpg")
 	background-attachment fixed
@@ -333,6 +333,7 @@ header nav ul li ul li .desc
 	width 100%
 
 .background .cover
+	margin-left -200px
 	position absolute
 	width 100%
 
@@ -342,20 +343,20 @@ header nav ul li ul li .desc
 	transform rotate(-4deg)
 
 	top 550px
-	height 600px
+	height 1000px
 	
 .secondaryCover
 	background-color alpha(_grey, 0.3)
 	
 	transform rotate(-1deg)
 	
-	top 930px
-	height 400px
+	top 1080px
+	height 500px
 	
 .tertiaryCover
 	background-color alpha(_grey, 1)
 	transform rotate(-1.5deg)		
-	top 1000px
+	top 1200px
 	height 300px
 	
 /*
@@ -378,8 +379,10 @@ header nav ul li ul li .desc
  */
 
 .news
+	width 85%
+	margin 0 auto
 	display flex
-	justify-content space-around
+	justify-content space-between
 
 .story
 	width 450px
@@ -407,8 +410,83 @@ header nav ul li ul li .desc
 	
 // Call to action buttons next to news
 
+.buttons
+	display flex
+	flex-direction column
+	flex-flow space-around
+	flex-wrap nowrap
+	align-items center
+
 .buttons *
 	font-size 0.8em
 	display block
 	text-align center
 	width 220px
+	
+/*
+ * Front page issue bar
+ */
+
+.barIssues
+	margin-top 50px
+
+.barIssues .constrainContainer
+	width 85%
+	margin 0 auto
+
+.issues
+	background-color _grey
+	
+.barIssues .decoration
+	height 12px
+	background-color alpha(_grey, 0.5)
+
+// Issue Header items
+// This includes the title and the buttons
+
+.issues .inner
+	padding 20px
+
+.issues .header
+	display flex
+	justify-content space-between
+
+// Issue header title
+
+.issues .title
+	font-family Futura
+	font-size 1.8em
+	text-transform uppercase
+	color _navy
+	
+.issues .title .secondary
+	font-weight bold
+
+// Issue header buttons
+
+.issues .buttons
+	display flex
+	flex-direction row
+
+.issues .button
+	margin 0px
+	margin-left 15px
+	
+	width 150px
+	border-radius 20px
+	border-color _navy
+	
+.issues .button.primary
+	background-color _navy
+	color _grey
+	
+.issues .button.primary:hover
+	background-color _grey
+	color _navy
+	
+.issues .button.secondary
+	color _navy
+	
+.issues .button.secondary:hover
+	background-color _navy
+	color _grey

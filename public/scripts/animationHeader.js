@@ -70,7 +70,7 @@ $(window).scroll(function() {
 	})
 
 	var tertiaryScroll = scroll / 200;
-	var tertiaryRotate = -1.5 + (scroll / -200)
+	var tertiaryRotate = -1.5 + (scroll / -150)
 
 	$(".tertiaryCover").css({
 		"transform" : "translate(0px, -" + tertiaryScroll + "%) rotate(" + tertiaryRotate + "deg)"
