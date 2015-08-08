@@ -5,17 +5,7 @@ html(lang="en")
 
 	body
 
-		div.bar.barMain
-			div.innerBar
-
-				header
-
-					div.image
-						img(src= "images/logo.png").img
-
-					div.nav
-						nav
-							+createMainNav(list, user)
+		include navigation
 
 		div.contentBody
 

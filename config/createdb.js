@@ -20,46 +20,46 @@ var create_users  =
 	"PRIMARY KEY (googleID)"       +
 	");";
 
-// var create_elements = 
-//     "CREATE TABLE elements(" +
-// 	"id          INT NOT NULL AUTO_INCREMENT," +
-// 	"googleID    VARCHAR(60),"  +
-// 	"title       VARCHAR(300)," +
-// 	"body        TEXT,"         +
-// 	"type        ENUM('blog', 'issue')," +
-// 	"PRIMARY KEY (id)"          +
-// 	");";
+var create_elements = 
+    "CREATE TABLE elements(" +
+	"id          INT NOT NULL AUTO_INCREMENT," +
+	"googleID    VARCHAR(60),"  +
+	"title       VARCHAR(300)," +
+	"body        TEXT,"         +
+	"type        ENUM('blog', 'issue')," +
+	"PRIMARY KEY (id)"          +
+	");";
 
-// var create_comments =
-//     "CREATE TABLE comments("   +
-// 	"id          INT NOT NULL AUTO_INCREMENT," +
-// 	"elementID   INT NOT NULL," +
-// 	"googleID    VARCHAR(60),"  +
-// 	"body        TEXT,"         +
-// 	"PRIMARY KEY (id)"          +
-// 	");";
+var create_comments =
+    "CREATE TABLE comments("   +
+	"id          INT NOT NULL AUTO_INCREMENT," +
+	"elementID   INT NOT NULL," +
+	"googleID    VARCHAR(60),"  +
+	"body        TEXT,"         +
+	"PRIMARY KEY (id)"          +
+	");";
 
-// var create_likes =
-//     "CREATE TABLE likes("   +
-// 	"id          INT NOT NULL AUTO_INCREMENT," +
-// 	"elementID   INT NOT NULL," +
-// 	"googleID    VARCHAR(60),"  +
-// 	"PRIMARY KEY (id)"          +
-// 	");";
+var create_likes =
+    "CREATE TABLE likes("   +
+	"id          INT NOT NULL AUTO_INCREMENT," +
+	"elementID   INT NOT NULL," +
+	"googleID    VARCHAR(60),"  +
+	"PRIMARY KEY (id)"          +
+	");";
 
-// var create_responses =
-//     "CREATE TABLE responses("   +
-// 	"id          INT NOT NULL AUTO_INCREMENT," +
-// 	"elementID   INT NOT NULL," +
-// 	"title       VARCHAR(300)," +
-// 	"body        TEXT,"         +
-// 	"type        ENUM('sgo', 'adm')," +
-// 	"PRIMARY KEY (id)"          +
-// 	");";
+var create_responses =
+    "CREATE TABLE responses("   +
+	"id          INT NOT NULL AUTO_INCREMENT," +
+	"elementID   INT NOT NULL," +
+	"title       VARCHAR(300)," +
+	"body        TEXT,"         +
+	"type        ENUM('sgo', 'adm')," +
+	"PRIMARY KEY (id)"          +
+	");";
 
-// var queries = [
-// 	create, use, create_users, create_elements, create_comments, create_likes, create_responses
-// ]
+var queries = [
+	create, use, create_users, create_elements, create_comments, create_likes, create_responses
+]
 
 console.log("Database: Checking database...")
 
@@ -70,12 +70,12 @@ connection.query(show, function(err, rows, fields) {
 		console.log("Database: " + dbconfig.database + " does not exist.")
 		console.log("Database: creating database " + dbconfig.database)
 
-		connection.query(create)
-		connection.query(use)
-		connection.query(create_users)
-		// for (i = 0; i < queries.length; i++) {
-		// 	connection.query(queries[i])
-		// }
+		// connection.query(create)
+		// connection.query(use)
+		// connection.query(create_users)
+		for (i = 0; i < queries.length; i++) {
+			connection.query(queries[i])
+		}
 
 		console.log('Database: Database and Tables Created');
 

@@ -25,6 +25,7 @@ $(document).ready(widthCorrection);
 
 var topWidthNormal = 180;
 var topWidthSmall  = 80;
+var small = false;
 
 $(window).scroll(function() {
 
@@ -36,12 +37,14 @@ $(window).scroll(function() {
 	if (scroll > 0) {
 
 		for (i = 0; i < classes.length; ++i) {
+			small = true;
 			$(classes[i].parent).addClass(classes[i].addon)
 		}
 
 	} else {
 
 		for (i = 0; i < classes.length; ++i) {
+			small = false;
 			$(classes[i].parent).removeClass(classes[i].addon)
 		}
 
@@ -81,5 +84,23 @@ $(window).scroll(function() {
 	$(".innerBar .action").css({
 		"transform" : "scale(" + actionScale + "%)"
 	})
+
+	// Change the position of the content of a normal page
+	// so that it is always shown under the navigation, no
+	// matter what the size of the navigation is.
+
+	if (small) {
+
+		$(".body").css({
+			"top" : topWidthSmall
+		})
+
+	} else {
+
+		$(".body").css({
+			"top" : topWidthNormal
+		})
+
+	}
 
 });

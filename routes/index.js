@@ -10,5 +10,12 @@ module.exports = function(app, passport) {
 		})
 
 	})
+
+	app.get("/issues/submit", function(req, res) {
+		res.render("submit.jade", {
+			mainNavigation : data.mainNavigation,
+			user           : req.user
+		})
+	})
 	
 }

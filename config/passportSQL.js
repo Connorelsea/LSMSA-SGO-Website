@@ -5,13 +5,6 @@ var database = require("./database")
 var mysql    = require("mysql")
 var color    = require("cli-color")
 
-var connection = mysql.createConnection({
-	host     : database.connection.host,
-    user     : database.connection.user,
-    password : database.connection.password,
-    database : database.database
-})
-
 function title() {
 	return color.bgWhite.red("Passport:");
 }
@@ -20,7 +13,7 @@ function log(text) {
 	console.log(title() + " " + color.black.bgWhite(text));
 }
 
-module.exports = function(passport) {
+module.exports = function(passport, connection) {
 
 	passport.serializeUser(function(user, done) {
 		if (user.id) {
@@ -62,8 +55,6 @@ module.exports = function(passport) {
 	function(token, refreshToken, profile, done) {
 
 		log("Middleware: Using Google Strategy.");
-
-		console.log(profile)
 
 		connection.query(
 			"SELECT * FROM users WHERE googleID = ? ",

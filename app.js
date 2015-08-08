@@ -8,11 +8,19 @@ var express      = require("express"),
     session      = require("express-session"),
     stylus       = require("stylus"),
     nib          = require("nib"),
-    mysql        = require("mysql")
+    mysql        = require("mysql"),
+    database     = require("./config/database")
 
 // Setup MySQL databases
 
 require("./config/createdb")
+
+var connection = mysql.createConnection({
+  host     : database.connection.host,
+    user     : database.connection.user,
+    password : database.connection.password,
+    database : database.database
+})
 
 // Express Application Setup
 
@@ -42,7 +50,7 @@ app.use(express.static('public'));
 
 // Passport and Session Setup
 
-require("./config/passportSQL.js")(passport)
+require("./config/passportSQL.js")(passport, connection)
 
 var info = require("./config/auth")
 
