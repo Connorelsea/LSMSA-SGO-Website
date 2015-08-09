@@ -1,18 +1,29 @@
+extends template
 
-doctype html
-html(lang="en")
+block t-title-h1
+	h1 Submit an Issue
 
-	include header
+block t-title-h2
+	h2 Be the Change You Want to See
 
-	body
+block content
 
-		include navigation
+	div.bar.submitIssue
+		div.bar
+			div.innerBar
 
-		div.body
+				div.header
 
-			div.bar
-				div.innerBar
+					div.title
+						img(src="../images/StarBar.png")
+						h2 Your Voice Heard, Anonymously
+						img(src="../images/StarBar.png")
 
-					h1 Submit an Issue
+				div.body
+
+
+				div.form
 					form(action="/issues/submit", method="post")
-					
+						div.input
+							span.label Title
+							input(type="text", name="title")
