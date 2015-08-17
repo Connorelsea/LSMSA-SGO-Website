@@ -1,29 +1,34 @@
 extends template
 
 block t-title-h1
-	h1 Submit an Issue
+	h1 Submit An Issue
 
 block t-title-h2
-	h2 Be the Change You Want to See
+	h2 Be the change you want to see
 
 block content
 
 	div.bar.submitIssue
 		div.bar
-			div.innerBar
 
-				div.header
+			div.innerBar.header
+				img(src="../images/StarBar.png")
+				h2 Be the change you lorem ipsum
+				img(src="../images/StarBar.png")
 
-					div.title
-						img(src="../images/StarBar.png")
-						h2 Your Voice Heard, Anonymously
-						img(src="../images/StarBar.png")
+			div.innerBar.content
+				p test
 
-				div.body
+			div.innerBar.form
 
+				form(action="/issues/submit", method="post")
 
-				div.form
-					form(action="/issues/submit", method="post")
-						div.input
-							span.label Title
+					div.input
+
+						div.line
+							div.label Title
 							input(type="text", name="title")
+
+						div.line
+							div.label Description
+							textarea(name="description")
