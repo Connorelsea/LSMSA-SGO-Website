@@ -29,9 +29,40 @@
 	.form
 		
 		.line
+			display flex
+			padding-bottom 20px
+			
+			height 40px
 			
 			> *
 				display inline-block
 
 			.label
-				width 150px
+				width 240px
+				padding-right 30px
+
+				text-align right
+				font-family Futura
+				font-weight bold
+				text-transform uppercase
+				font-size 2em
+				
+			input, select
+				height 35px
+				width 85%
+				border none
+				padding 5px
+				
+				outline none
+
+				font-family Futura
+				font-size 1.5em
+				font-color _navy
+				background-color _grey
+				
+				background: linear-gradient(to right, #a2b6e5 0%,#ebebeb 39%,#ebebeb 39%,#ebebeb 100%);
+				
+				transition all 0.4s
+				
+				//&:focus
+				//	background: linear-gradient(to right, #768fc9 0%,#ebebeb 39%,#ebebeb 39%,#ebebeb 100%);
