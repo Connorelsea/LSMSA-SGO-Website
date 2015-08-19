@@ -27,45 +27,53 @@
 			font-size 1.2em
 	
 	.form
+		display flex
+		justify-content center
+		flex-direction row
+		width 100%
 		
+		form
+			width 85%
+
 		.line
 			display flex
-			align-items center
-			padding-bottom 20px
+			align-items left
+			flex-direction column
 			
-			height 40px
-			
-			> *
-				display inline-block
+			padding-bottom 30px
 
 			.label
 				width 240px
-				padding-right 30px
 
-				text-align right
+				text-align center
 				font-family Futura
 				font-weight bold
 				text-transform uppercase
-				font-size 2em
+				font-size 1.4em
+				color _navy
+				
+				padding 10px
+				
+				background-color lighten(_grey, 60%)
 				
 			input, select, textarea
 				height 35px
-				width 800px
 				border none
-				border-bottom 2px solid _navy
-				padding 3px
+				border-bottom 4px solid _navy
+				padding 15px
 				
 				outline none
 
 				font-family Futura
 				font-weight normal
 				font-size 1.5em
-				color black
-				background-color _grey
+				color _navy
+				background-color lighten(_grey, 50%)
+				box-shadow 0 6px 8px -1px rgba(50, 50, 50, 0.40)
 				
 				//background: linear-gradient(to right, #a2b6e5 0%,#ebebeb 39%,#ebebeb 39%,#ebebeb 100%);
 				
 				transition all 0.4s
 				
-				//&:focus
-				//	background: linear-gradient(to right, #768fc9 0%,#ebebeb 39%,#ebebeb 39%,#ebebeb 100%);
+				&:focus
+					padding 20px
