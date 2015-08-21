@@ -26,11 +26,31 @@
 			text-transform uppercase
 			font-size 1.2em
 	
+	.content
+		padding-bottom 40px
+		
+		color _navy
+		
+		font-family Futura
+		font-size 1.3em
+
+		line-height 1.5em
+		
+		p
+			min-width 200px
+
 	.form
+		padding-top 120px
+		padding-bottom 100px
 		display flex
 		justify-content center
 		flex-direction row
 		width 100%
+		
+		background-image url("/images/mab.jpg")
+		background-attachment fixed
+		background-size  cover
+		background-color alpha(_grey, .5)
 		
 		form
 			width 85%
@@ -55,6 +75,9 @@
 				padding 10px
 				
 				background-color lighten(_grey, 60%)
+				
+			textarea
+				min-height 200px
 				
 			input, select, textarea
 				height 35px

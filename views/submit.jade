@@ -11,19 +11,19 @@ block content
 	div.bar.submitIssue
 		div.bar
 
-			div.innerBar.header
+			div.bar.header
 				img(src="../images/StarBar.png")
 				h2 Be the change you lorem ipsum
 				img(src="../images/StarBar.png")
 
-			div.innerBar.content
-				p test
+			div.bar.content
+				p.innerBar Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur
 
-			div.innerBar.form
+			div.bar.form
 
 				form(action="/issues/submit", method="post")
 
-					div.input
+					div.input.innerBar
 
 						div.line
 							div.label Issue Title
@@ -31,4 +31,7 @@ block content
 
 						div.line
 							div.label Description
-							textarea(name="description")
+							textarea(name="description").description
+
+			div.bar.content
+				p.innerBar Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur
