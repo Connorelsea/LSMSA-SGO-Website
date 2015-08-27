@@ -65,8 +65,9 @@ app.use(flash())
 
 // Setup Routes
 
-require("./routes/index.js")(app, passport)
-require("./routes/auth.js") (app, passport)
+require("./routes/index.js") (app, passport)
+require("./routes/auth.js")  (app, passport)
+require("./routes/issues.js")(app, passport)
 
 // Error Handling
 

@@ -33,6 +33,10 @@ var mainNavigation = [
 			{
 				name : "Submit an Issue",
 				link : "/issues/submit"
+			},
+			{
+				name : "My Issues",
+				link : "/issues#"
 			}
 		]
 	},

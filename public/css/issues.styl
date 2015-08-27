@@ -7,11 +7,40 @@
 
 .submitIssue
 	
+	.error
+		
+		text-align center
+		
+		.innerBar
+			font-family Futura
+			font-size 1.8em
+			color _navy
+			
+			padding-top 50px
+			padding-bottom 50px
+
+		.button.primary
+			width 150px
+			text-align center
+			
+			background-color _navy
+			border 4px solid _navy
+			color _grey
+			
+			&:hover
+				background-color _grey
+				color _navy
+
+	.bar
+		background-color _grey
+	
+	.style
+
 	.header
 
 		width 400px
 		margin 0 auto
-		margin-top 50px
+		padding-top 50px
 		margin-bottom 50px
 		
 		text-align center
@@ -61,6 +90,12 @@
 			flex-direction column
 			
 			padding-bottom 30px
+			
+			transition all 0.4s
+			
+			&:hover
+				.label
+					width 255px
 
 			.label
 				width 240px
@@ -75,6 +110,8 @@
 				padding 10px
 				
 				background-color lighten(_grey, 60%)
+				
+				transition all 0.4s
 				
 			textarea
 				min-height 200px
@@ -100,3 +137,13 @@
 				
 				&:focus
 					padding 20px
+
+		.submit
+			width  300px
+			
+			input
+				height 80px
+				
+				&:hover
+					cursor pointer
+					font-size 1.75em

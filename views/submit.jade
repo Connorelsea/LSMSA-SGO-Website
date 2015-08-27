@@ -9,29 +9,38 @@ block t-title-h2
 block content
 
 	div.bar.submitIssue
+
 		div.bar
 
-			div.bar.header
-				img(src="../images/StarBar.png")
-				h2 Be the change you lorem ipsum
-				img(src="../images/StarBar.png")
+			if user
 
-			div.bar.content
-				p.innerBar Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur
+				div.bar.header
+					img(src="../images/StarBar.png")
+					h2 Be the change you lorem ipsum
+					img(src="../images/StarBar.png")
 
-			div.bar.form
+				div.bar.content
+					p.innerBar This is example text. This paragraph will  explain in short what an issue is and that it will either be denied or accepted after review from an SGO member.
 
-				form(action="/issues/submit", method="post")
+				div.bar.form
 
-					div.input.innerBar
+					form(action="/issues/action/submit", method="post")
 
-						div.line
-							div.label Issue Title
-							input(type="text", name="title").issueTitle
+						div.input.innerBar
 
-						div.line
-							div.label Description
-							textarea(name="description").description
+							div.line
+								div.label Issue Title
+								input(type="text", name="title").issueTitle
 
-			div.bar.content
-				p.innerBar Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur
+							div.line
+								div.label Description
+								textarea(name="description").description
+
+							div.line.submit
+								input(type="submit", name="Submit", value="Submit Issue")
+
+			else
+
+				div.bar.error
+					p.innerBar Only users logged into the site can submit issues.
+					a(href="/login").button.primary.login Login
