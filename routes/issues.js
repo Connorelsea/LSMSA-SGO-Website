@@ -40,6 +40,8 @@ module.exports = function(app, passport, connection) {
 	 */
 	app.get("/issues", function(req, res) {
 
+		var separator = "|-|"
+
 		/*
 		 * FILTER: Top
 		 *
@@ -48,9 +50,6 @@ module.exports = function(app, passport, connection) {
 		 */
 		if (req.query.filter == "top") {
 
-			var element_rows;
-			var comment_rows;
-
 			connection.query(
 
 				/*
@@ -58,39 +57,73 @@ module.exports = function(app, passport, connection) {
 				 * Posts that have no upvotes have a NULL value
 				 * in the likeCount column.
 				 */
-				"SELECT E.id, E.googleID, E.title, L.likeCount\n" +
-    			"FROM elements E\n"             +
 
-    			"LEFT JOIN (\n"                 +
-        		"	SELECT elementId\n"         +
-            	"	, COUNT(id) AS likeCount\n" +
-            	"	FROM likes\n"               +
-            	"	GROUP BY elementId\n"       +
-    			") L ON L.elementId = E.id\n",
+				"SELECT E.id, E.time, E.title, E.body, E.type,\n" +
+				"GROUP_CONCAT(C.body SEPARATOR '" + separator + "') AS comments,\n" + 
+				"sum(if(L.elementID is null,0,1)) as likeCount\n" +
+				"FROM elements E\n" +
+				"LEFT JOIN comments C on E.id=C.elementID\n" +
+				"LEFT JOIN likes L on E.id=L.elementID\n" +
+				"group by E.id\n",
 
 				function(err, rows) {
-
-					for (var i = 0; i < rows.length; i++) {
-						if (rows[i].likeCount == null)
-							rows[i].likeCount = 0;
-					}
 
 					if (err) {
 						res.send("ERROR " + err)
 					}
-					else {
-						element_rows = rows;
+
+					/*
+					 * Create issue objects to send to the page
+					 * being rendered
+					 */
+
+					var issues = [];
+
+					// Loop throug every issue that was
+					// returned by the SQL query.
+					for (var i = 0; i < rows.length; i++) {
+
+						// Push the initial issues object to
+						// the  issues  array  with an empty
+						// comments array.
+						issues.push({
+							title    : rows[i].title,
+							time     : rows[i].time,
+							body     : rows[i].body,
+							likes    : rows[i].likeCount,
+							comments : []
+						});
+
+						// Split concatenated string of comments,
+						// making an array of all comments
+						var comments = rows[i].comments.split(separator);
+
+						// Fill the empty comments array in the
+						// issues  object  with  its respective
+						// comments.
+						for (var c = 0; c < comments.length; c++) {
+
+							issues[i].comments.push({
+								body : comments[c]
+							});
+
+						}
 					}
+
+					/*
+					 * Render the issues page and send  it the 
+					 * array of issues and their data/comments
+					 * to use when displaying them on the page.
+					 */
+					res.render("issues.jade", {
+						mainNavigation : data.mainNavigation,
+						user           : req.user,
+						rows           : rows,
+						filter         : "top"
+					});
 
 				}
 			);
-
-			res.render("issues.jade", {
-				mainNavigation : data.mainNavigation,
-				user           : req.user,
-				rows           : element_rows,
-				filter         : "top"
-			});
 
 		}
 
