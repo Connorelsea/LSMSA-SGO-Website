@@ -17,17 +17,18 @@ var create_users  =
 	"token    VARCHAR(100)," +
 	"name     VARCHAR(60),"  +
 	"email    VARCHAR(60),"  +
-	"PRIMARY KEY (googleID)"       +
+	"PRIMARY KEY (googleID)" +
 	");";
 
 var create_elements = 
-    "CREATE TABLE elements(" +
-	"id          INT NOT NULL AUTO_INCREMENT," +
-	"googleID    VARCHAR(60),"  +
-	"title       VARCHAR(300)," +
-	"body        TEXT,"         +
-	"type        ENUM('blog', 'issue')," +
-	"PRIMARY KEY (id)"          +
+    "CREATE TABLE elements(\n" +
+	"id          INT NOT NULL AUTO_INCREMENT,\n" +
+	"googleID    VARCHAR(60),\n"  +
+	"time        DATETIME DEFAULT CURRENT_TIMESTAMP,\n" +
+	"title       VARCHAR(300),\n" +
+	"body        TEXT,\n"         +
+	"type        ENUM('blog', 'issue'),\n" +
+	"PRIMARY KEY (id)\n"          +
 	");";
 
 var create_comments =
@@ -74,7 +75,9 @@ connection.query(show, function(err, rows, fields) {
 		// connection.query(use)
 		// connection.query(create_users)
 		for (i = 0; i < queries.length; i++) {
-			connection.query(queries[i])
+			connection.query(queries[i], function(err) {
+				if (err) console.log(err)
+			})
 		}
 
 		console.log('Database: Database and Tables Created');

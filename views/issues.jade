@@ -1,0 +1,13 @@
+doctype html
+html(lang="en")
+
+	include header
+
+	body
+
+		include navigation
+
+		div.body
+
+			each val in rows
+				+createIssueBox(val)

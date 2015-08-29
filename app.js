@@ -16,7 +16,7 @@ var express      = require("express"),
 require("./config/createdb")
 
 var connection = mysql.createConnection({
-  host     : database.connection.host,
+    host     : database.connection.host,
     user     : database.connection.user,
     password : database.connection.password,
     database : database.database
@@ -67,7 +67,7 @@ app.use(flash())
 
 require("./routes/index.js") (app, passport)
 require("./routes/auth.js")  (app, passport)
-require("./routes/issues.js")(app, passport)
+require("./routes/issues.js")(app, passport, connection)
 
 // Error Handling
 
