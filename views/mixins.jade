@@ -48,11 +48,7 @@ mixin createIssueBox(issue)
 			div.top
 
 				div.score
-
-					if issue.likes <= 0
-						p.zero= issue.likes
-					else
-						p.positive= "+" + issue.likes
+					p.positive= "+" + issue.likes
 
 				div.stars
 					
@@ -76,9 +72,13 @@ mixin createIssueBox(issue)
 		div.topContainer.content
 
 			div.top
-				h2= issue.title
-				h3= "Submitted on " + issue.date.toDateString()
-				a(href="").button-issue.primary SGO Response 
+
+				div.top
+					h2= issue.title
+					h3= "Submitted on " + issue.date.toDateString()
+
+				div.bottom
+					a(href="").button-issue.primary SGO Response 
 
 			div.bottom
 				p= issue.body

@@ -69,7 +69,8 @@ module.exports = function(app, passport, connection) {
 				"    SELECT elementID, COUNT(id) AS likeCount\n" + 
 				"    FROM likes\n" + 
 				"    GROUP BY elementID\n" + 
-				") L ON L.elementID = E.id\n",
+				") L ON L.elementID = E.id\n" +
+				"ORDER BY L.likeCount DESC\n",
 
 				function(err, rows) {
 
@@ -95,13 +96,17 @@ module.exports = function(app, passport, connection) {
 							title    : rows[i].title,
 							date     : rows[i].time,
 							body     : rows[i].body,
-							likes    : rows[i].likeCount,
+							likes    : ((rows[i].likeCount == null) ? 0 : rows[i].likeCount),
 							comments : []
 						});
 
 						// Split concatenated string of comments,
 						// making an array of all comments
-						var comments = rows[i].comments.split(separator);
+						var comments = [];
+
+						if (rows[i].comments) {
+							comments = rows[i].comments.split("|-|");
+						}
 
 						// Fill the empty comments array in the
 						// issues  object  with  its respective

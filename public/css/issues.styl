@@ -1,6 +1,23 @@
 .issueBox
 	display flex
 	
+	/*
+     * Generalized Top Container
+     */
+	.topContainer
+		display inline-block
+		margin  10px 10px
+		height 140px
+		
+		background-color _navy
+	
+	/*
+     * First Container: Votes
+     *
+     * Styling for the first container that contains
+     * the star images, count of votes, and the type
+     * tag for each element.
+     */
 	.topContainer.votes
 		width 130px
 		
@@ -16,7 +33,6 @@
 				font-family Futura
 				font-weight bold
 				font-size 3em
-				letter-spacing -4px
 				text-align center
 				color _yellow
 				
@@ -45,13 +61,84 @@
 
 			background-color _yellow
 			color darken(_yellow, 50%)
-	
-	.topContainer
-		display inline-block
-		margin  5px 5px
-		height 140px
+			
+	/*
+     * First Container: 
+     *
+     * Styling for the first container that contains
+     * the star images, count of votes, and the type
+     * tag for each element.
+     */
+	.topContainer.content
+		width 550px
 		
-		background-color _navy
+		> .top
+			display flex
+			justify-content space-between
+			align-items center
+
+			padding-top 20px
+			padding-left 30px
+			
+			> .top
+				
+				h2
+					font-family Constantia
+					font-size 2em
+
+					color white
+				
+				h3
+					padding-top 5px
+					font-family Futura
+					font-size .76em
+					font-weight bold
+					text-transform uppercase
+					
+					color _yellow
+					
+			> .bottom
+				
+				.button-issue
+					margin-right 30px
+					padding 6px 18px
+					border 2px solid #40ab6f
+					border-radius 30px
+					
+					font-family Futura
+					font-size .8em
+					font-weight bold
+					text-transform uppercase
+					text-decoration none
+					
+					background-color #40ab6f
+					color darken(#40ab6f, 40%)
+					
+					transition all 0.4s
+
+					&:hover
+						background-color _navy
+						border 2px solid #40ab6f
+						color #40ab6f
+				
+		> .bottom
+			p
+				padding-top 10px
+				padding-left 30px
+				font-family Constantia
+				font-size 1.4em
+				color white
+				
+
+	/*
+     * First Container: 
+     *
+     * Styling for the first container that contains
+     * the star images, count of votes, and the type
+     * tag for each element.
+     */
+	.topContainer.social
+		width 130px
 
 /*
  * Issue Submission Page
