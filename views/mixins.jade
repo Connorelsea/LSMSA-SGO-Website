@@ -71,17 +71,22 @@ mixin createIssueBox(issue)
 
 		div.topContainer.content
 
-			div.top
-
+			div.container
 				div.top
-					h2= issue.title
-					h3= "Submitted on " + issue.date.toDateString()
+
+					div.top
+						a(href="/")
+							h1= issue.title
+						h3= "Submitted on " + issue.date.toDateString()
+
+					div.bottom
+						a(href="").button-issue.primary SGO Response 
 
 				div.bottom
-					a(href="").button-issue.primary SGO Response 
+					p= issue.body
 
-			div.bottom
-				p= issue.body
+			div.alert
+				a(href="#") Go to this issue's page (comments, description)
 
 		div.topContainer.social
 
@@ -91,4 +96,5 @@ mixin createIssueBox(issue)
 				a(href="").link Share...
 
 			div.bottom
-				p 20+ Responses
+				p
+					a(href="") 20+ Responses

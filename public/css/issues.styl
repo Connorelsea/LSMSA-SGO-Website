@@ -1,3 +1,14 @@
+.issueContainer
+	display flex
+	flex-direction column
+	align-items center
+
+/*
+ * Issue Box
+ *
+ * This is the container that the different pieces of the
+ * issue display are contained in.
+ */
 .issueBox
 	display flex
 	
@@ -63,82 +74,215 @@
 			color darken(_yellow, 50%)
 			
 	/*
-     * First Container: 
+     * Second Container: Content
      *
-     * Styling for the first container that contains
-     * the star images, count of votes, and the type
-     * tag for each element.
+     * Contains the main information about the issue such as
+     * the title, the date, and a bit of the description.
      */
 	.topContainer.content
+		display flex
+		flex-direction column
+		justify-content space-between
+		overflow hidden
+		
+		background-image url("/images/LAUREL.png")
+		background-repeat no-repeat
+		background-position 430px 0px
+		background-size 20% auto
+		
 		width 550px
 		
-		> .top
-			display flex
-			justify-content space-between
-			align-items center
-
-			padding-top 20px
-			padding-left 30px
+		transition all 0.4s
+		
+		&:hover
+			
+			background-size 22% auto;
+			background-position 430px 0px
+			
+			.container
+				> .top
+					> .top
+						
+						a
+							text-decoration underline
+							
+							h1
+								font-size 1.6em
+								
+						h3
+							font-size .65em
+				> .bottom
+					p
+						font-size 1.2em
+						
+			.alert
+				a
+					bottom 0px
+		
+		.container
 			
 			> .top
-				
-				h2
-					font-family Constantia
-					font-size 2em
+				display flex
+				justify-content space-between
+				align-items center
 
-					color white
-				
-				h3
-					padding-top 5px
-					font-family Futura
-					font-size .76em
-					font-weight bold
-					text-transform uppercase
-					
-					color _yellow
-					
-			> .bottom
-				
-				.button-issue
-					margin-right 30px
-					padding 6px 18px
-					border 2px solid #40ab6f
-					border-radius 30px
-					
-					font-family Futura
-					font-size .8em
-					font-weight bold
-					text-transform uppercase
-					text-decoration none
-					
-					background-color #40ab6f
-					color darken(#40ab6f, 40%)
-					
-					transition all 0.4s
-
-					&:hover
-						background-color _navy
-						border 2px solid #40ab6f
-						color #40ab6f
-				
-		> .bottom
-			p
-				padding-top 10px
+				padding-top 20px
 				padding-left 30px
-				font-family Constantia
-				font-size 1.4em
-				color white
+				
+				transition all 0.4s
+				
+				> .alert
+					position relative
+					bottom 0px
+				
+				> .top
+					
+					transition font 0.4s
+					
+					a
+						text-decoration none
+						color white
+
+						h1
+							transition all 0.4s
+							font-family Constantia
+							font-size 2em
+
+							color white
+					
+					h3
+						transition all 0.4s
+						padding-top 5px
+						font-family Futura
+						font-size .76em
+						font-weight bold
+						text-transform uppercase
+						
+						color _yellow
+						
+				> .bottom
+					
+					.button-issue
+						margin-right 30px
+						padding 6px 18px
+						border 2px solid #40ab6f
+						border-radius 30px
+						
+						font-family Futura
+						font-size .8em
+						font-weight bold
+						text-transform uppercase
+						text-decoration none
+						
+						background-color #40ab6f
+						color darken(#40ab6f, 40%)
+						
+						transition all 0.4s
+
+						&:hover
+							background-color _navy
+							border 2px solid #40ab6f
+							color #40ab6f
+				
+			> .bottom
+				p
+					transition all 0.4s
+					padding-top 10px
+					padding-left 30px
+					font-family Constantia
+					font-size 1.4em
+					color white
+		
+		.alert
+			a
+				display flex
+				justify-content center
+				align-items center
+				
+				height 20px
+				position relative
+				bottom -30px
+
+				font-family Futura
+				font-weight bold
+				font-size .7em
+				text-transform uppercase
+				
+				padding 6px
+
+				background-color lighten(_navy, 10%)
+				color lighten(_navy, 50%)
+				
+				transition all 0.4s ease
 				
 
 	/*
-     * First Container: 
+     * Third Container: Social
      *
-     * Styling for the first container that contains
-     * the star images, count of votes, and the type
-     * tag for each element.
+     * Shows links for reading more, sharing, and discussing
+     * the current issue.
      */
 	.topContainer.social
+		display flex
+		flex-direction column
+		justify-content space-between
+		align-items center
 		width 130px
+		
+		&:hover
+			> .top
+				a
+					padding-bottom 9px
+		
+		> .top
+			
+			display flex
+			flex-direction column
+			
+			padding-top 20px
+			
+			a
+				padding-bottom 6px
+				font-family Constantia
+				font-size 1.2em
+				text-decoration none
+				color white
+				
+				transition all 0.3s
+				
+				&:hover
+					text-decoration  underline
+					
+		.bottom
+			display flex
+			justify-content center
+			align-items center
+			
+			width 130px
+			height 30px
+			
+			background-color darken(_navy, 30%)
+			
+			transition all 0.4s
+
+			&:hover
+				height 35px
+				
+				p
+					font-size .6em
+					text-decoration underline
+			
+			p
+				font-family Futura
+				font-weight bold
+				font-size .7em
+				text-transform uppercase
+				
+				transition all 0.2s
+				
+				a
+					color white
+					text-decoration none
 
 /*
  * Issue Submission Page
@@ -272,8 +416,6 @@
 				color _navy
 				background-color lighten(_grey, 50%)
 				box-shadow 0 6px 8px -1px rgba(50, 50, 50, 0.40)
-				
-				//background: linear-gradient(to right, #a2b6e5 0%,#ebebeb 39%,#ebebeb 39%,#ebebeb 100%);
 				
 				transition all 0.4s
 				
