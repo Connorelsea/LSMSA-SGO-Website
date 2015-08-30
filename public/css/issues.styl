@@ -2,6 +2,9 @@
 	display flex
 	flex-direction column
 	align-items center
+	padding-top 50px
+
+	background-color _grey
 
 /*
  * Issue Box
@@ -21,6 +24,72 @@
 		height 140px
 		
 		background-color _navy
+		
+	/*
+     * Arrow Container: Arrows
+     *
+     * Styling for the up-vote and down-vote arrows.
+     */
+	.topContainer.arrows
+		margin-right 0px
+		display flex
+		flex-direction row
+		justify-content center
+		align-items center
+		background none
+		
+		width 60px
+		
+		.arrowContainer
+			width 60px
+			display flex
+			flex-direction column
+			justify-content center
+			align-items center
+			
+			.uplink
+				transition all 0.2s
+
+			
+				&:hover
+					padding-bottom 10px
+					
+			.downlink
+				transition all 0.2s
+				
+				&:hover
+					padding-top 17px
+				
+
+			a
+				
+				img
+					width 40px
+					transition all 0.4s
+					
+				.imageContainer
+					position relative
+					left 0
+					top 0
+					
+					&:hover
+						.upimgacc
+							display inline
+					
+					.upimg
+						z-index 100
+						position relative
+						top 0
+						left 0
+						
+					.upimgacc
+						display none
+						z-index 101
+						position absolute
+						top 0
+						left 0
+						
+						transition all 0.2s
 	
 	/*
      * First Container: Votes
@@ -109,6 +178,9 @@
 							h1
 								font-size 1.6em
 								
+							h1.small
+								font-size 1.2em
+								
 						h3
 							font-size .65em
 				> .bottom
@@ -136,6 +208,7 @@
 					bottom 0px
 				
 				> .top
+					width 320px
 					
 					transition font 0.4s
 					
@@ -146,9 +219,12 @@
 						h1
 							transition all 0.4s
 							font-family Constantia
-							font-size 2em
+							font-size 1.8em
 
 							color white
+							
+						h1.small
+							font-size 1.4em
 					
 					h3
 						transition all 0.4s
@@ -190,7 +266,7 @@
 					padding-top 10px
 					padding-left 30px
 					font-family Constantia
-					font-size 1.4em
+					font-size 1.3em
 					color white
 		
 		.alert

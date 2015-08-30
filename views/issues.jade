@@ -1,13 +1,14 @@
-doctype html
-html(lang="en")
+extends template
 
-	include header
+block t-title-h1
+	h1 Issue Board
 
-	body
+block t-title-h2
+	h2 Student-Submitted Issues
 
-		include navigation
+block content
 
-		div.body.issueContainer
+		div.issueContainer
 
 			each val in rows
 				+createIssueBox(val)

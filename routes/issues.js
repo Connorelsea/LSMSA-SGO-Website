@@ -19,6 +19,22 @@ module.exports = function(app, passport, connection) {
 	 */
 	app.post("/issues/submit", function(req, res) {
 
+		var issue = {
+			googleID : req.user.googleID,
+			title    : req.body.title,
+			body     : req.body.description,
+			type     : "issue"
+		}
+
+		connection.query(
+			"INSERT INTO elements SET ?", issue,
+			function(rows, err) {
+				if (err)
+					console.log(err)
+			}
+		)
+
+		res.redirect("/issues?filter=top")
 	});
 
 	/*
@@ -29,7 +45,7 @@ module.exports = function(app, passport, connection) {
 	 * parameterized by issue ID.
 	 */
 	app.get("/issues/:issue_id", function(req, res) {
-		res.send("ID: " + req.params.issue_id);
+
 	});
 
 	/*
@@ -89,13 +105,25 @@ module.exports = function(app, passport, connection) {
 					// returned by the SQL query.
 					for (var i = 0; i < rows.length; i++) {
 
+						var new_body = rows[i].body;
+
+						if (new_body.length > 50) {
+							new_body = new_body.substring(0, 50) + "...";
+						}
+
+						var new_title = rows[i].title;
+
+						if (new_title.length > 50) {
+							new_title = new_title.substring(0, 50) + "...";
+						}
+
 						// Push the initial issues object to
 						// the  issues  array  with an empty
 						// comments array.
 						issues.push({
-							title    : rows[i].title,
+							title    : new_title,
 							date     : rows[i].time,
-							body     : rows[i].body,
+							body     : new_body,
 							likes    : ((rows[i].likeCount == null) ? 0 : rows[i].likeCount),
 							comments : []
 						});

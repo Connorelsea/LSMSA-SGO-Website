@@ -38,10 +38,13 @@ mixin createIssueBox(issue)
 	div.issueBox
 
 		div.topContainer.arrows
-			a(href="").uplink
-				img(src="").upimg
-			a(href="").downlink
-				img(src="").downimg
+			div.arrowContainer
+				a(href="").uplink
+					div.imageContainer
+						img(src="/images/ARROW_UP_DARK.png").upimg
+						img(src="/images/ARROW_UP_LIGHT.png").upimgacc
+				a(href="").downlink
+					img(src="/images/ARROW_DOWN_DARK.png").downimg
 
 		div.topContainer.votes
 
@@ -76,7 +79,10 @@ mixin createIssueBox(issue)
 
 					div.top
 						a(href="/")
-							h1= issue.title
+							if issue.title.length < 30
+								h1= issue.title
+							else
+								h1.small= issue.title
 						h3= "Submitted on " + issue.date.toDateString()
 
 					div.bottom
