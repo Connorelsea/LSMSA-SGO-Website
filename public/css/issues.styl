@@ -1,8 +1,57 @@
 .issueBox
+	display flex
 	
-	> *
+	.topContainer.votes
+		width 130px
+		
+		.top
+			display flex
+			flex-direction column
+			justify-content center
+			
+			height 110px
+			padding 0px 10px
+			
+			.score
+				font-family Futura
+				font-weight bold
+				font-size 3em
+				letter-spacing -4px
+				text-align center
+				color _yellow
+				
+				padding-bottom 4px
+				
+			.stars
+				text-align center
+				
+				> *
+					display inline-block
+					padding 0px 4px
+
+		.bottom
+			display flex
+			flex-direction column
+			justify-content center
+			
+			height 30px
+
+			font-family Futura
+			font-weight bold
+			font-size .9em
+			text-transform uppercase
+			
+			text-align center
+
+			background-color _yellow
+			color darken(_yellow, 50%)
+	
+	.topContainer
 		display inline-block
-		padding 5px 10px
+		margin  5px 5px
+		height 140px
+		
+		background-color _navy
 
 /*
  * Issue Submission Page

@@ -34,49 +34,56 @@ mixin createMainNav(list, user)
 
 // Issue Box
 // Creates a singular issue based on the argument
-mixin createIssueBox(row)
+mixin createIssueBox(issue)
 	div.issueBox
 
-		div.arrows
+		div.topContainer.arrows
 			a(href="").uplink
 				img(src="").upimg
 			a(href="").downlink
 				img(src="").downimg
 
-		div.votes
+		div.topContainer.votes
 
 			div.top
 
 				div.score
 
-					if row.likeCount <= 0
-						p.zero= row.likeCount
+					if issue.likes <= 0
+						p.zero= issue.likes
 					else
-						p.positive= "+" + row.likeCount
+						p.positive= "+" + issue.likes
 
 				div.stars
 					
-					if row.likeCount == 0
-					else if row.likeCount <= 5
-						p *
-					else if row.likeCount <= 10
-						p * *
-					else if  row.likeCount > 10
-						p * * *
+					if issue.likes == 0
+
+					else if issue.likes <= 5
+						img(src="/images/STAR_26.png")
+
+					else if issue.likes <= 10
+						img(src="/images/STAR_26.png")
+						img(src="/images/STAR_26.png")
+
+					else if issue.likes > 10
+						img(src="/images/STAR_26.png")
+						img(src="/images/STAR_26.png")
+						img(src="/images/STAR_26.png")
 
 			div.bottom
 				p Issue
 
-		div.content
+		div.topContainer.content
 
 			div.top
-				h2= row.title
+				h2= issue.title
+				h3= "Submitted on " + issue.date.toDateString()
 				a(href="").button-issue.primary SGO Response 
 
 			div.bottom
-				h3 Submitted by anonymous
+				p= issue.body
 
-		div.social
+		div.topContainer.social
 
 			div.top
 				a(href="").link Read More...

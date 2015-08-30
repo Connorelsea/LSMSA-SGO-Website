@@ -58,13 +58,18 @@ module.exports = function(app, passport, connection) {
 				 * in the likeCount column.
 				 */
 
-				"SELECT E.id, E.time, E.title, E.body, E.type,\n" +
-				"GROUP_CONCAT(C.body SEPARATOR '" + separator + "') AS comments,\n" + 
-				"sum(if(L.elementID is null,0,1)) as likeCount\n" +
-				"FROM elements E\n" +
-				"LEFT JOIN comments C on E.id=C.elementID\n" +
-				"LEFT JOIN likes L on E.id=L.elementID\n" +
-				"group by E.id\n",
+				"SELECT E.id, E.time, E.title, E.body, E.type, C.comments, E.googleID, L.likeCount\n" + 
+				"FROM elements E\n" + 
+				"LEFT JOIN(\n" + 
+				"    SELECT elementID, GROUP_CONCAT(body SEPARATOR '|-|') AS comments\n" + 
+				"    FROM comments\n" + 
+				"    GROUP BY elementID\n" + 
+				") C on C.elementID = E.id\n" + 
+				"LEFT JOIN (\n" + 
+				"    SELECT elementID, COUNT(id) AS likeCount\n" + 
+				"    FROM likes\n" + 
+				"    GROUP BY elementID\n" + 
+				") L ON L.elementID = E.id\n",
 
 				function(err, rows) {
 
@@ -88,7 +93,7 @@ module.exports = function(app, passport, connection) {
 						// comments array.
 						issues.push({
 							title    : rows[i].title,
-							time     : rows[i].time,
+							date     : rows[i].time,
 							body     : rows[i].body,
 							likes    : rows[i].likeCount,
 							comments : []
@@ -118,7 +123,7 @@ module.exports = function(app, passport, connection) {
 					res.render("issues.jade", {
 						mainNavigation : data.mainNavigation,
 						user           : req.user,
-						rows           : rows,
+						rows           : issues,
 						filter         : "top"
 					});
 
