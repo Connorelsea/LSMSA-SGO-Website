@@ -1,5 +1,57 @@
 var data = require("../info/index")
 
+function createIssues(rows) {
+	var issues = [];
+
+	// Loop throug every issue that was
+	// returned by the SQL query.
+	for (var i = 0; i < rows.length; i++) {
+
+		var new_body = rows[i].body;
+
+		if (new_body.length > 50) {
+			new_body = new_body.substring(0, 50) + "...";
+		}
+
+		var new_title = rows[i].title;
+
+		if (new_title.length > 50) {
+			new_title = new_title.substring(0, 50) + "...";
+		}
+
+		// Push the initial issues object to
+		// the  issues  array  with an empty
+		// comments array.
+		issues.push({
+			id       : rows[i].id,
+			title    : new_title,
+			date     : rows[i].time,
+			body     : new_body,
+			likes    : ((rows[i].likeCount == null) ? 0 : rows[i].likeCount),
+			comments : []
+		});
+
+		// Split concatenated string of comments,
+		// making an array of all comments
+		var comments = [];
+
+		if (rows[i].comments) {
+			comments = rows[i].comments.split("|-|");
+		}
+
+		// Fill the empty comments array in the
+		// issues  object  with  its respective
+		// comments.
+		for (var c = 0; c < comments.length; c++) {
+			issues[i].comments.push({
+				body : comments[c]
+			});
+		}
+	}
+
+	return issues;
+}
+
 module.exports = function(app, passport, connection) {
 
 	/*
@@ -120,56 +172,7 @@ module.exports = function(app, passport, connection) {
 					 * Create issue objects to send to the page
 					 * being rendered
 					 */
-
-					var issues = [];
-
-					// Loop throug every issue that was
-					// returned by the SQL query.
-					for (var i = 0; i < rows.length; i++) {
-
-						var new_body = rows[i].body;
-
-						if (new_body.length > 50) {
-							new_body = new_body.substring(0, 50) + "...";
-						}
-
-						var new_title = rows[i].title;
-
-						if (new_title.length > 50) {
-							new_title = new_title.substring(0, 50) + "...";
-						}
-
-						// Push the initial issues object to
-						// the  issues  array  with an empty
-						// comments array.
-						issues.push({
-							id       : rows[i].id,
-							title    : new_title,
-							date     : rows[i].time,
-							body     : new_body,
-							likes    : ((rows[i].likeCount == null) ? 0 : rows[i].likeCount),
-							comments : []
-						});
-
-						// Split concatenated string of comments,
-						// making an array of all comments
-						var comments = [];
-
-						if (rows[i].comments) {
-							comments = rows[i].comments.split("|-|");
-						}
-
-						// Fill the empty comments array in the
-						// issues  object  with  its respective
-						// comments.
-						for (var c = 0; c < comments.length; c++) {
-
-							issues[i].comments.push({
-								body : comments[c]
-							});
-
-						}
-					}
+					 var issues = createIssues(rows)
 
 					/*
 					 * Render the issues page and send  it the 
@@ -195,7 +198,7 @@ module.exports = function(app, passport, connection) {
 		 * from the top of the page.
 		 */
 		else if (req.query.filter == "recent") {
-			
+
 		}
 
 		/*
