@@ -39,7 +39,7 @@ mixin createIssueBox(issue)
 
 		div.topContainer.arrows
 			div.arrowContainer
-				a(href="").uplink
+				a(href="/issues/" + issue.id + "?action=like").uplink
 					div.imageContainer
 						img(src="/images/ARROW_UP_DARK.png").upimg
 						img(src="/images/ARROW_UP_LIGHT.png").upimgacc

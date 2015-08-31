@@ -34,7 +34,7 @@ module.exports = function(app, passport, connection) {
 			}
 		)
 
-		res.redirect("/issues?filter=top")
+		res.redirect("/issues?filter=top");
 	});
 
 	/*
@@ -45,6 +45,28 @@ module.exports = function(app, passport, connection) {
 	 * parameterized by issue ID.
 	 */
 	app.get("/issues/:issue_id", function(req, res) {
+
+		/*
+		 * Do a like action on this issue.
+		 * URL: /issues/:issue_id?action=like
+		 */
+		if (req.query.action == "like") {
+
+			var like = {
+				elementID : req.params.issue_id,
+				googleID  : req.user.googleID
+			}
+
+			connection.query(
+				"INSERT INTO likes SET ?", like,
+				function(rows, err) {
+					if (err)
+						console.log(err)
+				}
+			)
+
+			res.redirect("/issues?filter=top");
+		}
 
 	});
 
@@ -121,6 +143,7 @@ module.exports = function(app, passport, connection) {
 						// the  issues  array  with an empty
 						// comments array.
 						issues.push({
+							id       : rows[i].id,
 							title    : new_title,
 							date     : rows[i].time,
 							body     : new_body,
@@ -172,7 +195,7 @@ module.exports = function(app, passport, connection) {
 		 * from the top of the page.
 		 */
 		else if (req.query.filter == "recent") {
-
+			
 		}
 
 		/*
