@@ -54,6 +54,31 @@ function createIssues(rows) {
 
 module.exports = function(app, passport, connection) {
 
+	var queryIssues = function(orderBy, callback) {
+
+		connection.query(
+			/*
+			 * Return list of posts with numbers of upvotes.
+			 * Posts that have no upvotes have a NULL value
+			 * in the likeCount column.
+			 */
+			"SELECT E.id, E.time, E.title, E.body, E.type, C.comments, E.googleID, L.likeCount\n" + 
+			"FROM elements E\n" + 
+			"LEFT JOIN(\n" + 
+			"    SELECT elementID, GROUP_CONCAT(body SEPARATOR '|-|') AS comments\n" + 
+			"    FROM comments\n" + 
+			"    GROUP BY elementID\n" + 
+			") C on C.elementID = E.id\n" + 
+			"LEFT JOIN (\n" + 
+			"    SELECT elementID, COUNT(id) AS likeCount\n" + 
+			"    FROM likes\n" + 
+			"    GROUP BY elementID\n" + 
+			") L ON L.elementID = E.id\n" + orderBy, callback
+		);
+
+		return 0;
+	}
+
 	/*
 	 * GET: Submit an issue
 	 */
@@ -104,20 +129,33 @@ module.exports = function(app, passport, connection) {
 		 */
 		if (req.query.action == "like") {
 
-			var like = {
-				elementID : req.params.issue_id,
-				googleID  : req.user.googleID
+			if (req.user) {
+
+				var like = {
+					elementID : req.params.issue_id,
+					googleID  : req.user.googleID
+				}
+
+				connection.query(
+					"INSERT INTO likes SET ?", like,
+					function(rows, err) {
+						if (err)
+							console.log(err)
+					}
+				);
+
 			}
 
-			connection.query(
-				"INSERT INTO likes SET ?", like,
-				function(rows, err) {
-					if (err)
-						console.log(err)
-				}
-			)
-
 			res.redirect("/issues?filter=top");
+		}
+
+		/*
+		 * Load the page for the specific issue.
+		 */
+		else {
+
+
+
 		}
 
 	});
@@ -140,28 +178,8 @@ module.exports = function(app, passport, connection) {
 		 */
 		if (req.query.filter == "top") {
 
-			connection.query(
-
-				/*
-				 * Return list of posts with numbers of upvotes.
-				 * Posts that have no upvotes have a NULL value
-				 * in the likeCount column.
-				 */
-
-				"SELECT E.id, E.time, E.title, E.body, E.type, C.comments, E.googleID, L.likeCount\n" + 
-				"FROM elements E\n" + 
-				"LEFT JOIN(\n" + 
-				"    SELECT elementID, GROUP_CONCAT(body SEPARATOR '|-|') AS comments\n" + 
-				"    FROM comments\n" + 
-				"    GROUP BY elementID\n" + 
-				") C on C.elementID = E.id\n" + 
-				"LEFT JOIN (\n" + 
-				"    SELECT elementID, COUNT(id) AS likeCount\n" + 
-				"    FROM likes\n" + 
-				"    GROUP BY elementID\n" + 
-				") L ON L.elementID = E.id\n" +
-				"ORDER BY L.likeCount DESC\n",
-
+			queryIssues(
+				"ORDER BY L.likeCount DESC",
 				function(err, rows) {
 
 					if (err) {
@@ -179,12 +197,15 @@ module.exports = function(app, passport, connection) {
 					 * array of issues and their data/comments
 					 * to use when displaying them on the page.
 					 */
-					res.render("issues.jade", {
-						mainNavigation : data.mainNavigation,
-						user           : req.user,
-						rows           : issues,
-						filter         : "top"
-					});
+					res.render(
+						"issues.jade",
+						{
+							mainNavigation : data.mainNavigation,
+							user           : req.user,
+							rows           : issues,
+							filter         : "top"
+						}
+					);	
 
 				}
 			);

@@ -66,6 +66,9 @@ console.log("Database: Checking database...")
 
 connection.query(show, function(err, rows, fields) {
 
+	if (err)
+		console.log(err)
+
 	if (rows.length <= 0) {
 
 		console.log("Database: " + dbconfig.database + " does not exist.")
