@@ -78,7 +78,7 @@ mixin createIssueBox(issue)
 				div.top
 
 					div.top
-						a(href="/")
+						a(href="/issues/" + issue.id)
 							if issue.title.length < 30
 								h1= issue.title
 							else
@@ -92,14 +92,14 @@ mixin createIssueBox(issue)
 					p= issue.body
 
 			div.alert
-				a(href="#") Go to this issue's page (comments, description)
+				a(href="/issues/" + issue.id) Go to this issue's page (comments, description)
 
 		div.topContainer.social
 
 			div.top
-				a(href="").link Read More...
-				a(href="").link Discuss...
-				a(href="").link Share...
+				a(href="/issues/" + issue.id).link Read More...
+				a(href="/issues/" + issue.id).link Discuss...
+				a(href="/issues/" + issue.id).link Share...
 
 			div.bottom
 				p

@@ -123,11 +123,15 @@ module.exports = function(app, passport, connection) {
 	 */
 	app.get("/issues/:issue_id", function(req, res) {
 
+		console.log("START")
+
 		/*
 		 * Do a like action on this issue.
 		 * URL: /issues/:issue_id?action=like
 		 */
 		if (req.query.action == "like") {
+
+			console.log("LIKE")
 
 			if (req.user) {
 
@@ -146,17 +150,52 @@ module.exports = function(app, passport, connection) {
 
 			}
 
-			res.redirect("/issues?filter=top");
+			res.redirect("/issues");
+			return;
 		}
 
 		/*
 		 * Load the page for the specific issue.
 		 */
-		else {
 
+		connection.query(
 
+			"SELECT E.id, E.time, E.title, E.body, E.type, C.comments, E.googleID, L.likeCount\n" +
+			"FROM elements E\n" +
+			"LEFT JOIN(\n" +
+			"  SELECT elementID, GROUP_CONCAT(body SEPARATOR '|-|') AS comments\n" +
+			"  FROM comments\n" +
+			"  GROUP BY elementID\n" +
+			") C on C.elementID = E.id\n" +
+			"LEFT JOIN (\n" +
+			"  SELECT elementID, COUNT(id) AS likeCount\n" +
+			"  FROM likes\n" +
+			"  GROUP BY elementID\n" +
+			") L ON L.elementID = E.id\n" +
+			"WHERE E.id = " + req.params.issue_id,
 
-		}
+			function(err, rows) {
+
+				console.log("hello baby")
+
+				if (err) {
+					console.log(err);
+					res.redirect("/issues");
+				}
+
+				var issues = createIssues(rows);
+
+				res.render(
+					"issue-page.jade",
+					{
+						mainNavigation : data.mainNavigation,
+						user           : req.user,
+						issue          : issues[0]
+					}
+				);
+			}
+			
+		);
 
 	});
 
@@ -176,7 +215,7 @@ module.exports = function(app, passport, connection) {
 		 * Sorts the post by number of votes in descending order
 		 * from the top of the page.
 		 */
-		if (req.query.filter == "top") {
+		if (req.query.filter == "top" || !req.query.filter) {
 
 			queryIssues(
 				"ORDER BY L.likeCount DESC",
@@ -220,6 +259,38 @@ module.exports = function(app, passport, connection) {
 		 */
 		else if (req.query.filter == "recent") {
 
+			queryIssues(
+				"ORDER BY E.time DESC",
+				function(err, rows) {
+
+					if (err) {
+						res.send("ERROR " + err)
+					}
+
+					/*
+					 * Create issue objects to send to the page
+					 * being rendered
+					 */
+					 var issues = createIssues(rows)
+
+					/*
+					 * Render the issues page and send  it the 
+					 * array of issues and their data/comments
+					 * to use when displaying them on the page.
+					 */
+					res.render(
+						"issues.jade",
+						{
+							mainNavigation : data.mainNavigation,
+							user           : req.user,
+							rows           : issues,
+							filter         : "top"
+						}
+					);
+
+				}
+			);
+
 		}
 
 		/*
@@ -230,7 +301,8 @@ module.exports = function(app, passport, connection) {
 		 * history, as well as the most recent posts.
 		 */
 		else {
-
+			// Temporary redirect
+			res.redirect("/issues")
 		}
 
 	});
