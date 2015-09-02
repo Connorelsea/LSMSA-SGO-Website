@@ -1,0 +1,149 @@
+.singleIssue
+	display flex
+	justify-content center
+	background-image url("/images/DarkBackground.png")
+
+	.container
+		min-height 270px
+		display flex
+		padding 60px
+		
+		> .left
+			width     700px
+			min-width 700px
+			max-width 700px
+			
+			.top
+				padding-bottom 10px
+				
+				h1
+					font-family Constantia
+					font-size 3em
+					color white
+				
+				h3
+					padding-top 10px
+					
+					font-family Futura
+					font-size 0.8em
+					font-weight bold
+					color _yellow
+					text-transform uppercase
+					
+			.bottom
+				padding-top 30px
+				
+				h5
+					opacity 0.5
+					font-family Constantia
+					font-size 0.8em
+					color #95a3d2
+					padding-bottom 10px
+
+				p
+					font-family Constantia
+					font-size 1.4em
+					line-height 1.4em
+					color white
+
+					transition all 0.5s ease
+					
+					&:hover
+						line-height 1.7em
+						padding 50px
+						background-color alpha(black, 0.4)
+		
+		> .right
+			display flex
+			flex-direction column
+			justify-content space-between
+
+			width     300px
+			min-width 300px
+			max-width 300px
+			
+			.stats
+				display flex
+				flex-direction row
+				justify-content space-between
+				
+				.left
+					
+					> *
+						display block
+						
+					span
+						display inline-block
+						font-size 2em
+						
+					.number
+						width 90px
+						font-family Futura
+						font-weight bold
+						text-align right
+						
+					.word
+						padding-left 15px
+						font-family FuturaCond
+						text-transform uppercase
+						
+					.rowOne
+						color _yellow
+						
+					.rowTwo
+						color lighten(_yellow, 20%)
+						
+					.rowThree
+						color lighten(_yellow, 60%)
+						
+				.right
+					display flex
+					
+					height     160px
+					min-height 160px
+					max-height 160px
+					
+					div
+						margin-right 12px
+						height 40px
+						min-height 10px
+						width 13px
+						max-width 30px
+						
+						transition all 0.4s
+						
+						&:hover
+							height 80%
+						
+					.barOne
+						height 87px
+						background-color _yellow
+						
+					.barTwo
+						height 147px
+						background-color lighten(_yellow, 20%)
+						
+					.barThree
+						height 107px
+						background-color lighten(_yellow, 60%)
+			
+			.share
+				
+				&:hover
+					
+					> *
+						padding-top 8px
+
+				a
+					display block
+					font-family Constantia
+					font-size 1.3em
+					text-align right
+					text-decoration none
+					color #95a3d2
+					
+					padding-top 3px
+					transition all 0.5s
+					
+					&:hover
+						text-decoration underline

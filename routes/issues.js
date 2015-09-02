@@ -1,22 +1,26 @@
 var data = require("../info/index")
 
-function createIssues(rows) {
+function createIssues(rows, wrap) {
 	var issues = [];
 
 	// Loop throug every issue that was
 	// returned by the SQL query.
 	for (var i = 0; i < rows.length; i++) {
 
-		var new_body = rows[i].body;
-
-		if (new_body.length > 50) {
-			new_body = new_body.substring(0, 50) + "...";
-		}
-
+		var new_body  = rows[i].body;
 		var new_title = rows[i].title;
 
-		if (new_title.length > 50) {
-			new_title = new_title.substring(0, 50) + "...";
+
+		if (wrap == true) {
+
+			if (new_body.length > 50) {
+				new_body = new_body.substring(0, 50) + "...";
+			}
+
+			if (new_title.length > 50) {
+				new_title = new_title.substring(0, 50) + "...";
+			}
+
 		}
 
 		// Push the initial issues object to
@@ -176,14 +180,12 @@ module.exports = function(app, passport, connection) {
 
 			function(err, rows) {
 
-				console.log("hello baby")
-
 				if (err) {
 					console.log(err);
 					res.redirect("/issues");
 				}
 
-				var issues = createIssues(rows);
+				var issues = createIssues(rows, false);
 
 				res.render(
 					"issue-page.jade",
@@ -194,7 +196,7 @@ module.exports = function(app, passport, connection) {
 					}
 				);
 			}
-			
+
 		);
 
 	});
@@ -229,7 +231,7 @@ module.exports = function(app, passport, connection) {
 					 * Create issue objects to send to the page
 					 * being rendered
 					 */
-					 var issues = createIssues(rows)
+					 var issues = createIssues(rows, true)
 
 					/*
 					 * Render the issues page and send  it the 
@@ -271,7 +273,7 @@ module.exports = function(app, passport, connection) {
 					 * Create issue objects to send to the page
 					 * being rendered
 					 */
-					 var issues = createIssues(rows)
+					 var issues = createIssues(rows, true)
 
 					/*
 					 * Render the issues page and send  it the 

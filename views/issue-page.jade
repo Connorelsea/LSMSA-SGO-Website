@@ -1,3 +1,55 @@
-html
+doctype html
+html(lang="en")
+
+	include header
+
 	body
-		p= issue.title
+
+		include navigation
+
+		div.body
+
+			div.singleIssue.bar
+
+				div.container
+
+					div.left
+
+						div.top
+							h1= issue.title
+							h3= "Submitted On " + issue.date.toDateString() + " at " + issue.date.getHours() + ":" + issue.date.getMinutes() + ":" + issue.date.getSeconds()
+
+						div.bottom
+							//h5 Hover for easy reading mode
+							p= issue.body
+
+					div.right
+
+						div.stats
+
+							div.left
+
+								div.row.rowOne
+									h3
+										span.number 27
+										span.word Upvotes
+
+								div.row.rowTwo
+									h3 
+										span.number 245
+										span.word Views
+
+								div.row.rowThree
+									h3 
+										span.number 6
+										span.word Shares
+
+							div.right
+								div.barOne
+								div.barTwo
+								div.barThree
+
+						div.share
+							a(href="") Share to Facebook
+							a(href="") Share to Twitter
+							a(href="") Share as Link
