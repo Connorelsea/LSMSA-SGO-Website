@@ -21,23 +21,27 @@ var create_users  =
 	");";
 
 var create_elements = 
-    "CREATE TABLE elements(\n" +
+	"CREATE TABLE elements(\n"     +
 	"id          INT NOT NULL AUTO_INCREMENT,\n" +
-	"googleID    VARCHAR(60),\n"  +
+	"googleID    VARCHAR(60),\n"   +
 	"time        DATETIME DEFAULT CURRENT_TIMESTAMP,\n" +
-	"title       VARCHAR(300),\n" +
-	"body        TEXT,\n"         +
+	"title       VARCHAR(300),\n"  +
+	"body        TEXT,\n"          +
+	"approved    INT DEFAULT 0,"   +
+	"views       INT DEFAULT 0,"   +
+	"shares      INT DEFAULT 0,"   +
 	"type        ENUM('blog', 'issue'),\n" +
-	"PRIMARY KEY (id)\n"          +
+	"PRIMARY KEY (id)\n"           +
 	");";
 
 var create_comments =
-    "CREATE TABLE comments("   +
+	"CREATE TABLE comments("     +
 	"id          INT NOT NULL AUTO_INCREMENT," +
-	"elementID   INT NOT NULL," +
-	"googleID    VARCHAR(60),"  +
-	"body        TEXT,"         +
-	"PRIMARY KEY (id)"          +
+	"elementID   INT NOT NULL,"  +
+	"googleID    VARCHAR(60),"   +
+	"body        TEXT,"          +
+	"approved    INT DEFAULT 0," +
+	"PRIMARY KEY (id)"           +
 	");";
 
 var create_likes =

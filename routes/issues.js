@@ -83,6 +83,25 @@ module.exports = function(app, passport, connection) {
 		return 0;
 	}
 
+	var doLike = function(req, elementID, googleID) {
+
+		console.log("doing like")
+
+		var like = {
+			elementID : req.params.issue_id,
+			googleID  : req.user.googleID
+		}
+
+		connection.query(
+			"INSERT INTO likes SET ?", like,
+			function(rows, err) {
+				if (err)
+					console.log(err)
+			}
+		);
+
+	}
+
 	/*
 	 * GET: Submit an issue
 	 */
@@ -139,17 +158,34 @@ module.exports = function(app, passport, connection) {
 
 			if (req.user) {
 
-				var like = {
-					elementID : req.params.issue_id,
-					googleID  : req.user.googleID
-				}
+				// Query to determine whether or not the
+				// current user has liked the element
+				// before.
 
-				connection.query(
-					"INSERT INTO likes SET ?", like,
-					function(rows, err) {
-						if (err)
+				console.log("\n\nQUERY\n\n" + "SELECT * FROM likes WHERE googleID = " + req.user.googleID + " AND elementID = " + req.params.issue_id + "\n\n")
+
+				var QueryString = "SELECT * FROM likes WHERE googleID = " + req.user.googleID + " AND elementID = " + req.params.issue_id;
+
+				connection.query(QueryString,
+
+					function(err, rows) {
+
+						if (rows) {
+							console.log("has rows")
+						} else {
+							console.log("HAS NO ROWS")
+						}
+
+						if (err) {
 							console.log(err)
+						}
+
+						if (!rows || rows.length < 1) {
+							doLike(req, req.params.issue_id, req.user.googleID);
+						}
+
 					}
+
 				);
 
 			}

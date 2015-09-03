@@ -10,5 +10,11 @@ block content
 
 		div.issueContainer
 
-			each val in rows
-				+createIssueBox(val)
+			if rows.length > 0
+				each val in rows
+					+createIssueBox(val)
+			else
+				h1 No Issues Currently
+				a(href="/issues/submit").button.primary Submit an Issue
+
+
