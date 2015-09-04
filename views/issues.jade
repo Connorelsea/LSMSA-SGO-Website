@@ -8,7 +8,7 @@ block t-title-h2
 
 block content
 
-		div.issueContainer
+		div.issueContainer.ics
 
 			if rows.length > 0
 				each val in rows
@@ -16,5 +16,3 @@ block content
 			else
 				h1 No Issues Currently
 				a(href="/issues/submit").button.primary Submit an Issue
-
-

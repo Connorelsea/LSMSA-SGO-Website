@@ -103,6 +103,31 @@ module.exports = function(app, passport, connection) {
 	}
 
 	/*
+	 * GET: Home page
+	 */
+	app.get("/", function(req, res) {
+
+		queryIssues(
+		"ORDER BY L.likeCount DESC",
+			function(err, rows) {
+
+				if (err) {
+					res.send("ERROR " + err)
+				}
+
+				var issues = createIssues(rows, true)
+
+				res.render("index.jade", {
+					mainNavigation : data.mainNavigation,
+					user           : req.user,
+					rows           : issues
+				});
+
+			}
+		);
+	});
+
+	/*
 	 * GET: Submit an issue
 	 */
 	app.get("/issues/submit", function(req, res) {

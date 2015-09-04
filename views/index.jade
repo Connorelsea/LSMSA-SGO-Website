@@ -54,17 +54,30 @@ html(lang="en")
 								div.inner
 
 									div.header
-										div.title
-											h2
-												span.primary Trending 
-												span.secondary Issues
 
-										div.buttons
-											a(href="#").button.secondary Submit an Issue
-											a(href="#").button.primary View All Issues
+										div.upper
 
-									div.body
-										p Test Issue Space
+											div.title
+												h2
+													span.primary Trending 
+													span.secondary Issues
+
+											div.buttons
+												a(href="#").button.secondary Submit an Issue
+												a(href="#").button.primary View All Issues
+
+										div.lower
+
+											p Issues and the Issue Board are tools created by the community for the community. Issues are submitted by students, reviewed by the SGO, and then put on the site for students to vote on and discuss.
+
+									div.issueContainer
+
+										if rows.length > 0
+											each val in rows
+												+createIssueBox(val)
+										else
+											h1 No Issues Currently
+											a(href="/issues/submit").button.primary Submit an Issue
 
 		div.contentBodyTwo
 			p Content here test

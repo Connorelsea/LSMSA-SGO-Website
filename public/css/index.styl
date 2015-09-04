@@ -266,13 +266,15 @@ header nav ul li ul li .desc
 
 // "Make a difference" title
 
-.actionBar .header
-	font-family Constantia
-	color _grey
-	font-size 3em
+.actionBar
 	
-.actionBar .header *
-	display inline
+	.header
+		font-family Constantia
+		color _grey
+		font-size 3em
+	
+		*
+			display inline
 
 // .actionBar .header .primary
 // 	font-style oblique
@@ -439,65 +441,80 @@ header nav ul li ul li .desc
 .barIssues
 	margin-top 50px
 
-.barIssues .constrainContainer
-	width 85%
-	margin 0 auto
-
-.issues
-	background-color _grey
-	
-.barIssues .decoration
-	height 12px
-	background-color alpha(_grey, 0.5)
-
-// Issue Header items
-// This includes the title and the buttons
-
-.issues
-	
-	.inner
-		padding 20px
-
-	.header
-		display flex
-		justify-content space-between
-
-	// Issue header title
-
-	.title
-		font-family Futura
-		font-size 1.8em
-		text-transform uppercase
-		color _navy
-	
-	.title .secondary
-		font-weight bold
-
-	// Issue header buttons
+	.constrainContainer
+		width 1000px
+		margin 0 auto
 		
-	.buttons
-		display flex
-		flex-direction row
+	.decoration
+		height 12px
+		background-color alpha(_grey, 0.5)
+		
+	.issues
+		background-color _grey
+		
+		.inner
+			padding 20px
 
-	.button
-		margin 0px
-		margin-left 15px
-		
-		width 150px
-		border-radius 20px
-		border-color _navy
-		
-	.button.primary
-		background-color _navy
-		color _grey
-		
-		&:hover
-			background-color _grey
+		.header
+			display flex
+			flex-direction column
+			justify-content space-between
+			padding-bottom 20px
+			
+			.upper
+				display flex
+				flex-direction row
+				justify-content space-between
+				
+			.lower
+				display flex
+				flex-direction column
+				text-align center
+				padding 40px 35px
+				padding-bottom 10px
+				
+				p
+					font-family Futura
+					font-size 1.3em
+					color _navy
+
+
+		// Issue header title
+
+		.title
+			font-family Futura
+			font-size 1.8em
+			text-transform uppercase
 			color _navy
-	
-	.button.secondary
-		color _navy
-	
-		&:hover
+		
+		.title .secondary
+			font-weight bold
+
+		// Issue header buttons
+			
+		.buttons
+			display flex
+			flex-direction row
+
+		.button
+			margin 0px
+			margin-left 15px
+			
+			width 150px
+			border-radius 20px
+			border-color _navy
+			
+		.button.primary
 			background-color _navy
 			color _grey
+			
+			&:hover
+				background-color _grey
+				color _navy
+		
+		.button.secondary
+			color _navy
+		
+			&:hover
+				background-color _navy
+				color _grey
