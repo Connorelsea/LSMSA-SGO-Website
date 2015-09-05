@@ -15,12 +15,24 @@ var express      = require("express"),
 
 require("./config/createdb")
 
-var connection = mysql.createConnection({
-    host     : database.connection.host,
-    user     : database.connection.user,
-    password : database.connection.password,
-    database : database.database
-})
+if (process.env.OPENSHIFT_NODEJS_IP) {
+
+    var connection = mysql.createConnection({
+        host     : database.connection.host,
+        user     : database.connection.user,
+        password : database.connection.password,
+        database : database.database
+    });
+
+} else {
+
+    var connection = mysql.createConnection({
+        host     : database.connection_local.host,
+        user     : database.connection_local.user,
+        database : database.database_local
+    });
+
+}
 
 // Express Application Setup
 
@@ -81,7 +93,9 @@ app.use(function(err, req, res, next) {
 
 // Launch Application
 
-var port = process.env.PORT || 3000
-app.listen(port)
+var ip   = process.env.OPENSHIFT_NODEJS_IP   || "127.0.0.1"
+var port = process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 3000
+// app.listen(ip, port)
+app.listen(port, ip);
 
-console.log("Application: Now running on port " + port)
+console.log("Application: Now running on " + ip + ":" + port)

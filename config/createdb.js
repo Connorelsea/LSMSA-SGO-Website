@@ -3,13 +3,22 @@ var dbconfig = require('../config/database');
 
 console.log("Database: Starting MySQL connection.")
 
-var connection = mysql.createConnection(dbconfig.connection);
+var connection;
+var database;
 
-var show   = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = \'" + dbconfig.database + "\';"
+if (process.env.OPENSHIFT_NODEJS_IP) {
+	connection = mysql.createConnection(dbconfig.connection);
+	database   = dbconfig.database;
+} else {
+	connection = mysql.createConnection(dbconfig.connection_local)
+	database   = dbconfig.database_local;
+}
 
-var create = "CREATE DATABASE " + dbconfig.database + ";";
+var show   = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = \'" + database + "\';"
 
-var use    = "USE " + dbconfig.database + ";";
+var create = "CREATE DATABASE " + database + ";";
+
+var use    = "USE " + database + ";";
 
 var create_users  =
     "CREATE TABLE " + dbconfig.tb_users + "(" +
@@ -21,27 +30,23 @@ var create_users  =
 	");";
 
 var create_elements = 
-	"CREATE TABLE elements(\n"     +
+    "CREATE TABLE elements(\n" +
 	"id          INT NOT NULL AUTO_INCREMENT,\n" +
-	"googleID    VARCHAR(60),\n"   +
+	"googleID    VARCHAR(60),\n"  +
 	"time        DATETIME DEFAULT CURRENT_TIMESTAMP,\n" +
-	"title       VARCHAR(300),\n"  +
-	"body        TEXT,\n"          +
-	"approved    INT DEFAULT 0,"   +
-	"views       INT DEFAULT 0,"   +
-	"shares      INT DEFAULT 0,"   +
+	"title       VARCHAR(300),\n" +
+	"body        TEXT,\n"         +
 	"type        ENUM('blog', 'issue'),\n" +
-	"PRIMARY KEY (id)\n"           +
+	"PRIMARY KEY (id)\n"          +
 	");";
 
 var create_comments =
-	"CREATE TABLE comments("     +
+    "CREATE TABLE comments("   +
 	"id          INT NOT NULL AUTO_INCREMENT," +
-	"elementID   INT NOT NULL,"  +
-	"googleID    VARCHAR(60),"   +
-	"body        TEXT,"          +
-	"approved    INT DEFAULT 0," +
-	"PRIMARY KEY (id)"           +
+	"elementID   INT NOT NULL," +
+	"googleID    VARCHAR(60),"  +
+	"body        TEXT,"         +
+	"PRIMARY KEY (id)"          +
 	");";
 
 var create_likes =
@@ -75,8 +80,8 @@ connection.query(show, function(err, rows, fields) {
 
 	if (rows.length <= 0) {
 
-		console.log("Database: " + dbconfig.database + " does not exist.")
-		console.log("Database: creating database " + dbconfig.database)
+		console.log("Database: " + database + " does not exist.")
+		console.log("Database: creating database " + database)
 
 		// connection.query(create)
 		// connection.query(use)
@@ -90,7 +95,7 @@ connection.query(show, function(err, rows, fields) {
 		console.log('Database: Database and Tables Created');
 
 	} else {
-		console.log("Database: " + dbconfig.database + " already exists.")
+		console.log("Database: " + database + " already exists.")
 	}
 
 	console.log("Database: Ending MySQL connection.")
