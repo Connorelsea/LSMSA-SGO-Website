@@ -3,15 +3,23 @@ var dbconfig = require('../config/database');
 
 console.log("Database: Starting MySQL connection.")
 
-var connection;
-var database;
-
 if (process.env.OPENSHIFT_NODEJS_IP) {
+
+	console.log("Database: Attempting to use OpenShift credentials.")
+
 	connection = mysql.createConnection(dbconfig.connection);
 	database   = dbconfig.database;
+
+	console.log("Database: Connected using OpenShift credentials.")
+
 } else {
+
+	console.log("Database: Attempting to use local credentials")
+
 	connection = mysql.createConnection(dbconfig.connection_local)
 	database   = dbconfig.database_local;
+
+	console.log("Database: Connected using local credentials.")
 }
 
 var show   = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = \'" + database + "\';"
@@ -75,30 +83,33 @@ console.log("Database: Checking database...")
 
 connection.query(show, function(err, rows, fields) {
 
-	if (err)
+	if (err) {
+
+		console.log("Database: There was an error")
 		console.log(err)
 
-	if (rows.length <= 0) {
+	} else {
 
-		console.log("Database: " + database + " does not exist.")
-		console.log("Database: creating database " + database)
+		if (!rows || rows.length <= 0) {
 
-		// connection.query(create)
-		// connection.query(use)
-		// connection.query(create_users)
-		for (i = 0; i < queries.length; i++) {
-			connection.query(queries[i], function(err) {
-				if (err) console.log(err)
-			})
+			console.log("Database: " + database + " does not exist.")
+			console.log("Database: creating database " + database)
+
+			for (i = 0; i < queries.length; i++) {
+				connection.query(queries[i], function(err) {
+					if (err) console.log(err)
+				})
+			}
+
+			console.log('Database: Database and Tables Created');
+
+		} else {
+			console.log("Database: " + database + " already exists.")
 		}
 
-		console.log('Database: Database and Tables Created');
+		console.log("Database: Ending MySQL connection.")
+		connection.end();
 
-	} else {
-		console.log("Database: " + database + " already exists.")
 	}
-
-	console.log("Database: Ending MySQL connection.")
-	connection.end();
 
 })

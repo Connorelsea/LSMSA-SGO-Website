@@ -1,6 +1,9 @@
 {
 	"name": "lsmsa-sgo-website",
 	"main": "app.js",
+	"scripts": {
+		"start": "node app.js"
+	},
 	"dependencies": {
 		"express": "*",
 		"jade": "*",

@@ -93,9 +93,9 @@ app.use(function(err, req, res, next) {
 
 // Launch Application
 
-var ip   = process.env.OPENSHIFT_NODEJS_IP   || "127.0.0.1"
-var port = process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 3000
-// app.listen(ip, port)
-app.listen(port, ip);
+var ip   = process.env.OPENSHIFT_NODEJS_IP   || "localhost"
+var port = process.env.OPENSHIFT_NODEJS_PORT || 3000
 
-console.log("Application: Now running on " + ip + ":" + port)
+app.listen(port, ip, function() {
+    console.log("Application: Now running on " + ip + ":" + port)
+});

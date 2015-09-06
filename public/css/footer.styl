@@ -1,47 +1,55 @@
 footer
-	display flex
-	flex-direction column
-	background-image url("/images/DarkBackground.png")
 	
-	.section
-		display flex
-		flex-direction row
-		justify-content center
+	> .upper
+		padding 30px
+		text-align center
+		background-color darken(_navy, 70%)
+		
+		.upperNav, .lowerNav
+			font-family FuturaCond
+			text-transform uppercase
+			
+		.upperNav
+			
+			ul li a
+				font-size 1.4em
+				
+		.lowerNav
+			padding-top 10px
+			
+		ul
+			li
+				display inline-block
+				padding 0px 6px
+				transition all 0.4s
+				
+				&:hover
+					padding 0px 16px
+					
+					a
+						color lighten(_navy, 20%)
+				
+				a
+					color _navy
+					text-decoration none
 	
-		.inner
-			width 1000px
+	> .lower
+		padding 30px
+		text-align center
+		background-color _navy
 		
-	.dark
-		background-color alpha(black, 0.4)
-		
-	> .top
-		height 150px
-	
-		
-	> .middle
-		
-		.inner
-			padding 40px
+		h1, h2
+			font-family FuturaCond
+			text-transform uppercase
 		
 		h1
-			font-family Constantia
-			color lighten(_navy, 50%)
+			font-size 1.2em
+			color lighten(_navy, 60%)
 			
-			> *
-				display block
-				
-			.top
-				font-size 0.8em
-				
-			.bottom
-				font-size 1.9em
-	
-	> .bottom
-		
-		.inner
-			padding 20px
-			
-		p
-			font-family Futura
-			font-size 0.95em
-			color lighten(_navy, 20%)
+			.name
+				font-weight bold
+				font-size 1.1em		
+		h2
+			font-size 1.0em
+			padding-top 10px
+			color lighten(_navy, 40%)
