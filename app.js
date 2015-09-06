@@ -15,21 +15,18 @@ var express      = require("express"),
 
 require("./config/createdb")
 
+var connection;
+
 if (process.env.OPENSHIFT_NODEJS_IP) {
 
-    var connection = mysql.createConnection({
-        host     : database.connection.host,
-        user     : database.connection.user,
-        password : database.connection.password,
-        database : database.database
-    });
+    connection = mysql.createConnection(database.connection);
 
 } else {
 
-    var connection = mysql.createConnection({
+    connection = mysql.createConnection({
         host     : database.connection_local.host,
         user     : database.connection_local.user,
-        database : database.database_local
+        database : database.database
     });
 
 }

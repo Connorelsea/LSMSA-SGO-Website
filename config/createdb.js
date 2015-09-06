@@ -3,12 +3,14 @@ var dbconfig = require('../config/database');
 
 console.log("Database: Starting MySQL connection.")
 
+var database = "lsmsa";
+
 if (process.env.OPENSHIFT_NODEJS_IP) {
 
 	console.log("Database: Attempting to use OpenShift credentials.")
 
 	connection = mysql.createConnection(dbconfig.connection);
-	database   = dbconfig.database;
+	database   = dbconfig.connection.database;
 
 	console.log("Database: Connected using OpenShift credentials.")
 
@@ -17,7 +19,7 @@ if (process.env.OPENSHIFT_NODEJS_IP) {
 	console.log("Database: Attempting to use local credentials")
 
 	connection = mysql.createConnection(dbconfig.connection_local)
-	database   = dbconfig.database_local;
+	database   = dbconfig.database;
 
 	console.log("Database: Connected using local credentials.")
 }
@@ -29,7 +31,7 @@ var create = "CREATE DATABASE " + database + ";";
 var use    = "USE " + database + ";";
 
 var create_users  =
-    "CREATE TABLE " + dbconfig.tb_users + "(" +
+    "CREATE TABLE users(" +
 	"googleID VARCHAR(60),"  +
 	"token    VARCHAR(100)," +
 	"name     VARCHAR(60),"  +
@@ -85,31 +87,37 @@ connection.query(show, function(err, rows, fields) {
 
 	if (err) {
 
-		console.log("Database: There was an error")
+		console.log("Database: There was an error while checking database.")
 		console.log(err)
-
-	} else {
-
-		if (!rows || rows.length <= 0) {
-
-			console.log("Database: " + database + " does not exist.")
-			console.log("Database: creating database " + database)
-
-			for (i = 0; i < queries.length; i++) {
-				connection.query(queries[i], function(err) {
-					if (err) console.log(err)
-				})
-			}
-
-			console.log('Database: Database and Tables Created');
-
-		} else {
-			console.log("Database: " + database + " already exists.")
-		}
-
-		console.log("Database: Ending MySQL connection.")
-		connection.end();
 
 	}
 
+	if (!rows || rows.length <= 0) {
+
+		console.log("Database: " + database + " does not exist.")
+		console.log("Database: creating database " + database)
+
+		for (i = 0; i < queries.length; i++) {
+
+			connection.query(
+				queries[i], 
+				function(err, rows, fields) {
+
+					if (err) {
+						console.log("Database: There was an error during the query.");
+						console.log(err);
+					}
+				}
+			);
+
+		}
+
+		console.log('Database: Database and Tables Created');
+
+	} else {
+		console.log("Database: " + database + " already exists.")
+	}
+
+	console.log("Database: Ending MySQL connection.")
+	connection.end();
 })
