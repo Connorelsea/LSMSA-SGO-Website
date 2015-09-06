@@ -18,6 +18,7 @@
 		"mysql": "*",
 		"stylus": "*",
 		"nib": "*",
-		"cli-color": "*"
+		"cli-color": "*",
+		"async": "*"
 	}
 }

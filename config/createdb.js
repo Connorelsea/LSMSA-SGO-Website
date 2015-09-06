@@ -1,5 +1,6 @@
-var mysql = require('mysql');
+var mysql    = require('mysql');
 var dbconfig = require('../config/database');
+var async    = require('async'); 
 
 console.log("Database: Starting MySQL connection.")
 
@@ -31,7 +32,7 @@ var create = "CREATE DATABASE " + database + ";";
 var use    = "USE " + database + ";";
 
 var create_users  =
-    "CREATE TABLE users(" +
+    "CREATE TABLE IF NOT EXISTS users(" +
 	"googleID VARCHAR(60),"  +
 	"token    VARCHAR(100)," +
 	"name     VARCHAR(60),"  +
@@ -39,11 +40,17 @@ var create_users  =
 	"PRIMARY KEY (googleID)" +
 	");";
 
+var create_elements_trigger =
+	"CREATE TRIGGER `ELEMENTS_INSERT` BEFORE INSERT ON `elements`\n" +
+	"FOR EACH ROW BEGIN\n" +
+	"    SET new.time = now();\n" +
+	"END;";
+
 var create_elements = 
-    "CREATE TABLE elements(\n" +
+    "CREATE TABLE IF NOT EXISTS elements(\n" +
 	"id          INT NOT NULL AUTO_INCREMENT,\n" +
 	"googleID    VARCHAR(60),\n"  +
-	"time        DATETIME DEFAULT CURRENT_TIMESTAMP,\n" +
+	"time        DATETIME,\n" +
 	"title       VARCHAR(300),\n" +
 	"body        TEXT,\n"         +
 	"type        ENUM('blog', 'issue'),\n" +
@@ -51,7 +58,7 @@ var create_elements =
 	");";
 
 var create_comments =
-    "CREATE TABLE comments("   +
+    "CREATE TABLE IF NOT EXISTS comments("   +
 	"id          INT NOT NULL AUTO_INCREMENT," +
 	"elementID   INT NOT NULL," +
 	"googleID    VARCHAR(60),"  +
@@ -60,7 +67,7 @@ var create_comments =
 	");";
 
 var create_likes =
-    "CREATE TABLE likes("   +
+    "CREATE TABLE IF NOT EXISTS likes("   +
 	"id          INT NOT NULL AUTO_INCREMENT," +
 	"elementID   INT NOT NULL," +
 	"googleID    VARCHAR(60),"  +
@@ -68,7 +75,7 @@ var create_likes =
 	");";
 
 var create_responses =
-    "CREATE TABLE responses("   +
+    "CREATE TABLE IF NOT EXISTS responses("   +
 	"id          INT NOT NULL AUTO_INCREMENT," +
 	"elementID   INT NOT NULL," +
 	"title       VARCHAR(300)," +
@@ -78,46 +85,92 @@ var create_responses =
 	");";
 
 var queries = [
-	create, use, create_users, create_elements, create_comments, create_likes, create_responses
+	create, use, create_users, create_elements_trigger, create_elements, create_comments, create_likes, create_responses
 ]
 
 console.log("Database: Checking database...")
 
-connection.query(show, function(err, rows, fields) {
+/*
+ * OpenShift Database Creation
+ *
+ * Specific instructions for creating the tables when
+ * hosted on the OpenShift server.
+ */
+if (process.env.OPENSHIFT_MYSQL_DB_HOST) {
 
-	if (err) {
+	console.log("Database: Attempting table creation. (OpenShift)");
 
-		console.log("Database: There was an error while checking database.")
-		console.log(err)
+	connection.query(use, function(err) {
 
-	}
+		async.forEach(
+			queries,
+			function(query, callback) {
 
-	if (!rows || rows.length <= 0) {
-
-		console.log("Database: " + database + " does not exist.")
-		console.log("Database: creating database " + database)
-
-		for (i = 0; i < queries.length; i++) {
-
-			connection.query(
-				queries[i], 
-				function(err, rows, fields) {
+				connection.query(query, function(err) {
 
 					if (err) {
-						console.log("Database: There was an error during the query.");
+						console.log("Database: There was an error during async query.");
 						console.log(err);
 					}
-				}
-			);
+
+					callback();
+				});
+
+			},
+			function(err) {
+				connection.end();
+			}
+		);
+
+	});
+
+	console.log("Database: Done with OpenShift table creation");
+}
+
+/*
+ * Local Database Creation
+ *
+ * Specific instructions for creating the database and
+ * the tables when hosted on a local development machine.
+ */
+else {
+
+	connection.query(show, function(err, rows, fields) {
+
+		if (err) {
+
+			console.log("Database: There was an error while checking database.")
+			console.log(err)
 
 		}
 
-		console.log('Database: Database and Tables Created');
+		if (!rows || rows.length <= 0) {
 
-	} else {
-		console.log("Database: " + database + " already exists.")
-	}
+			console.log("Database: " + database + " does not exist.")
+			console.log("Database: creating database " + database)
 
-	console.log("Database: Ending MySQL connection.")
-	connection.end();
-})
+			for (i = 0; i < queries.length; i++) {
+
+				connection.query(
+					queries[i], 
+					function(err, rows, fields) {
+
+						if (err) {
+							console.log("Database: There was an error during the query.");
+							console.log(err);
+						}
+					}
+				);
+
+			}
+
+			console.log('Database: Database and Tables Created');
+
+		} else {
+			console.log("Database: " + database + " already exists.")
+		}
+
+		console.log("Database: Ending MySQL connection.")
+		connection.end();
+	});
+}
