@@ -54,6 +54,7 @@ var create_elements =
 	"title       VARCHAR(300),\n" +
 	"body        TEXT,\n"         +
 	"type        ENUM('blog', 'issue'),\n" +
+	"approved    BOOL DEFAULT 0,\n" +
 	"PRIMARY KEY (id)\n"          +
 	");";
 
@@ -63,6 +64,7 @@ var create_comments =
 	"elementID   INT NOT NULL," +
 	"googleID    VARCHAR(60),"  +
 	"body        TEXT,"         +
+	"approved    BOOL DEFAULT 0,\n" +
 	"PRIMARY KEY (id)"          +
 	");";
 
@@ -101,25 +103,39 @@ console.log("Database: Attempting table creation.");
 
 connection.query(use, function(err) {
 
-	async.forEach(
-		queries,
-		function(query, callback) {
+	connection.query(show, function(err, rows, fields) {
 
-			connection.query(query, function(err) {
-
-				if (err) {
-					console.log("Database: There was an error during async query.");
-					console.log(err);
-				}
-
-				callback();
-			});
-
-		},
-		function(err) {
-			connection.end();
+		if (err) {
+			console.log(err)
 		}
-	);
+
+		if (rows.length <= 0) {
+
+			async.forEach(
+				queries,
+				function(query, callback) {
+
+					connection.query(query, function(err) {
+
+						if (err) {
+							console.log("Database: There was an error during async query.");
+							console.log(err);
+						}
+
+						callback();
+					});
+
+				},
+				function(err) {
+					connection.end();
+				}
+			);
+
+		} else {
+			console.log("Database: Database sgo already exists.")
+		}
+
+	})
 
 });
 

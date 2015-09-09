@@ -53,3 +53,21 @@ html(lang="en")
 							a(href="") Share to Facebook
 							a(href="") Share to Twitter
 							a(href="") Share as Link
+
+			div.comments.bar
+				
+				div.commentContainer
+
+					div.submitContainer
+
+						form(name="add-comment", method="post")
+
+							div.text
+								textarea(name="comment")
+
+							div.submitArea
+								input(type="submit", value="Submit")
+
+					div.childrenContainer
+						p comment children here
+

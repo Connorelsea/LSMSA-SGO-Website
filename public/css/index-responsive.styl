@@ -75,7 +75,6 @@
 				
 				a
 					width 65%
-				
 
 		.constrainContainer
 			width 100%
@@ -92,8 +91,32 @@
 		
 		width 100%
 		
+		> *
+			margin 5px !important
+		
 		.topContainer
 			width 90% !important
 			
 		.topContainer.content
-			height 300px
+			height 200px
+			
+			.top .bottom
+				display none
+			
+		.social
+			background none
+			
+			> .top
+				padding-top 5px !important
+				width 100%
+				flex-direction row !important
+				justify-content space-around
+				
+				a
+					width 30% !important
+					font-weight bold
+					color _navy !important
+					font-size 1em !important
+			
+			> .bottom
+				display none !important

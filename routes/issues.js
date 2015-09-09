@@ -171,9 +171,34 @@ module.exports = function(app, passport, connection) {
 	 */
 	app.get("/issues/:issue_id", function(req, res) {
 
-		console.log("START")
+		/*
+		 * Comment:
+		 *
+		 * If this exists, it means that the user is attempting
+		 * to submit a comment. Submit this comment to the database,
+		 * which will mark it as unapproved.
+		 */
+		if (req.body.comment) {
+
+			var comment = {
+				elementID : req.params.issue_id,
+				googleID  : req.user.googleID,
+				body      : req.body.comment
+			}
+
+			connection.query(
+				"INSERT INTO comments SET ?", comment,
+				function(rows, err) {
+					if (err)
+						console.log(err)
+				}
+			);
+
+		}
 
 		/*
+		 * Like:
+		 *
 		 * Do a like action on this issue.
 		 * URL: /issues/:issue_id?action=like
 		 */
@@ -187,19 +212,11 @@ module.exports = function(app, passport, connection) {
 				// current user has liked the element
 				// before.
 
-				console.log("\n\nQUERY\n\n" + "SELECT * FROM likes WHERE googleID = " + req.user.googleID + " AND elementID = " + req.params.issue_id + "\n\n")
-
 				var QueryString = "SELECT * FROM likes WHERE googleID = " + req.user.googleID + " AND elementID = " + req.params.issue_id;
 
 				connection.query(QueryString,
 
 					function(err, rows) {
-
-						if (rows) {
-							console.log("has rows")
-						} else {
-							console.log("HAS NO ROWS")
-						}
 
 						if (err) {
 							console.log(err)
@@ -207,6 +224,8 @@ module.exports = function(app, passport, connection) {
 
 						if (!rows || rows.length < 1) {
 							doLike(req, req.params.issue_id, req.user.googleID);
+						} else {
+							res.redirect("/issues/" + req.params.issue_id + "?alert=\"\"")
 						}
 
 					}
