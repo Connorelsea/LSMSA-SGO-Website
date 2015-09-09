@@ -108,7 +108,7 @@ module.exports = function(app, passport, connection) {
 	app.get("/", function(req, res) {
 
 		queryIssues(
-		"ORDER BY L.likeCount DESC",
+		"ORDER BY L.likeCount DESC LIMIT 3\n",
 			function(err, rows) {
 
 				if (err) {

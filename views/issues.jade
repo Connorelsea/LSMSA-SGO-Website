@@ -11,8 +11,16 @@ block content
 		div.issueContainer.ics
 
 			if rows.length > 0
-				each val in rows
-					+createIssueBox(val)
+
+				div.issCont
+					each val in rows
+						+createIssueBox(val)
+				div.addMore
+					h1 You can be the voice of change
+					a(href="/issues/submit").submit-button Submit an Issue
+
 			else
-				h1 No Issues Currently
-				a(href="/issues/submit").submit-button Submit an Issue
+
+				div.addMore
+					h1 You can be the voice of change
+					a(href="/issues/submit").submit-button Submit an Issue

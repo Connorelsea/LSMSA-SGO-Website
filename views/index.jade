@@ -75,12 +75,15 @@ html(lang="en")
 										if rows.length > 0
 											each val in rows
 												+createIssueBox(val)
+											div.addMore
+												h1 You can be the voice of change
+												div.multButtons
+													a(href="/issues/submit").submit-button.first Submit an Issue
+													a(href="/issues").submit-button View All Issues
 										else
-											h1 No Issues Currently
-											a(href="/issues/submit").submit-button Submit an Issue
+											div.addMore
+												h1 There are no issues currently
+												a(href="/issues/submit").submit-button Submit an Issue
 							div.decoration-dark
 
-		div.contentBodyTwo
-			p Content here test
-
-		include footer
+				include footer
