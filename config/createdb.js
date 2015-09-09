@@ -85,7 +85,7 @@ var create_responses =
 	");";
 
 var queries = [
-	create, use, create_users, create_elements_trigger, create_elements, create_comments, create_likes, create_responses
+	create, use, create_users, create_elements, create_elements_trigger, create_comments, create_likes, create_responses
 ]
 
 console.log("Database: Checking database...")
@@ -96,81 +96,31 @@ console.log("Database: Checking database...")
  * Specific instructions for creating the tables when
  * hosted on the OpenShift server.
  */
-if (process.env.OPENSHIFT_MYSQL_DB_HOST) {
 
-	console.log("Database: Attempting table creation. (OpenShift)");
+console.log("Database: Attempting table creation.");
 
-	connection.query(use, function(err) {
+connection.query(use, function(err) {
 
-		async.forEach(
-			queries,
-			function(query, callback) {
+	async.forEach(
+		queries,
+		function(query, callback) {
 
-				connection.query(query, function(err) {
+			connection.query(query, function(err) {
 
-					if (err) {
-						console.log("Database: There was an error during async query.");
-						console.log(err);
-					}
+				if (err) {
+					console.log("Database: There was an error during async query.");
+					console.log(err);
+				}
 
-					callback();
-				});
+				callback();
+			});
 
-			},
-			function(err) {
-				connection.end();
-			}
-		);
-
-	});
-
-	console.log("Database: Done with OpenShift table creation");
-}
-
-/*
- * Local Database Creation
- *
- * Specific instructions for creating the database and
- * the tables when hosted on a local development machine.
- */
-else {
-
-	connection.query(show, function(err, rows, fields) {
-
-		if (err) {
-
-			console.log("Database: There was an error while checking database.")
-			console.log(err)
-
+		},
+		function(err) {
+			connection.end();
 		}
+	);
 
-		if (!rows || rows.length <= 0) {
+});
 
-			console.log("Database: " + database + " does not exist.")
-			console.log("Database: creating database " + database)
-
-			for (i = 0; i < queries.length; i++) {
-
-				connection.query(
-					queries[i], 
-					function(err, rows, fields) {
-
-						if (err) {
-							console.log("Database: There was an error during the query.");
-							console.log(err);
-						}
-					}
-				);
-
-			}
-
-			console.log('Database: Database and Tables Created');
-
-		} else {
-			console.log("Database: " + database + " already exists.")
-		}
-
-		console.log("Database: Ending MySQL connection.")
-		connection.end();
-	});
-}
+console.log("Database: Done with table creation.");
