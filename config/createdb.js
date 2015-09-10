@@ -47,15 +47,16 @@ var create_elements_trigger =
 	"END;";
 
 var create_elements = 
-    "CREATE TABLE IF NOT EXISTS elements(\n" +
+    "CREATE TABLE IF NOT EXISTS elements(\n"     +
 	"id          INT NOT NULL AUTO_INCREMENT,\n" +
-	"googleID    VARCHAR(60),\n"  +
-	"time        DATETIME,\n" +
-	"title       VARCHAR(300),\n" +
-	"body        TEXT,\n"         +
+	"googleID    VARCHAR(60),\n"    +
+	"time        DATETIME,\n"       +
+	"title       VARCHAR(300),\n"   +
+	"body        TEXT,\n"           +
 	"type        ENUM('blog', 'issue'),\n" +
+	"views       INT DEFAULT 0,\n"  +
 	"approved    BOOL DEFAULT 0,\n" +
-	"PRIMARY KEY (id)\n"          +
+	"PRIMARY KEY (id)\n"            +
 	");";
 
 var create_comments =

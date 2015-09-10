@@ -32,8 +32,11 @@ function createIssues(rows, wrap) {
 			date     : rows[i].time,
 			body     : new_body,
 			likes    : ((rows[i].likeCount == null) ? 0 : rows[i].likeCount),
+			views    : rows[i].views,
 			comments : []
 		});
+
+		console.log("VIEWS: " + rows[i].views)
 
 		// Split concatenated string of comments,
 		// making an array of all comments
@@ -66,7 +69,7 @@ module.exports = function(app, passport, connection) {
 			 * Posts that have no upvotes have a NULL value
 			 * in the likeCount column.
 			 */
-			"SELECT E.id, E.time, E.title, E.body, E.type, C.comments, E.googleID, L.likeCount\n" + 
+			"SELECT E.id, E.time, E.title, E.body, E.type, E.views, C.comments, E.googleID, L.likeCount\n" + 
 			"FROM elements E\n" + 
 			"LEFT JOIN(\n" + 
 			"    SELECT elementID, GROUP_CONCAT(body SEPARATOR '|-|') AS comments\n" + 
@@ -304,7 +307,7 @@ module.exports = function(app, passport, connection) {
 
 		connection.query(
 
-			"SELECT E.id, E.time, E.title, E.body, E.type, C.comments, E.googleID, L.likeCount\n" +
+			"SELECT E.id, E.time, E.title, E.body, E.type, E.views, C.comments, E.googleID, L.likeCount\n" +
 			"FROM elements E\n" +
 			"LEFT JOIN(\n" +
 			"  SELECT elementID, GROUP_CONCAT(body SEPARATOR '|-|') AS comments\n" +
@@ -323,23 +326,40 @@ module.exports = function(app, passport, connection) {
 				if (err) {
 					console.log(err);
 					res.redirect("/issues");
-				}
+				} else {
 
-				var issues     = createIssues(rows, false);
-				var alertTitle = req.query.alertTitle;
-				var alertBody  = req.query.alertBody;
+					var issues     = createIssues(rows, false);
+					var alertTitle = req.query.alertTitle;
+					var alertBody  = req.query.alertBody;
 
-				res.render(
-					"issue-page.jade",
-					{
-						mainNavigation : data.mainNavigation,
-						user           : req.user,
-						issue          : issues[0],
-						alert          : (req.query.alertTitle && req.query.alertBody) ? true : false,
-						alertTitle     : alertTitle,
-						alertBody      : alertBody
-					}
-				);
+					connection.query(
+
+						"UPDATE elements SET views = views + 1 WHERE id = " + req.params.issue_id,
+
+						function(err, rows) {
+
+							if (err) {
+								console.log("Database: Unable to add views to " + req.params.issue_id);
+								console.log(err);
+							}
+
+							res.render(
+								"issue-page.jade",
+								{
+									mainNavigation : data.mainNavigation,
+									user           : req.user,
+									issue          : issues[0],
+									alert          : (req.query.alertTitle && req.query.alertBody) ? true : false,
+									alertTitle     : alertTitle,
+									alertBody      : alertBody
+								}
+							); // End of render
+
+						}
+					); // End of like query
+
+				} // End of else
+
 			}
 
 		);
