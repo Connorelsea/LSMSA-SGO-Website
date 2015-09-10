@@ -9,6 +9,12 @@ html(lang="en")
 
 		div.body
 
+			if alert
+				div.ialert.bar
+					div.innerContainer
+						h1.atitle!= alertTitle
+						p.abody!= alertBody
+
 			div.singleIssue.bar
 
 				div.container
@@ -66,7 +72,7 @@ html(lang="en")
 								textarea(name="comment")
 
 							div.submitArea
-								input(type="submit", value="Submit")
+								input(type="submit", value="Comment")
 
 					div.childrenContainer
 						p comment children here

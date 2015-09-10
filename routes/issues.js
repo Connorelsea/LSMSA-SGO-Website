@@ -83,7 +83,7 @@ module.exports = function(app, passport, connection) {
 		return 0;
 	}
 
-	var doLike = function(req, elementID, googleID) {
+	var doLike = function(req, elementID, googleID, callback) {
 
 		console.log("doing like")
 
@@ -95,11 +95,18 @@ module.exports = function(app, passport, connection) {
 		connection.query(
 			"INSERT INTO likes SET ?", like,
 			function(rows, err) {
+
 				if (err)
 					console.log(err)
+
+				callback();
 			}
 		);
 
+	}
+
+	var alertLink = function(issueID, alertTitle, alertBody) {
+		return ("/issues/" + issueID + "?alertTitle=" + alertTitle + "&alertBody=" + alertBody);
 	}
 
 	/*
@@ -159,7 +166,54 @@ module.exports = function(app, passport, connection) {
 			}
 		)
 
-		res.redirect("/issues?filter=top");
+		res.redirect("/issues");
+	});
+
+	app.post("/issues/:issue_id", function(req, res) {
+
+		/*
+		 * Comment:
+		 *
+		 * If this exists, it means that the user is attempting
+		 * to submit a comment. Submit this comment to the database,
+		 * which will mark it as unapproved.
+		 */
+		if (req.body.comment && req.user) {
+
+			var comment = {
+				elementID : req.params.issue_id,
+				googleID  : req.user.googleID,
+				body      : req.body.comment
+			}
+
+			connection.query(
+				"INSERT INTO comments SET ?", comment,
+				function(rows, err) {
+					if (err) console.log(err)
+				}
+			);
+
+			res.redirect(alertLink(
+				req.params.issue_id,
+				"You commented.",
+				"Thank you for participating in the community discussion. Check back to see if anyone replies to your words of wisdom!"
+			));
+
+		} else {
+			res.redirect(alertLink(
+				req.params.issue_id,
+				"You are not logged in!",
+				"You cannot submit a comment when you aren't logged in."
+			));
+
+			return;
+		}
+
+		res.redirect(alertLink(
+			req.params.issue_id,
+			"Error",
+			"Unallowed HTTP POST REQ on this issue."
+		));
 	});
 
 	/*
@@ -172,39 +226,12 @@ module.exports = function(app, passport, connection) {
 	app.get("/issues/:issue_id", function(req, res) {
 
 		/*
-		 * Comment:
-		 *
-		 * If this exists, it means that the user is attempting
-		 * to submit a comment. Submit this comment to the database,
-		 * which will mark it as unapproved.
-		 */
-		if (req.body.comment) {
-
-			var comment = {
-				elementID : req.params.issue_id,
-				googleID  : req.user.googleID,
-				body      : req.body.comment
-			}
-
-			connection.query(
-				"INSERT INTO comments SET ?", comment,
-				function(rows, err) {
-					if (err)
-						console.log(err)
-				}
-			);
-
-		}
-
-		/*
 		 * Like:
 		 *
 		 * Do a like action on this issue.
 		 * URL: /issues/:issue_id?action=like
 		 */
 		if (req.query.action == "like") {
-
-			console.log("LIKE")
 
 			if (req.user) {
 
@@ -218,23 +245,56 @@ module.exports = function(app, passport, connection) {
 
 					function(err, rows) {
 
+						console.log("UPVOTE")
+
 						if (err) {
 							console.log(err)
 						}
 
 						if (!rows || rows.length < 1) {
-							doLike(req, req.params.issue_id, req.user.googleID);
-						} else {
-							res.redirect("/issues/" + req.params.issue_id + "?alert=\"\"")
+
+							var callbackRedirect = function() {
+
+								res.redirect(alertLink(
+									req.params.issue_id,
+									"You upvoted this!",
+									"Now that you've upvoted it, continue the discussion with a <strong>comment</strong> on this issue or a <strong>share</strong> to Facebook."
+								));
+
+							}
+
+							doLike(
+								req,
+								req.params.issue_id,
+								req.user.googleID,
+								callbackRedirect
+							);
+
+						}
+
+						else {
+
+							res.redirect(alertLink(
+								req.params.issue_id,
+								"You've already upvoted this!",
+								"You can only upvote something once. Share your opinions about this by <strong>commenting</strong> or <strong>sharing</strong> on Facebook."
+							));
+
 						}
 
 					}
 
 				);
 
+			} else {
+
+				res.redirect(alertLink(
+						req.params.issue_id,
+						"You are not logged in!",
+						"To comment or upvote, login."
+				));
 			}
 
-			res.redirect("/issues");
 			return;
 		}
 
@@ -265,14 +325,19 @@ module.exports = function(app, passport, connection) {
 					res.redirect("/issues");
 				}
 
-				var issues = createIssues(rows, false);
+				var issues     = createIssues(rows, false);
+				var alertTitle = req.query.alertTitle;
+				var alertBody  = req.query.alertBody;
 
 				res.render(
 					"issue-page.jade",
 					{
 						mainNavigation : data.mainNavigation,
 						user           : req.user,
-						issue          : issues[0]
+						issue          : issues[0],
+						alert          : (req.query.alertTitle && req.query.alertBody) ? true : false,
+						alertTitle     : alertTitle,
+						alertBody      : alertBody
 					}
 				);
 			}
