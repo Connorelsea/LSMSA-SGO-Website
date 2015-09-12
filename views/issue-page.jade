@@ -77,5 +77,6 @@ html(lang="en")
 					div.childrenContainer
 						each comment in issue.comments
 							div.commentBox
-								p= comment.body
+								p!= comment.body
 
+			include footer

@@ -185,34 +185,29 @@
 .comments.bar
 	display flex
 	flex-direction column
-	align-items center
-	justify-content center
 
 .commentContainer
-	width 100%
-	display flex
-	flex-direction column
-	justify-content center
-	align-items center
+	width 70%
+	margin 0 auto
 	
 	.submitContainer
-		padding-top 40px
-		width 60%
 		
 		form
-			width 100%
+			height 100px
+			margin 40px 0px
 			display flex
 			flex-direction row
 			justify-content space-between
 			
 			.text
-				width  75%
-				height 100px
+				height 100%
+				width 75%
 				
 				textarea
-					width  100%
-					
-					padding 20px
+					box-sizing border-box
+					padding 10px
+					height 100%
+					width 100%
 					
 					font-family Futura
 					font-size 1.3em
@@ -225,13 +220,12 @@
 					outline none
 					
 			.submitArea
-				width  20%
-				height 100px
+				height 100%
+				width 20%
 				
 				input
-					width  100%
-					height 100px
-					margin-left 20px
+					height 100%
+					width 100%
 					
 					background-color _navy
 					border 4px solid _navy
@@ -248,3 +242,26 @@
 					&:hover
 						background-color _grey
 						color _navy
+						
+	.childrenContainer
+		margin-bottom 60px
+		
+		.commentBox
+			box-sizing border-box
+			padding 30px
+			margin 20px 0px
+			background-color lighten(_grey, 90%)
+			border none
+			box-shadow 0 6px 8px -1px rgba(50,50,50,0.4)
+			outline none
+			
+			transition all 0.4s
+			
+			&:hover
+				padding 35px
+			
+			p
+				color darken(_navy, 30%)
+				font-family Futura
+				font-size 1.2em
+				line-height 1.3em

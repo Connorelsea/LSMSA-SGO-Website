@@ -328,8 +328,8 @@ module.exports = function(app, passport, connection) {
 			"SELECT E.id, E.time, E.title, E.body, E.type, E.views, C.comments, E.googleID, L.likeCount\n" +
 			"FROM elements E\n" +
 			"LEFT JOIN(\n" +
-			"  SELECT elementID, GROUP_CONCAT(body SEPARATOR '|-|') AS comments\n" +
-			"  FROM comments\n" +
+			"  SELECT elementID, GROUP_CONCAT(body ORDER BY time DESC SEPARATOR '|-|') AS comments\n" +
+			"  FROM comments\n " +
 			"  GROUP BY elementID\n" +
 			") C on C.elementID = E.id\n" +
 			"LEFT JOIN (\n" +

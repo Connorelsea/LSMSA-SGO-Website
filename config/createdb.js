@@ -59,11 +59,18 @@ var create_elements =
 	"PRIMARY KEY (id)\n"            +
 	");";
 
+var create_comments_trigger =
+	"CREATE TRIGGER `COMMENTSS_INSERT` BEFORE INSERT ON `comments`\n" +
+	"FOR EACH ROW BEGIN\n" +
+	"    SET new.time = now();\n" +
+	"END;";
+
 var create_comments =
-    "CREATE TABLE IF NOT EXISTS comments("   +
+    "CREATE TABLE IF NOT EXISTS comments("     +
 	"id          INT NOT NULL AUTO_INCREMENT," +
 	"elementID   INT NOT NULL," +
 	"googleID    VARCHAR(60),"  +
+	"time        DATETIME,\n"   +
 	"body        TEXT,"         +
 	"approved    BOOL DEFAULT 0,\n" +
 	"PRIMARY KEY (id)"          +
@@ -88,7 +95,7 @@ var create_responses =
 	");";
 
 var queries = [
-	create, use, create_users, create_elements, create_elements_trigger, create_comments, create_likes, create_responses
+	create, use, create_users, create_elements, create_elements_trigger, create_comments, create_comments_trigger, create_likes, create_responses
 ]
 
 console.log("Database: Checking database...")
