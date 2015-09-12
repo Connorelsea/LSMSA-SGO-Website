@@ -75,5 +75,7 @@ html(lang="en")
 								input(type="submit", value="Comment")
 
 					div.childrenContainer
-						p comment children here
+						each comment in issue.comments
+							div.commentBox
+								p= comment.body
 

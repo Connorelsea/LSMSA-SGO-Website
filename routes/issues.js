@@ -86,6 +86,10 @@ module.exports = function(app, passport, connection) {
 		return 0;
 	}
 
+	/*
+	 * Performs a "like" action on a certain element/issue
+	 * using the information given to this function as arguments.
+	 */
 	var doLike = function(req, elementID, googleID, callback) {
 
 		console.log("doing like")
@@ -114,6 +118,8 @@ module.exports = function(app, passport, connection) {
 
 	/*
 	 * GET: Home page
+	 *
+	 * Renders the home page of the website.
 	 */
 	app.get("/", function(req, res) {
 
@@ -139,6 +145,9 @@ module.exports = function(app, passport, connection) {
 
 	/*
 	 * GET: Submit an issue
+	 *
+	 * Renders the submit an issue page. Does not actually
+	 * submit an issue since it is a GET request.
 	 */
 	app.get("/issues/submit", function(req, res) {
 
@@ -150,7 +159,9 @@ module.exports = function(app, passport, connection) {
 	});
 
 	/*
-	 * POST: Submit an issue form information
+	 * POST: Submit an Issue
+	 *
+	 * Posting to this is the issue form submission process.
 	 */
 	app.post("/issues/submit", function(req, res) {
 
@@ -172,6 +183,12 @@ module.exports = function(app, passport, connection) {
 		res.redirect("/issues");
 	});
 
+	/*
+	 * POST: Adding a comment
+	 *
+	 * Posting to this request adds a comment to a specific
+	 * issue using the issue ID passed in through the route.
+	 */
 	app.post("/issues/:issue_id", function(req, res) {
 
 		/*
@@ -302,9 +319,10 @@ module.exports = function(app, passport, connection) {
 		}
 
 		/*
+		 * QUERY: Specific Issue Information (By ID)
+		 *
 		 * Load the page for the specific issue.
 		 */
-
 		connection.query(
 
 			"SELECT E.id, E.time, E.title, E.body, E.type, E.views, C.comments, E.googleID, L.likeCount\n" +
@@ -324,14 +342,21 @@ module.exports = function(app, passport, connection) {
 			function(err, rows) {
 
 				if (err) {
+
 					console.log(err);
 					res.redirect("/issues");
+
 				} else {
 
 					var issues     = createIssues(rows, false);
 					var alertTitle = req.query.alertTitle;
 					var alertBody  = req.query.alertBody;
 
+					/*
+					 * QUERY: Do like
+					 *
+					 * This query adds a view to the specific element/issue/
+					 */
 					connection.query(
 
 						"UPDATE elements SET views = views + 1 WHERE id = " + req.params.issue_id,
@@ -356,7 +381,7 @@ module.exports = function(app, passport, connection) {
 							); // End of render
 
 						}
-					); // End of like query
+					); // End of view query
 
 				} // End of else
 
@@ -370,7 +395,8 @@ module.exports = function(app, passport, connection) {
 	 * GET: Issue Page
 	 * 
 	 * Show a list of all issues, sorted or filtered in a manner
-	 * determined by URL parameters.
+	 * determined by URL parameters. All of the filters and their
+	 * specific instructions are handled in this route.
 	 */
 	app.get("/issues", function(req, res) {
 
