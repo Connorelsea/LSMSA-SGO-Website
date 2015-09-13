@@ -22,7 +22,7 @@ module.exports = function(app, passport) {
 
 	app.get("/constitution", function(req, res) {
 
-		res.render("coming-soon.jade", {
+		res.render("constitution.jade", {
 			mainNavigation : data.mainNavigation,
 			user           : req.user
 		});
