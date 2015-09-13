@@ -96,7 +96,7 @@ app.use(function(err, req, res, next) {
     }
 
     if (err.code === 500) {
-        
+
         res.redirect("/failure");
     }
 

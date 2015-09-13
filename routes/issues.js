@@ -10,7 +10,6 @@ function createIssues(rows, wrap) {
 		var new_body  = rows[i].body;
 		var new_title = rows[i].title;
 
-
 		if (wrap == true) {
 
 			if (new_body.length > 50) {

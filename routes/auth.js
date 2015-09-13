@@ -20,6 +20,7 @@ module.exports = function(app, passport) {
 				{ title : "Login Again", link : "/login" }
 			]
 		})
+
 	})
 
 	app.get("/logout", function(req, res) {
@@ -27,6 +28,26 @@ module.exports = function(app, passport) {
 		req.session.destroy()
 		res.clearCookie("connect.sid")
 		res.redirect("/")
+	})
+
+	app.get("/login-welcome", function(req, res) {
+
+		if (req.user) {
+			console.log("User " + req.user.name + " already logged in.")
+			res.redirect("/")
+		} else {
+
+			res.render("alert-page.jade", {
+				title   : "LSMSA SGO",
+				body    : "Logging into the LSMSA SGO website gives you the ability to create issues and participate in community discussion.Note that you can only log in with your LSMSA email.",
+				buttons : [
+					//{ title : "Home", link : "/" },
+					{ title : "Login", link : "/login" }
+				]
+			})
+
+		}
+
 	})
 
 	app.get("/login", function(req, res) {

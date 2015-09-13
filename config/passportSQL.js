@@ -16,13 +16,19 @@ function log(text) {
 module.exports = function(passport, connection) {
 
 	passport.serializeUser(function(user, done) {
+
 		if (user.id) {
+
 			log("Serialize: Creating session with id \"" + user.id  + "\".");
 			done(null, user.id);
+
 		} else {
+
 			log("Serialize: Creating session with id \"" + user.googleID  + "\".");
 			done(null, user.googleID);
+
 		}
+
 	})
 
 	passport.deserializeUser(function(id, done) {
@@ -79,8 +85,10 @@ module.exports = function(passport, connection) {
 	            // is so, return the user.
 
 	            if (rows.length > 0) {
+
 					log("Middleware: User with id \"" + profile.id + " already exists.");
 					return done(null, rows[0]);
+
 				}
 
 	            // Ensure that the email address being used
@@ -97,7 +105,6 @@ module.exports = function(passport, connection) {
 						var error = new Error();
  						error.code = 500;
 
- 						log("WHY IS IT DOING THIS TO ME.")
  						return done(error, null);
 
 	            } else {
@@ -111,9 +118,7 @@ module.exports = function(passport, connection) {
 
 					log("Middleware: User with id \"" + profile.id + "\" not found, attempting new user creation.")
 					log("Middleware: Verifying email domain...");
-
 					log("Middleware: LSMSA domain verified.");
-
 					log("PROFILE: " + JSON.stringify(profile))
 
 					var user = {

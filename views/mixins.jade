@@ -13,7 +13,7 @@ mixin createMainNav(list, user)
 
 				if val.name == 'Login'
 					if user
-						a(href="#")= user.first
+						a(href="/")= user.first
 						ul.login
 							li= user.name
 							li
@@ -21,7 +21,7 @@ mixin createMainNav(list, user)
 							li
 								a(href="/logout") Logout
 					else
-						a(href="/login") Login
+						a(href="/login-welcome") Login
 
 				else
 					a(href= val.link)= val.name
