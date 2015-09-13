@@ -82,12 +82,26 @@ require("./routes/issues.js")(app, passport, connection)
 
 app.use(function(err, req, res, next) {
 
+    if (err.code === 404 || err.code == 404) {
+
+        res.render("alert-page.jade", {
+            title   : "404: Page Not Found",
+            body    : "Page not found on the LSMSA SGO website. Try one of these.",
+            buttons : [
+                { title : "Home", link : "/" },
+                { title : "Issue Board", link : "/issues" }
+            ]
+        });
+
+    }
+
     if (err.code === 500) {
-        res.redirect("/failure")
+        
+        res.redirect("/failure");
     }
 
     if (err) {
-        res.redirect("/")
+        res.redirect("/");
     }
 
 });

@@ -114,10 +114,14 @@ module.exports = function(passport, connection) {
 
 					log("Middleware: LSMSA domain verified.");
 
+					log("PROFILE: " + JSON.stringify(profile))
+
 					var user = {
 						id    : profile.id,
 						token : token,
 						name  : profile.displayName,
+						first : profile.name.givenName,
+						last  : profile.name.familyName,
 						email : profile.emails[0].value
 					}
 
@@ -127,11 +131,11 @@ module.exports = function(passport, connection) {
 
 					log("Middleware: Attempting to insert user into database.");
 
-					var insertQuery = "INSERT INTO users (googleID, token, name, email) values (?, ?, ?, ?)";
+					var insertQuery = "INSERT INTO users (googleID, token, name, first, last, email) values (?, ?, ?, ?, ?, ?)";
 
 					connection.query(
 						insertQuery,
-						[user.id, user.token, user.name, user.email], 
+						[user.id, user.token, user.name, user.first, user.last, user.email], 
 						function(err, rows) {
 
 							if (err) {

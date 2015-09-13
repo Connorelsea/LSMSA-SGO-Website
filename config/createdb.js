@@ -36,6 +36,8 @@ var create_users  =
 	"googleID VARCHAR(60),"  +
 	"token    VARCHAR(100)," +
 	"name     VARCHAR(60),"  +
+	"first    VARCHAR(60),"  +
+	"last     VARCHAR(60),"  +	
 	"email    VARCHAR(60),"  +
 	"PRIMARY KEY (googleID)" +
 	");";
