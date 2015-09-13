@@ -86,6 +86,10 @@ app.use(function(err, req, res, next) {
         res.redirect("/failure")
     }
 
+    if (err) {
+        res.redirect("/")
+    }
+
 });
 
 // Launch Application

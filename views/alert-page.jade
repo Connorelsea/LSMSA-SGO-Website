@@ -1,0 +1,21 @@
+doctype html
+html(lang="en").alertHtml
+
+	include header
+
+	body.alertBody
+
+		div.alert
+
+			div.upper
+				div.starHeader
+					img(src="../images/StarBar.png").one
+					h1= title
+					img(src="../images/StarBar.png").two
+				if subtitle
+					h2= subtitle
+				p= body
+
+			div.lower
+				each button in buttons
+					a(href= button.link).button= button.title

@@ -11,8 +11,14 @@ module.exports = function(app, passport) {
 	})
 
 	app.get("/failure", function(req, res) {
-		res.render("failure.jade", {
-			error_loginFailed: info.error_loginFailed
+
+		res.render("alert-page.jade", {
+			title   : "Login Failed",
+			body    : "You must use your LSMSA email address when logging into the SGO website.",
+			buttons : [
+				//{ title : "Home", link : "/" },
+				{ title : "Login Again", link : "/login" }
+			]
 		})
 	})
 

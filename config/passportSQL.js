@@ -95,12 +95,13 @@ module.exports = function(passport, connection) {
 	            		log("Middleware: Email domain " + domain + " not allowed.");
 
 						var error = new Error();
- 						error.status = 500;
+ 						error.code = 500;
 
+ 						log("WHY IS IT DOING THIS TO ME.")
  						return done(error, null);
 
 	            } else {
-	            	log("Middleware: LSMSA domain verified.");
+	            	log("Middleware: LSMSA domain verified with " + domain);
 	            }
 
 				// The email verification process has been passed,
