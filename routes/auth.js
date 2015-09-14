@@ -26,8 +26,7 @@ module.exports = function(app, passport) {
 			buttons : [
 				//{ title : "Home", link : "/" },
 				{ title : "Login Again", link : "/login" }
-			],
-			title          : "LSMSA SGO - Error",
+			]
 		})
 
 	})
@@ -52,8 +51,7 @@ module.exports = function(app, passport) {
 				buttons : [
 					//{ title : "Home", link : "/" },
 					{ title : "Login", link : "/login" }
-				],
-				title          : "LSMSA SGO - Alert"
+				]
 			})
 
 		}

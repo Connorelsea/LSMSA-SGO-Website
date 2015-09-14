@@ -1,16 +1,142 @@
 @media screen and (max-width: 1000px)
 
+	.singleIssue .container
+		padding 10px
+
+	.body
+		top 100px !important
+		
+		.container
+			display flex
+			flex-direction column
+			
+			.left
+				width     100%
+				min-width 100%
+				max-width 100%
+				padding-bottom 20px
+				
+				.top
+					padding-top 20px
+					padding-bottom 0px
+					
+					h1
+						text-align center
+						font-size 1.8em
+					
+					h3
+						text-align center
+						
+				.bottom
+					p
+						text-align center
+						font-size 1.2em
+				
+			.right
+				width     100%
+				min-width 100%
+				max-width 100%
+				
+				.stats
+					width 100%
+					flex-direction row
+					justify-content center
+					text-align center
+					
+					.left
+						display flex
+						flex-direction row
+						justify-content space-between
+						padding-bottom 0px
+						
+						width 90%
+						min-width 90%
+						max-width 90%
+						
+						> *
+							display inline-block
+						
+						h3
+							display flex
+							flex-direction column
+							justify-content center
+							align-items center
+							
+							width auto
+							font-size 1em
+						.word
+							padding-left 0px
+							text-align right !important
+						.number
+							width auto !important
+							text-align right
+				
+				.right
+					display none !important
+				
+
+	.navigationHeader
+		display flex
+		flex-direction column
+
 	.barMain
-		height 22%
+		height auto
+		
+		ul
+			li
+				padding 5px
+				
+		.upperPart
+			width 100%
+			display flex
+			flex-direction row
+			justify-content space-around
+			align-items center
+			
+			.navImage
+				display flex
+				justify-content flex-end
 
 		header
 
 			.image .img
-				width 300px
-				
-			.nav
-				display none
+				padding 20px
+				width 250px
 			
+			.navImage
+				display block
+
+			nav
+				//display flex
+				display none
+				
+				ul
+					position static
+					font-size 1.4em
+					display flex
+					flex-direction column
+					
+					li
+						font-size 0.9em
+						padding 5px
+						display block
+							
+						ul
+							background none
+							background-color _grey
+							box-shadow none
+							opacity 1
+							visibility visible
+							display flex
+							flex-direction column
+							
+							li
+								background-color _grey
+								max-width auto
+								min-width auto
+								width     auto
+								padding 5px
+								font-size 0.6em
 
 	.innerBar
 		width     100%
@@ -91,6 +217,30 @@
 		
 		width 100%
 		
+		.voteStuff
+			width 90%
+			display flex
+			
+			.topContainer.votes
+				width 90%
+				margin-left 45px
+				flex-align flex-start
+			
+			.topContainer.arrows
+				flex 1
+
+		// .topContainer.votes
+		// 	background-color _grey
+			
+		// 	.score
+		// 		color _navy !important
+				
+		// 	.stars
+		// 		display none
+				
+		// 	.bottom
+		// 		display none
+		
 		> *
 			margin 5px !important
 		
@@ -120,3 +270,15 @@
 			
 			> .bottom
 				display none !important
+				
+@media screen and (max-width: 340px)
+	.barMain
+		header
+
+			.image .img
+				padding 20px
+				width 83%
+			
+			.navImage
+				padding-right 10%
+				display block

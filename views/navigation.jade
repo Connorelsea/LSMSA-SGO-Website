@@ -3,9 +3,21 @@ div.bar.barMain
 
 		header.navigationHeader
 
-			div.image
-				img(src= "../images/logo.png").img
+			div.upperPart
+				div.image
+					img(src= "../images/logo.png").img
+
+				div.navImage
+					img(src= "../images/menu.png").menuImg
+
+					script.
+						$(function() {
+							$('.menuImg').click(function() {
+								if ($('.realNav').css("display") == "none") $('.realNav').slideDown("slow")
+								else $('.realNav').slideUp("slow");
+							});
+						});
 
 			div.nav
-				nav
+				nav.realNav
 					+createMainNav(list, user)

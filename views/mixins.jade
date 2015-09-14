@@ -37,40 +37,41 @@ mixin createMainNav(list, user)
 mixin createIssueBox(issue)
 	div.issueBox
 
-		div.topContainer.arrows
-			div.arrowContainer
-				a(href="/issues/" + issue.id + "?action=like").uplink
-					div.imageContainer
-						img(src="/images/ARROW_UP_DARK.png").upimg
-						img(src="/images/ARROW_UP_LIGHT.png").upimgacc
-				a(href="").downlink
-					img(src="/images/ARROW_DOWN_DARK.png").downimg
+		div.voteStuff
+			div.topContainer.arrows
+				div.arrowContainer
+					a(href="/issues/" + issue.id + "?action=like").uplink
+						div.imageContainer
+							img(src="/images/ARROW_UP_DARK.png").upimg
+							img(src="/images/ARROW_UP_LIGHT.png").upimgacc
+					a(href="").downlink
+						img(src="/images/ARROW_DOWN_DARK.png").downimg
 
-		div.topContainer.votes
+			div.topContainer.votes
 
-			div.top
+				div.top
 
-				div.score
-					p.positive= "+" + issue.likes
+					div.score
+						p.positive= "+" + issue.likes
 
-				div.stars
-					
-					if issue.likes == 0
+					div.stars
+						
+						if issue.likes == 0
 
-					else if issue.likes <= 5
-						img(src="/images/STAR_26.png")
+						else if issue.likes <= 5
+							img(src="/images/STAR_26.png")
 
-					else if issue.likes <= 10
-						img(src="/images/STAR_26.png")
-						img(src="/images/STAR_26.png")
+						else if issue.likes <= 10
+							img(src="/images/STAR_26.png")
+							img(src="/images/STAR_26.png")
 
-					else if issue.likes > 10
-						img(src="/images/STAR_26.png")
-						img(src="/images/STAR_26.png")
-						img(src="/images/STAR_26.png")
+						else if issue.likes > 10
+							img(src="/images/STAR_26.png")
+							img(src="/images/STAR_26.png")
+							img(src="/images/STAR_26.png")
 
-			div.bottom
-				p Issue
+				div.bottom
+					p Issue
 
 		div.topContainer.content
 
