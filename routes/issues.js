@@ -68,10 +68,10 @@ module.exports = function(app, passport, connection) {
 			 * Posts that have no upvotes have a NULL value
 			 * in the likeCount column.
 			 */
-			"SELECT E.id, E.time, E.title, E.body, E.type, E.views, C.comments, E.googleID, L.likeCount\n" + 
+			"SELECT E.id, E.time, E.title, E.body, E.type, E.approved, E.views, C.comments, E.googleID, L.likeCount\n" + 
 			"FROM elements E\n" + 
 			"LEFT JOIN(\n" + 
-			"    SELECT elementID, GROUP_CONCAT(body SEPARATOR '|-|') AS comments\n" + 
+			"    SELECT elementID, GROUP_CONCAT(CASE WHEN approved = 1 THEN body ELSE NULL END ORDER BY time DESC SEPARATOR '|-|') AS comments\n" + 
 			"    FROM comments\n" + 
 			"    GROUP BY elementID\n" + 
 			") C on C.elementID = E.id\n" + 
@@ -79,7 +79,7 @@ module.exports = function(app, passport, connection) {
 			"    SELECT elementID, COUNT(id) AS likeCount\n" + 
 			"    FROM likes\n" + 
 			"    GROUP BY elementID\n" + 
-			") L ON L.elementID = E.id\n" + orderBy, callback
+			") L ON L.elementID = E.id\nWHERE E.approved = 1\n" + orderBy, callback
 		);
 
 		return 0;
@@ -330,6 +330,21 @@ module.exports = function(app, passport, connection) {
 		}
 
 		/*
+		 * Dislike:
+		 *
+		 * Redirect instead of doing dislike.
+		 * URL: /issues/:issue_id?action=dislike
+		 */
+		if (req.query.action == "dislike") {
+
+			res.redirect(alertLink(
+				req.params.issue_id,
+				"Downvoting is not allowed.",
+				"It is better to participate in community discussion. Leave a comment explaining why you disagree or what could be changed."
+			));
+		}
+
+		/*
 		 * QUERY: Specific Issue Information (By ID)
 		 *
 		 * Load the page for the specific issue.
@@ -338,7 +353,7 @@ module.exports = function(app, passport, connection) {
  			"SELECT E.id, E.time, E.title, E.body, E.type, E.views, C.comments, E.googleID, L.likeCount\n" + 
 			"FROM elements E\n" + 
 			"LEFT JOIN(\n" + 
-			"    SELECT elementID, GROUP_CONCAT(body ORDER BY time DESC SEPARATOR '|-|') AS comments\n" + 
+			"    SELECT elementID, GROUP_CONCAT(CASE WHEN approved = 1 THEN body ELSE NULL END ORDER BY time DESC SEPARATOR '|-|') AS comments\n" + 
 			"    FROM comments\n" + 
 			"    GROUP BY elementID\n" + 
 			") C on C.elementID = E.id\n" + 
@@ -347,7 +362,7 @@ module.exports = function(app, passport, connection) {
 			"  FROM likes\n" +
 			"  GROUP BY elementID\n" +
 			") L ON L.elementID = E.id\n" +
-			"WHERE E.id = " + req.params.issue_id,
+			"WHERE E.id = " + req.params.issue_id + " AND E.approved = 1;",
 
 			function(err, rows) {
 

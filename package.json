@@ -19,6 +19,7 @@
 		"stylus": "*",
 		"nib": "*",
 		"cli-color": "*",
-		"async": "*"
+		"async": "*",
+		"serve-favicon": "*"
 	}
 }

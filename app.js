@@ -9,7 +9,8 @@ var express      = require("express"),
     stylus       = require("stylus"),
     nib          = require("nib"),
     mysql        = require("mysql"),
-    database     = require("./config/database")
+    database     = require("./config/database"),
+    favicon      = require("serve-favicon")
 
 // Setup MySQL databases
 
@@ -71,6 +72,8 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(flash())
+
+app.use(favicon(__dirname + '/public/favicon.ico'));
 
 // Setup Routes
 
