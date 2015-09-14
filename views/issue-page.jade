@@ -4,6 +4,16 @@ html(lang="en")
 	include header
 
 	body
+		div(id= "fb-root")
+		script.
+			(function(d, s, id) {
+			  var js, fjs = d.getElementsByTagName(s)[0];
+			  if (d.getElementById(id)) return;
+			  js = d.createElement(s); js.id = id;
+			  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.4&appId=102673221131";
+			  fjs.parentNode.insertBefore(js, fjs);
+			}(document, 'script', 'facebook-jssdk'));
+
 
 		include navigation
 
@@ -54,11 +64,9 @@ html(lang="en")
 								div.barOne
 								div.barTwo
 								div.barThree
-
+									
 						div.share
-							a(href="") Share to Facebook
-							a(href="") Share to Twitter
-							a(href="") Share as Link
+							div.fb-share-button(data-href=ogurl data-layout="box_count")
 
 			div.comments.bar
 				

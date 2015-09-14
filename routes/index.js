@@ -6,7 +6,8 @@ module.exports = function(app, passport) {
 
 		res.render("about.jade", {
 			mainNavigation : data.mainNavigation,
-			user           : req.user
+			user           : req.user,
+			title          : "LSMSA SGO - About"
 		});
 
 	})
@@ -15,7 +16,8 @@ module.exports = function(app, passport) {
 
 		res.render("coming-soon.jade", {
 			mainNavigation : data.mainNavigation,
-			user           : req.user
+			user           : req.user,
+			title          : "LSMSA SGO - Members"
 		});
 
 	})
@@ -24,7 +26,8 @@ module.exports = function(app, passport) {
 
 		res.render("constitution.jade", {
 			mainNavigation : data.mainNavigation,
-			user           : req.user
+			user           : req.user,
+			title          : "LSMSA SGO - Constitution"
 		});
 
 	})
@@ -33,7 +36,8 @@ module.exports = function(app, passport) {
 
 		res.render("events.jade", {
 			mainNavigation : data.mainNavigation,
-			user           : req.user
+			user           : req.user,
+			title          : "LSMSA SGO - Events"
 		});
 
 	})
@@ -42,7 +46,8 @@ module.exports = function(app, passport) {
 
 		res.render("news.jade", {
 			mainNavigation : data.mainNavigation,
-			user           : req.user
+			user           : req.user,
+			title          : "LSMSA SGO - News"
 		});
 
 	})

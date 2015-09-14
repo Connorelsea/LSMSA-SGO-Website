@@ -5,8 +5,16 @@ var info = require("../info/index.js")
 module.exports = function(app, passport) {
 
 	app.get("/profile", function(req, res) {
+
+		var baseurl = req.protocol + "://" + req.hostname;
+
 		res.render("profile.jade", {
-			user: req.user
+			user: req.user,
+			title          : "LSMSA SGO - Home",
+			keywords       : "lsmsa, student government, lsmsa sgo, sgo, louisiana school",
+			description    : "The official LSMSA SGO website made for students, by students.",
+			linkimage      : baseurl + "/images/facebook.png",
+			ogurl          : ogurl,
 		})
 	})
 
@@ -18,7 +26,8 @@ module.exports = function(app, passport) {
 			buttons : [
 				//{ title : "Home", link : "/" },
 				{ title : "Login Again", link : "/login" }
-			]
+			],
+			title          : "LSMSA SGO - Error",
 		})
 
 	})
@@ -43,7 +52,8 @@ module.exports = function(app, passport) {
 				buttons : [
 					//{ title : "Home", link : "/" },
 					{ title : "Login", link : "/login" }
-				]
+				],
+				title          : "LSMSA SGO - Alert"
 			})
 
 		}

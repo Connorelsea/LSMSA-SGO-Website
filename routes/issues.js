@@ -132,10 +132,19 @@ module.exports = function(app, passport, connection) {
 
 				var issues = createIssues(rows, true)
 
+				var ogurl   = req.protocol + "://" + req.hostname + req.originalUrl;
+				var baseurl = req.protocol + "://" + req.hostname;
+
 				res.render("index.jade", {
 					mainNavigation : data.mainNavigation,
 					user           : req.user,
-					rows           : issues
+					rows           : issues,
+					title          : "LSMSA SGO - Home",
+					keywords       : "lsmsa, student government, lsmsa sgo, sgo, louisiana school",
+					description    : "The official LSMSA SGO website made for students, by students.",
+					linkimage      : baseurl + "/images/facebook.png",
+					ogurl          : ogurl,
+
 				});
 
 			}
@@ -152,7 +161,10 @@ module.exports = function(app, passport, connection) {
 
 		res.render("submit.jade", {
 			mainNavigation : data.mainNavigation,
-			user           : req.user
+			user           : req.user,
+			title          : "LSMSA SGO - Submit Issue",
+			keywords       : "lsmsa, submit issue, student government, lsmsa sgo, sgo, louisiana school",
+			description    : "Submit an issue to the LSMSA SGO website.",
 		});
 
 	});
@@ -366,6 +378,9 @@ module.exports = function(app, passport, connection) {
 								console.log(err);
 							}
 
+							var baseurl = req.protocol + "://" + req.hostname;
+							var ogurl   = req.protocol + "://" + req.hostname + req.originalUrl;
+
 							res.render(
 								"issue-page.jade",
 								{
@@ -374,7 +389,12 @@ module.exports = function(app, passport, connection) {
 									issue          : issues[0],
 									alert          : (req.query.alertTitle && req.query.alertBody) ? true : false,
 									alertTitle     : alertTitle,
-									alertBody      : alertBody
+									alertBody      : alertBody,
+									title          : "LSMSA SGO - " + issues[0].title,
+									keywords       : "lsmsa, submit issue, student government, lsmsa sgo, sgo, louisiana school",
+									description    : "Issue Description: " + issues[0].body,
+									linkimage      : baseurl + "/images/facebook.png",
+									ogurl          : ogurl
 								}
 							); // End of render
 
@@ -422,6 +442,8 @@ module.exports = function(app, passport, connection) {
 					 */
 					 var issues = createIssues(rows, true)
 
+					var baseurl = req.protocol + "://" + req.hostname;
+
 					/*
 					 * Render the issues page and send  it the 
 					 * array of issues and their data/comments
@@ -433,7 +455,11 @@ module.exports = function(app, passport, connection) {
 							mainNavigation : data.mainNavigation,
 							user           : req.user,
 							rows           : issues,
-							filter         : "top"
+							filter         : "top",
+							title          : "LSMSA SGO - Issue Board",
+							keywords       : "lsmsa, submit issue, student government, lsmsa sgo, sgo, louisiana school",
+							description    : "The Issue Board is a place where students can view, share, and discuss issues about or ideas for LSMSA as a school.",
+							linkimage      : baseurl + "/images/facebook.png" 
 						}
 					);	
 
@@ -478,6 +504,8 @@ module.exports = function(app, passport, connection) {
 							filter         : "top"
 						}
 					);
+
+					// TODO: meta tag stuff goes in the render block
 
 				}
 			);
