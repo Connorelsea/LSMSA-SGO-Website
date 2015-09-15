@@ -373,48 +373,102 @@ module.exports = function(app, passport, connection) {
 
 				} else {
 
-					var issues     = createIssues(rows, false);
-					var alertTitle = req.query.alertTitle;
-					var alertBody  = req.query.alertBody;
+					var issues = [];
 
-					/*
-					 * QUERY: Do like
-					 *
-					 * This query adds a view to the specific element/issue/
-					 */
-					connection.query(
+					rows.forEach(function (row, index) {
 
-						"UPDATE elements SET views = views + 1 WHERE id = " + req.params.issue_id,
+						var new_body  = row.body;
+						var new_title = row.title;
 
-						function(err, rows) {
+						// Push the initial issues object to
+						// the  issues  array  with an empty
+						// comments array.
 
-							if (err) {
-								console.log("Database: Unable to add views to " + req.params.issue_id);
-								console.log(err);
-							}
+						var issue = {
+							id       : row.id,
+							title    : new_title,
+							date     : row.time,
+							body     : new_body,
+							likes    : ((row.likeCount == null) ? 0 : row.likeCount),
+							views    : row.views,
+							comments : []
+						};
 
-							var baseurl = req.protocol + "://" + req.hostname;
-							var ogurl   = req.protocol + "://" + req.hostname + req.originalUrl;
+						// Query comments for individual post
+						connection.query(
+							"SELECT C.id, C.elementID, C.googleID, C.time, C.body FROM comments C WHERE elementID = ? AND approved = 1", issue.id,
 
-							res.render(
-								"issue-page.jade",
+							function (err, rows_comments)
+							{
+								if (err) {
+									console.log(err)
+								} 
+								else
 								{
-									mainNavigation : data.mainNavigation,
-									user           : req.user,
-									issue          : issues[0],
-									alert          : (req.query.alertTitle && req.query.alertBody) ? true : false,
-									alertTitle     : alertTitle,
-									alertBody      : alertBody,
-									title          : "LSMSA SGO - " + issues[0].title,
-									keywords       : "lsmsa, submit issue, student government, lsmsa sgo, sgo, louisiana school",
-									description    : "Issue Description: " + issues[0].body,
-									linkimage      : baseurl + "/images/facebook.png",
-									ogurl          : ogurl
-								}
-							); // End of render
 
-						}
-					); // End of view query
+									// Loop through all comments, create each
+									// object and push it to the 
+									rows_comments.forEach(function(comment, comment_index)
+									{
+										issue.comments.push({
+											id   : comment.id,
+											time : comment.time,
+											body : comment.body
+										});
+									})
+
+									issues.push(issue);
+
+									var alertTitle = req.query.alertTitle;
+									var alertBody  = req.query.alertBody;
+
+									/*
+									 * QUERY: Do view
+									 *
+									 * This query adds a view to the specific element/issue/
+									 */
+									connection.query(
+
+										"UPDATE elements SET views = views + 1 WHERE id = " + req.params.issue_id,
+
+										function(err, rows) {
+
+											if (err) {
+												console.log("Database: Unable to add views to " + req.params.issue_id);
+												console.log(err);
+											}
+
+											var baseurl = req.protocol + "://" + req.hostname;
+											var ogurl   = req.protocol + "://" + req.hostname + req.originalUrl;
+
+											console.log("\n\nISSUE BEING RENDERED:\n" + JSON.stringify(issues[0]) + "\n\n")
+
+											res.render(
+												"issue-page.jade",
+												{
+													mainNavigation : data.mainNavigation,
+													user           : req.user,
+													issue          : issues[0],
+													alert          : (req.query.alertTitle && req.query.alertBody) ? true : false,
+													alertTitle     : alertTitle,
+													alertBody      : alertBody,
+													title          : "LSMSA SGO - " + issues[0].title,
+													keywords       : "lsmsa, submit issue, student government, lsmsa sgo, sgo, louisiana school",
+													description    : "Issue Description: " + issues[0].body,
+													linkimage      : baseurl + "/images/facebook.png",
+													ogurl          : ogurl
+												}
+											); // End of render
+
+										}
+									); // End of view query
+									
+								} // end of else
+
+							} // end of function(err, rows_comments)
+						)
+
+					});
 
 				} // End of else
 

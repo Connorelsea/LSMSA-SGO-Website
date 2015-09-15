@@ -29,6 +29,8 @@ var show   = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_N
 
 var create = "CREATE DATABASE " + database + ";";
 
+var fixes  = "SET SESSION group_concat_max_len = 1000000;"
+
 var use    = "USE " + database + ";";
 
 var create_users  =
@@ -97,7 +99,7 @@ var create_responses =
 	");";
 
 var queries = [
-	create, use, create_users, create_elements, create_elements_trigger, create_comments, create_comments_trigger, create_likes, create_responses
+	create, use, create_users, create_elements, create_elements_trigger, create_comments, create_comments_trigger, create_likes, create_responses, fixes
 ]
 
 console.log("Database: Checking database...")
