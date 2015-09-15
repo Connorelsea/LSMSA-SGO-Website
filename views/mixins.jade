@@ -38,63 +38,70 @@ mixin createIssueBox(issue)
 	div.issueBox
 
 		div.voteStuff
-			div.topContainer.arrows
-				div.arrowContainer
-					a(href="/issues/" + issue.id + "?action=like").uplink
-						div.imageContainer
-							img(src="/images/ARROW_UP_DARK.png").upimg
-							img(src="/images/ARROW_UP_LIGHT.png").upimgacc
-					a(href="/issues/" + issue.id + "?action=dislike").downlink
-						img(src="/images/ARROW_DOWN_DARK.png").downimg
 
-			div.topContainer.votes
+			div.sideContainer
+				// TOP CONTAINER: ARROWS
+				div.topContainer.arrows
 
-				div.top
+					div.arrowContainer
+						a(href="/issues/" + issue.id + "?action=like").uplink
+							div.imageContainer
+								img(src="/images/ARROW_UP_DARK.png").upimg
+								img(src="/images/ARROW_UP_LIGHT.png").upimgacc
+						a(href="/issues/" + issue.id + "?action=dislike").downlink
+							img(src="/images/ARROW_DOWN_DARK.png").downimg
 
-					div.score
-						p.positive= "+" + issue.likes
-
-					div.stars
-						
-						if issue.likes == 0
-
-						else if issue.likes <= 5
-							img(src="/images/STAR_26.png")
-
-						else if issue.likes <= 10
-							img(src="/images/STAR_26.png")
-							img(src="/images/STAR_26.png")
-
-						else if issue.likes > 10
-							img(src="/images/STAR_26.png")
-							img(src="/images/STAR_26.png")
-							img(src="/images/STAR_26.png")
-
-				div.bottom
-					p Issue
-
-		div.topContainer.content
-
-			div.container
-				div.top
+				// TOP CONTAINER: VOTES
+				div.topContainer.votes
 
 					div.top
-						a(href="/issues/" + issue.id)
-							if issue.title.length < 30
-								h1= issue.title
-							else
-								h1.small= issue.title
-						h3= "Submitted on " + issue.date.toDateString()
+
+						div.score
+							p.positive= "+" + issue.likes
+
+						div.stars
+							
+							if issue.likes == 0
+
+							else if issue.likes <= 5
+								img(src="/images/STAR_26.png")
+
+							else if issue.likes <= 10
+								img(src="/images/STAR_26.png")
+								img(src="/images/STAR_26.png")
+
+							else if issue.likes > 10
+								img(src="/images/STAR_26.png")
+								img(src="/images/STAR_26.png")
+								img(src="/images/STAR_26.png")
 
 					div.bottom
-						a(href="").button-issue.primary SGO Response 
+						p Issue
 
-				div.bottom
-					p= issue.body
+			// TOP CONTAINER: CONTENT
+			div.topContainer.content
 
-			div.alert
-				a(href="/issues/" + issue.id) Go to this issue's page (comments, description)
+				div.container
+					div.top
 
+						div.top
+							a(href="/issues/" + issue.id)
+								if issue.title.length < 30
+									h1= issue.title
+								else
+									h1.small= issue.title
+							h3= "Submitted on " + issue.date.toDateString()
+
+						div.bottom
+							a(href="").button-issue.primary SGO Response 
+
+					div.bottom
+						p= issue.body
+
+				div.alert
+					a(href="/issues/" + issue.id) Go to this issue's page (comments, description)
+
+		// TOP CONTAINER: SOCIAL
 		div.topContainer.social
 
 			div.top

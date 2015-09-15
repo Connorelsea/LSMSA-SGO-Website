@@ -326,11 +326,33 @@
 		flex-direction column
 		justify-content center
 		align-items center
-		
 		width 100%
 		
+		.sideContainer
+			display flex
+			flex-direction column
+			align-items center
+			margin 0px 10px
+			height 200px
+			
+			.arrows
+				margin 0px
+			
+			.votes
+				padding 0px
+				margin 0px
+				height 80px !important
+				width auto
+				
+				.top
+					padding 0px
+					
+					.score
+						font-size 2.5em
+		
 		.voteStuff
-			width 90%
+			display flex
+			width 100%
 
 		.topContainer.votes
 			background-color _grey
@@ -346,15 +368,19 @@
 		
 		> *
 			margin 5px !important
-		
-		.topContainer
+
+		.topContainer.social
 			width 90% !important
 			
 		.topContainer.content
+			margin 0px 10px
 			height 200px
 			
-			.top .bottom
-				display none
+			.top
+				padding 10px !important
+
+				.bottom
+					display none
 			
 		.social
 			background none
