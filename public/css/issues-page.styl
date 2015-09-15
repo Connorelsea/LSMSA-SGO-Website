@@ -271,20 +271,51 @@
 		
 		.commentBox
 			box-sizing border-box
-			padding 30px
+			
 			margin 20px 0px
 			background-color lighten(_grey, 90%)
 			border none
 			box-shadow 0 6px 8px -1px rgba(50,50,50,0.4)
 			outline none
-			
-			transition all 0.4s
-			
-			&:hover
-				padding 35px
+
+			.studentBar
+				padding 10px 30px
+				background-color darken(_grey, 10%)
+				
+				h2
+					color darken(_grey, 80%)
+					font-family Futura
+					
+					.first
+						text-transform uppercase
+						
+					.firstA
+						font-size 0.8em
+
+			.adminBar
+				padding 20px 30px
+				background-color _navy
+				
+				h2
+					color lighten(_navy, 70%)
+					font-family Futura
+					font-weight bold
+					
+					.first
+						text-transform uppercase
+						
+					.firstA
+						font-size 0.8em
+						
+				h4
+					font-family Futura
+					font-size 0.8em
+					color lighten(_navy, 70%)
+					padding-top 10px
 			
 			p
+				padding 20px 30px
 				color darken(_navy, 30%)
 				font-family Futura
 				font-size 1.2em
-				line-height 1.3em
+				line-height 1.4em

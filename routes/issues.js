@@ -396,7 +396,7 @@ module.exports = function(app, passport, connection) {
 
 						// Query comments for individual post
 						connection.query(
-							"SELECT C.id, C.elementID, C.googleID, C.time, C.body FROM comments C WHERE elementID = ? AND approved = 1", issue.id,
+							"SELECT comments.id, comments.elementID, comments.googleID, comments.time, comments.body, users.name, users.admin FROM comments LEFT JOIN users ON comments.googleID = users.googleID WHERE comments.elementID = ? AND comments.approved = 1 ORDER BY comments.time DESC", issue.id,
 
 							function (err, rows_comments)
 							{
@@ -411,9 +411,11 @@ module.exports = function(app, passport, connection) {
 									rows_comments.forEach(function(comment, comment_index)
 									{
 										issue.comments.push({
-											id   : comment.id,
-											time : comment.time,
-											body : comment.body
+											id    : comment.id,
+											time  : comment.time.toUTCString(),
+											body  : comment.body,
+											name  : comment.name,
+											admin : comment.admin
 										});
 									})
 

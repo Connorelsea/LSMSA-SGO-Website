@@ -88,6 +88,20 @@ html(lang="en")
 					div.childrenContainer
 						each comment in issue.comments
 							div.commentBox
-								p!= comment.body
+
+								if comment.admin === 1
+									div.adminBar
+										h2
+											span.first Official Administrator Response 
+											span.second= "(" + comment.name + ")"
+										h4
+											span.first= comment.time
+								else
+									div.studentBar
+										h2
+											span.firstA= "Anonymous Student Response (" + comment.time + ")"
+
+								div.innerCommentContainer
+									p!= comment.body
 
 			include footer
