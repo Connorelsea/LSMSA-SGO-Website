@@ -47,7 +47,7 @@ module.exports = function(app, passport) {
 
 			res.render("alert-page.jade", {
 				title   : "LSMSA SGO",
-				body    : "Logging into the LSMSA SGO website gives you the ability to create issues and participate in community discussion.Note that you can only log in with your LSMSA email.",
+				body    : "Logging into the LSMSA SGO website gives you the ability to create issues and participate in community discussion. Note that you can only log in with your LSMSA email.",
 				buttons : [
 					//{ title : "Home", link : "/" },
 					{ title : "Login", link : "/login" }
