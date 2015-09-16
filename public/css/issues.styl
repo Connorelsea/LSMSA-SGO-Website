@@ -3,6 +3,42 @@
 
 .ics
 	padding 60px 0px
+	
+.addMore
+	display -webkit-flex
+	display flex
+	flex-direction column
+	align-items center
+
+	h1
+		padding 34px 0px
+		font-family Futura
+		font-size 1.4em
+		font-weight bold
+		text-transform uppercase
+		color darken(_grey, 35%)
+			
+	.submit-button
+		margin 8px
+		margin-top 20px
+		text-align center
+		padding 8px 25px
+			
+		background-color _navy
+		border 4px solid _navy
+		color white
+			
+		font-family Futura
+		font-size 0.7em
+		font-weight bold
+		text-transform uppercase
+		text-decoration none
+			
+		transition all 0.4s
+			
+		&:hover
+			background-color _grey
+			color _navy
 
 .issueContainer
 	display -webkit-flex
@@ -13,42 +49,6 @@
 	background-color _grey
 	
 	padding-bottom 40px
-
-	.addMore
-		display -webkit-flex
-		display flex
-		flex-direction column
-		align-items center
-
-		h1
-			padding 34px 0px
-			font-family Futura
-			font-size 1.4em
-			font-weight bold
-			text-transform uppercase
-			color darken(_grey, 35%)
-			
-		.submit-button
-			margin 8px
-			margin-top 20px
-			text-align center
-			padding 8px 25px
-			
-			background-color _navy
-			border 4px solid _navy
-			color white
-			
-			font-family Futura
-			font-size 0.7em
-			font-weight bold
-			text-transform uppercase
-			text-decoration none
-			
-			transition all 0.4s
-			
-			&:hover
-				background-color _grey
-				color _navy
 
 /*
  * Issue Box
@@ -443,7 +443,7 @@
 			color _navy
 			
 			padding-top 50px
-			padding-bottom 50px
+			padding-bottom 30px
 
 		.button.primary
 			width 150px
@@ -452,6 +452,8 @@
 			background-color _navy
 			border 4px solid _navy
 			color _grey
+			
+			margin-bottom 50px
 			
 			&:hover
 				background-color _grey

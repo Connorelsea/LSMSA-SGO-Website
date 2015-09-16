@@ -141,7 +141,7 @@ module.exports = function(app, passport, connection) {
 					rows           : issues,
 					title          : "LSMSA SGO - Home",
 					keywords       : "lsmsa, student government, lsmsa sgo, sgo, louisiana school",
-					description    : "The official LSMSA SGO website made for students, by students.",
+					description    : "The official LSMSA Student Government Organization (LSMSA SGO) website made for students, by students.",
 					linkimage      : baseurl + "/images/facebook.png",
 					ogurl          : ogurl,
 

@@ -72,15 +72,20 @@ html(lang="en")
 				
 				div.commentContainer
 
-					div.submitContainer
+					if !user
+						div.alertContainer
+							h1 You cannot comment because you are not logged in.
+							a(href="/login-welcome").submit-button Log in and comment
+					else
+						div.submitContainer
 
-						form(name="add-comment", method="post")
+							form(name="add-comment", method="post")
 
-							div.text
-								textarea(name="comment")
+								div.text
+									textarea(name="comment")
 
-							div.submitArea
-								input(type="submit", value="Comment")
+								div.submitArea
+									input(type="submit", value="Comment")
 
 					div.explanationContainer
 						p Comments are a valuable way to share your opinion on the issue. Comments are anonymous and are sorted from most recent to least recent.
