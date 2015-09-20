@@ -12,8 +12,8 @@ function createIssues(rows, wrap) {
 
 		if (wrap == true) {
 
-			if (new_body.length > 50) {
-				new_body = new_body.substring(0, 50) + "...";
+			if (new_body.length > 105) {
+				new_body = new_body.substring(0, 105) + "...";
 			}
 
 			if (new_title.length > 50) {
@@ -32,6 +32,7 @@ function createIssues(rows, wrap) {
 			body     : new_body,
 			likes    : ((rows[i].likeCount == null) ? 0 : rows[i].likeCount),
 			views    : rows[i].views,
+			admin    : false,
 			comments : []
 		});
 
@@ -49,6 +50,15 @@ function createIssues(rows, wrap) {
 		// issues  object  with  its respective
 		// comments.
 		for (var c = 0; c < comments.length; c++) {
+
+			// ADD IN SECOND QUERY FOR COMMENTS SIMILAR TO LOWER
+			// QUERY IN ORDER TO CHECK FOR ADMIN OR NOT. CURRENTLY
+			// COMMENTS ARE ONLY BEING RETURNED AS TEXT. Need to
+			// check for admin so the issue box itself can show
+			// the alert. This query for the issue box needs to
+			// be modernized like it was modernized for the issue
+			// page as a whole.
+
 			issues[i].comments.push({
 				body : comments[c]
 			});
@@ -391,6 +401,7 @@ module.exports = function(app, passport, connection) {
 							body     : new_body,
 							likes    : ((row.likeCount == null) ? 0 : row.likeCount),
 							views    : row.views,
+							admin    : false,
 							comments : []
 						};
 
@@ -410,6 +421,10 @@ module.exports = function(app, passport, connection) {
 									// object and push it to the 
 									rows_comments.forEach(function(comment, comment_index)
 									{
+										if (comment.admin === true) {
+											issue.admin = true;
+										}
+
 										issue.comments.push({
 											id    : comment.id,
 											time  : comment.time.toUTCString(),

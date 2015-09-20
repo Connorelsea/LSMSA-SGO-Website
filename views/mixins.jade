@@ -162,15 +162,22 @@ mixin createMaterialIssueBox(issue)
 						div.description
 							p= issue.body
 
-		div.lower.clear
-			a(href="/issues/" + issue.id).link View
-			a(href="/issues/" + issue.id).link Comment
-			a(href="/issues/" + issue.id).link Share
+		div.lower
+			div.left
+				if issue.admin === true
+					div.imageContainer
+						img(src="/images/alert9.png").warning
+					a(href="/issues/" + issue.id).link Has LSMSA Staff Response
+
+			div.right
+				a(href="/issues/" + issue.id).link View
+				a(href="/issues/" + issue.id).link Comment
+				a(href="/issues/" + issue.id).link Share
 
 mixin createVoteButtons(issue)
 	a(href="/issues/" + issue.id + "?action=like").voteLink.upLink
 		div.mImageContainer
-			img(src="/images/ARROW_UP_LIGHT.png").imageMain
+			img(src="/images/ARROW_UP_LIGHT.png").imageMain.imageUp
 	a(href="/issues/" + issue.id + "?action=dislike").voteLink.downLink
 		div.mImageContainer
-			img(src="/images/ARROW_DOWN_LIGHT.png").imageMain
+			img(src="/images/ARROW_DOWN_LIGHT.png").imageMain.imageDown

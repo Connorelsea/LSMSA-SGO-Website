@@ -459,43 +459,42 @@ header nav ul li ul li .desc
 		.inner
 			padding 20px
 
-		.header
-			display -webkit-flex
-			display flex
-			flex-direction column
-			justify-content space-between
-			padding-bottom 20px
-			
-			.upper
-				display -webkit-flex
-				display flex
-				flex-direction row
-				justify-content space-between
-				
-			.lower
+			.header
 				display -webkit-flex
 				display flex
 				flex-direction column
-				text-align center
-				padding 40px 35px
-				padding-bottom 10px
+				justify-content space-between
+				padding-bottom 20px
 				
-				p
-					font-family Futura
-					font-size 1.3em
-					color _navy
+				.upper
+					display -webkit-flex
+					display flex
+					flex-direction row
+					justify-content space-between
+					
+					// Issue header title
 
-
-		// Issue header title
-
-		.title
-			font-family Futura
-			font-size 1.8em
-			text-transform uppercase
-			color _navy
-		
-		.title .secondary
-			font-weight bold
+					.title
+						font-family Futura
+						font-size 1.8em
+						text-transform uppercase
+						color _navy
+					
+					.title .secondary
+						font-weight bold
+					
+				.lower
+					display -webkit-flex
+					display flex
+					flex-direction column
+					text-align center
+					padding 40px 35px
+					padding-bottom 10px
+					
+					p
+						font-family Futura
+						font-size 1.3em
+						color _navy
 
 		// Issue header buttons
 			
@@ -532,6 +531,7 @@ header nav ul li ul li .desc
  */
 
 @import 'index-responsive'
+@import 'material-issues-responsive'
 
 .superAlert
 	height 100% !important

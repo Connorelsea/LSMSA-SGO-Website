@@ -1,15 +1,23 @@
 .mIssueContainer
-	width 70%
+	width 73%
 	margin 0px auto
 	
 	> *
 		margin 30px 0px
 
+.mfIssueContainer
+	width 93%
+	margin 0px auto
+	
+	> *
+		margin 30px 0px
+
+
 .mIssueBox
 	width 100% // Parent container defines width of box
 	border-radius 10px
 	
-	box-shadow 0px 25px 48px -9px rgba(0,0,0,0.48)
+	box-shadow 0px 25px 48px -9px rgba(0,0,0,0.40)
 	
 	> .upper
 		border-top-left-radius  10px
@@ -23,12 +31,12 @@
 			
 		// Inner Container: Score, Content, Info, etc
 		.main
-			height 140px
+			min-height 160px
 			display flex
 			align-items center
 			
 			.area.score
-				width 135px
+				min-width 100px
 				display flex
 				align-items center
 				margin 0px 40px
@@ -47,23 +55,43 @@
 						color _yellow
 				
 				.stars
+					width 110%
 					display flex
 					justify-content space-around
 					
 					.starImage
-						width 35px
-						height 35px
+						width 30px
+						height 30px
 						
 			.area.votesDesktop
+				
+				margin 5px 0px
+				padding 7px 0px
 				padding-left 30px
 				border-left 2px solid #293f70
 				
 				.mImageContainer
+					
+					.imageUp
+						margin-bottom 10px
+						transition all 0.2s
+						
+						&:hover
+							margin-bottom 20px
+					
+					.imageDown
+						margin-top 0px
+						transition all 0.2s
+						
+						&:hover
+							margin-top 7px
+						
 					.imageMain
-						width 36px
+						width 32px
 
 			.area.content
-				margin-left 30px
+				margin 10px 30px
+				margin-right 40px
 				
 				.upper
 					
@@ -71,17 +99,17 @@
 						display none
 						
 					.title
-						margin-bottom 10px
+						margin-bottom 12px
 						
 						h1
 							font-family Constantia
-							font-size 2em
+							font-size 1.8em
 							color _grey
-							margin-bottom 5px
+							margin-bottom 12px
 							
 						h3
 							font-family Futura
-							font-size 0.9em
+							font-size 0.8em
 							font-weight bold
 							text-transform uppercase
 							color _yellow
@@ -89,31 +117,66 @@
 				.lower
 					p
 						font-family Constantia
-						font-size 1.3em
+						font-size 1.1em
 						color _grey
 					
 	> .lower
 		display flex
-		justify-content flex-end
+		justify-content space-between
 		border-bottom-left-radius  10px
 		border-bottom-right-radius 10px
 		background-color _yellow
+		//background-color darken(_navy, 40%)
 		
+		> *
+			display flex
+			align-items center
+			
+		.left
+			margin-left 14px
+			
+			.imageContainer
+				text-align center
+				width 22px
+			
+				.warning
+					width  20px
+					height 20px
+					
+					animation-name pulse
+					animation-duration 1s
+					animation-iteration-count infinite
+
+		.right
+			margin-right 14px
+
 		a
 			display inline-block
-			padding 13px
+			padding 12px 13px
 
 			font-family Futura
 			font-weight bold
-			font-size 1em
+			font-size 0.84em
 			text-transform uppercase
 			text-decoration none
 			color darken(_yellow, 55%)
 			
-@media screen and (max-width: 1000px)
-	.mIssueBox > .upper
-		.votesDesktop
-			display none
-		.main
-			.votesMobile
-				display inline-block
+			transition all 0.4s
+			
+			&:hover
+				padding 12px 20px
+				
+@keyframes pulse {
+	0% {
+		width 15px
+		height 15px
+	}
+	50% {
+		width 20px
+		height 20px
+	}
+	100% {
+		width 15px
+		height 15px
+	}
+}

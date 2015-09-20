@@ -69,11 +69,12 @@ include html
 
 											p Issues and the Issue Board are tools created by the community for the community. Issues are submitted by students, reviewed by the SGO, and then put on the site for students to vote on and discuss.
 
-									div.issueContainer
+									div.mfIssueContainer
 
 										if rows.length > 0
 											each val in rows
-												+createIssueBox(val)
+												//+createIssueBox(val)
+												+createMaterialIssueBox(val)
 											div.addMore
 												h1 You can be the voice of change
 												div.multButtons
