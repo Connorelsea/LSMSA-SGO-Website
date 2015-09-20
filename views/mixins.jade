@@ -143,43 +143,44 @@ mixin createMaterialIssueBox(issue, admin)
 								img(src="/images/STAR.png").starImage
 								- stars = stars - 1
 
-				div.area.votesDesktop
-					+createVoteButtons(issue)
+				div.area.right
+					div.area.votesDesktop
+						+createVoteButtons(issue)
 
-				div.area.content
+					div.area.content
 
-					div.upper
+						div.upper
 
-						div.votesMobile
-							+createVoteButtons(issue)
+							div.votesMobile
+								+createVoteButtons(issue)
 
-						div.title
-							a(href="/issues/" + issue.id)
-								h1= issue.title
-							h3= "Submitted on " + issue.date.toDateString()
+							div.title
+								a(href="/issues/" + issue.id)
+									h1= issue.title
+								h3= "Submitted on " + issue.date.toDateString()
 
-					div.lower
+						div.lower
 
-						div.description
-							a(href="/issues/" + issue.id)
-								p= issue.body
-							if admin
-								div.adminInfo
-									h3 Confidential Issue Information
-									if issue.approved
+							div.description
+								a(href="/issues/" + issue.id)
+									p= issue.body
+								if admin
+									div.adminInfo
+										h3 Confidential Issue Information
+										if issue.approved
+											p
+												span.bold Approved Status: 
+												span.after APPROVED
+										else
+											p
+												span.bold Approved Status: 
+												span.after NOT APPROVED
 										p
-											span.bold Approved Status: 
-											span.after APPROVED
-									else
+											span.bold Submitter: 
+											span.after= issue.username
 										p
-											span.bold Approved Status: 
-											span.after NOT APPROVED
-									p
-										span.bold Submitter: 
-										span.after= issue.username
-									p
-										span.bold Email: 
-										span.after= issue.email
+											span.bold Email: 
+											span.after= issue.email
 
 		div.lower
 			div.left
@@ -196,7 +197,7 @@ mixin createMaterialIssueBox(issue, admin)
 						a(href="/issues/" + issue.id + "?action=unapprove").link [Admin] Un-Approve
 					else
 						a(href="/issues/" + issue.id + "?action=approve").link [Admin] Approve
-						
+
 				else
 					a(href="/issues/" + issue.id).link View
 					a(href="/issues/" + issue.id).link Comment
