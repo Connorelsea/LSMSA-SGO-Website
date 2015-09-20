@@ -1,4 +1,5 @@
-var data = require("../info/index")
+var data  = require("../info/index")
+var async = require("async")
 
 function createIssues(rows, wrap) {
 	var issues = [];
@@ -57,7 +58,7 @@ function createIssues(rows, wrap) {
 			// check for admin so the issue box itself can show
 			// the alert. This query for the issue box needs to
 			// be modernized like it was modernized for the issue
-			// page as a whole.
+			// page as a whole. MAYBE GROUP_CONCAT 1s and 0s.
 
 			issues[i].comments.push({
 				body : comments[c]
@@ -69,6 +70,20 @@ function createIssues(rows, wrap) {
 }
 
 module.exports = function(app, passport, connection) {
+
+	var isAdmin = function(req) {
+		var email = req.user.email.toLowerCase()
+		console.log("Checking if is admin " + email)
+
+		if (email === "elilangley@student.lsmsa.edu"  ||
+			email === "connorelsea@student.lsmsa.edu" ||
+			email === "sgo@lsmsa.edu") {
+			return true
+		}
+		else {
+			return false
+		}
+	}
 
 	var queryIssues = function(orderBy, callback) {
 
@@ -132,6 +147,8 @@ module.exports = function(app, passport, connection) {
 	 */
 	app.get("/", function(req, res) {
 
+		console.log("HERE")
+
 		queryIssues(
 		"ORDER BY L.likeCount DESC LIMIT 3\n",
 			function(err, rows) {
@@ -154,7 +171,12 @@ module.exports = function(app, passport, connection) {
 					description    : "The official LSMSA Student Government Organization (LSMSA SGO) website made for students, by students.",
 					linkimage      : baseurl + "/images/facebook.png",
 					ogurl          : ogurl,
-
+				}, function(err, html) {
+					if (err) {
+						console.log(err)
+					} else {
+						res.send(html)
+					}
 				});
 
 			}
@@ -265,6 +287,72 @@ module.exports = function(app, passport, connection) {
 	 * parameterized by issue ID.
 	 */
 	app.get("/issues/:issue_id", function(req, res) {
+
+		/*
+		 * ADMIN - Delete:
+		 *
+		 * Delete this issue
+		 * URL: /issues/:issue_id?action=delete
+		 */
+		if (req.query.action == "delete") {
+
+			if (isAdmin(req)) {
+
+				connection.query(
+					"DELETE FROM elements WHERE id = ?", req.params.issue_id,
+					function(err, rows) {
+						if (err) console.log(err)
+					}
+				)
+
+				res.redirect("/admin")
+			}
+
+		}
+
+		/*
+		 * ADMIN - Approve:
+		 *
+		 * Approve this issue.
+		 * URL: /issues/:issue_id?action=approve
+		 */
+		if (req.query.action == "approve") {
+
+			if (isAdmin(req)) {
+
+				connection.query(
+					"UPDATE elements SET approved = 1 WHERE id = ?", req.params.issue_id,
+					function(err, rows) {
+						if (err) console.log(err)
+					}
+				)
+
+				res.redirect("/admin")
+			}
+
+		}
+
+		/*
+		 * ADMIN - Un-Approve:
+		 *
+		 * Un-approve this issue.
+		 * URL: /issues/:issue_id?action=unapprove
+		 */
+		if (req.query.action == "unapprove") {
+
+			if (isAdmin(req)) {
+
+				connection.query(
+					"UPDATE elements SET approved = 0 WHERE id = ?", req.params.issue_id,
+					function(err, rows) {
+						if (err) console.log(err)
+					}
+				)
+
+				res.redirect("/admin")
+			}
+
+		}
 
 		/*
 		 * Like:
@@ -496,6 +584,86 @@ module.exports = function(app, passport, connection) {
 	});
 
 	/*
+	 * ADMIN PAGE
+	 *
+	 * Page used by admin to approve issues
+	 */
+	app.get("/admin", function(req, res) {
+
+		if (isAdmin(req)) {
+
+			connection.query(
+
+				"SELECT E.id, E.time, E.googleID, E.title, E.body, E.views, E.approved, users.name, users.email, L.likeCount\n" +
+				"FROM elements E\n" +
+				"LEFT JOIN users ON E.googleID = users.googleID\n" +
+				"LEFT JOIN (\n" + 
+				"    SELECT elementID, COUNT(id) AS likeCount\n" + 
+				"    FROM likes\n" + 
+				"    GROUP BY elementID\n" + 
+				") L ON L.elementID = E.id",
+
+				function(err, rows) {
+
+					var issues = [];
+
+					async.each(
+						rows,
+						function(row, callback) {
+
+							issues.push({
+								id       : row.id,
+								title    : row.title,
+								body     : row.body,
+								date     : row.time,
+								likes    : ((row.likeCount == null) ? 0 : row.likeCount),
+								views    : row.views,
+								approved : row.approved,
+								email    : row.email,
+								username : row.name
+							})
+
+							console.log(row.title)
+
+							callback()
+						},
+
+						function(err) {
+
+							if (err) {
+								console.log(err)
+							}
+
+							res.render(
+								"admin.jade",
+								{
+									mainNavigation : data.mainNavigation,
+									user           : req.user,
+									rows           : issues,
+									filter         : "top",
+									title          : "LSMSA SGO - Admin Board"
+								},
+								function(err, html) {
+									if (err) {
+										console.log(err)
+									}
+									else {
+										res.send(html)
+									}
+								}
+							);	
+
+						}
+					); // End of async.each
+
+				} // End of query callback
+			)
+
+		} // End of user checking
+
+	})
+
+	/*
 	 * GET: Issue Page
 	 * 
 	 * Show a list of all issues, sorted or filtered in a manner
@@ -526,7 +694,7 @@ module.exports = function(app, passport, connection) {
 					 * Create issue objects to send to the page
 					 * being rendered
 					 */
-					 var issues = createIssues(rows, true)
+					var issues = createIssues(rows, true)
 
 					var baseurl = req.protocol + "://" + req.hostname;
 

@@ -1,0 +1,26 @@
+extends template
+
+block t-title-h1
+	h1 Admin Issue Board
+
+block t-title-h2
+	h2 Student-Submitted Issues
+
+block content
+
+		//div.issueContainer.ics
+		div.mIssueContainer
+
+			if rows.length > 0
+				each val in rows
+					// +createIssueBox(val)
+					+createMaterialIssueBox(val, true)
+
+				div.addMore
+					h1 You can be the voice of change
+					div.multButtons
+						a(href="/issues/submit").submit-button.first Submit an Issue
+			else
+				div.addMore
+					h1 There are no issues currently
+					a(href="/issues/submit").submit-button Submit an Issue
