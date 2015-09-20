@@ -154,13 +154,15 @@ mixin createMaterialIssueBox(issue)
 							+createVoteButtons(issue)
 
 						div.title
-							h1= issue.title
+							a(href="/issues/" + issue.id)
+								h1= issue.title
 							h3= "Submitted on " + issue.date.toDateString()
 
 					div.lower
 
 						div.description
-							p= issue.body
+							a(href="/issues/" + issue.id)
+								p= issue.body
 
 		div.lower
 			div.left
