@@ -10,7 +10,11 @@ var express      = require("express"),
     nib          = require("nib"),
     mysql        = require("mysql"),
     database     = require("./config/database"),
-    favicon      = require("serve-favicon")
+    favicon      = require("serve-favicon"),
+    nodemailer   = require("nodemailer"),
+    auth         = require("./config/auth"),
+    EmailTemp    = require("email-templates").EmailTemplate,
+    path         = require("path")
 
 // Setup MySQL databases
 
@@ -99,7 +103,6 @@ app.use(function(err, req, res, next) {
     }
 
     if (err.code === 500) {
-
         res.redirect("/failure");
     }
 
@@ -116,4 +119,40 @@ var port = process.env.OPENSHIFT_NODEJS_PORT || 3000
 
 app.listen(port, ip, function() {
     console.log("Application: Now running on " + ip + ":" + port)
+
+    // var templateDir = path.join(__dirname, "emails", "email-welcome");
+
+    // var welcomeEmail = new EmailTemp(templateDir)
+    // console.log(welcomeEmail)
+    // var input = { inputWord : "THIS IS THE DYNAMIC INPUT" }
+
+    // welcomeEmail.render(input, function(err, results) {
+
+    //     if (err) {
+    //         console.log("ERROR: " + err);
+    //     }
+
+    //     var transporter = nodemailer.createTransport({
+    //         service : "Gmail",
+    //         auth    : auth.mailer.auth
+    //     })
+
+    //     var mailOptions = {
+    //         from    : "SGO Wesbite <sgo@lsmsa.edu>",
+    //         to      : "sarahpommier@student.lsmsa.edu, connorelsea@student.lsmsa.edu",
+    //         subject : "Hello from the NodeJS server in TECHNICOLOR",
+    //         text    : results.text,
+    //         html    : results.html
+    //     }
+
+    //     transporter.sendMail(mailOptions, function(error, info) {
+    //         if (error) {
+    //             console.log(error)
+    //         } else {
+    //             console.log("Message sent: " + info.response)
+    //         }
+    //     });
+
+    // });
+
 });

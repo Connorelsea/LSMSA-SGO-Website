@@ -1,0 +1,119 @@
+.mIssueContainer
+	width 70%
+	margin 0px auto
+	
+	> *
+		margin 30px 0px
+
+.mIssueBox
+	width 100% // Parent container defines width of box
+	border-radius 10px
+	
+	box-shadow 0px 25px 48px -9px rgba(0,0,0,0.48)
+	
+	> .upper
+		border-top-left-radius  10px
+		border-top-right-radius 10px
+		background-color _navy
+		
+		// Global styling for .upper > .innerContainer
+		> .innerContainer
+			width auto
+			display inline-block
+			
+		// Inner Container: Score, Content, Info, etc
+		.main
+			height 140px
+			display flex
+			align-items center
+			
+			.area.score
+				width 135px
+				display flex
+				align-items center
+				margin 0px 40px
+				
+				.holder
+					width 100%
+				
+				.likes
+					margin-bottom 7px
+					
+					p
+						font-family Futura
+						font-weight bold
+						font-size 3.2em
+						text-align center
+						color _yellow
+				
+				.stars
+					display flex
+					justify-content space-around
+					
+					.starImage
+						width 35px
+						height 35px
+						
+			.area.votesDesktop
+				padding-left 30px
+				border-left 2px solid #293f70
+				
+				.mImageContainer
+					.imageMain
+						width 36px
+
+			.area.content
+				margin-left 30px
+				
+				.upper
+					
+					.votesMobile
+						display none
+						
+					.title
+						margin-bottom 10px
+						
+						h1
+							font-family Constantia
+							font-size 2em
+							color _grey
+							margin-bottom 5px
+							
+						h3
+							font-family Futura
+							font-size 0.9em
+							font-weight bold
+							text-transform uppercase
+							color _yellow
+
+				.lower
+					p
+						font-family Constantia
+						font-size 1.3em
+						color _grey
+					
+	> .lower
+		display flex
+		justify-content flex-end
+		border-bottom-left-radius  10px
+		border-bottom-right-radius 10px
+		background-color _yellow
+		
+		a
+			display inline-block
+			padding 13px
+
+			font-family Futura
+			font-weight bold
+			font-size 1em
+			text-transform uppercase
+			text-decoration none
+			color darken(_yellow, 55%)
+			
+@media screen and (max-width: 1000px)
+	.mIssueBox > .upper
+		.votesDesktop
+			display none
+		.main
+			.votesMobile
+				display inline-block

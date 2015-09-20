@@ -8,11 +8,14 @@ block t-title-h2
 
 block content
 
-		div.issueContainer.ics
+		//div.issueContainer.ics
+		div.mIssueContainer
 
 			if rows.length > 0
 				each val in rows
-					+createIssueBox(val)
+					// +createIssueBox(val)
+					+createMaterialIssueBox(val)
+
 				div.addMore
 					h1 You can be the voice of change
 					div.multButtons

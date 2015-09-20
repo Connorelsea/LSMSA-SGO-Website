@@ -48,8 +48,8 @@ mixin createIssueBox(issue)
 							div.imageContainer
 								img(src="/images/ARROW_UP_DARK.png").upimg
 								img(src="/images/ARROW_UP_LIGHT.png").upimgacc
-						//- a(href="/issues/" + issue.id + "?action=dislike").downlink
-						//- 	img(src="/images/ARROW_DOWN_DARK.png").downimg
+						a(href="/issues/" + issue.id + "?action=dislike").downlink
+							img(src="/images/ARROW_DOWN_DARK.png").downimg
 
 				// TOP CONTAINER: VOTES
 				div.topContainer.votes
@@ -112,3 +112,65 @@ mixin createIssueBox(issue)
 			div.bottom
 				p
 					a(href="/issues/" + issue.id) Comments
+
+// Material/Mobile Issue Box
+// Creates a singular issue based on the argument which uses
+// the new material design that is optimized  for mobile and
+// browsers with little flexbox support.
+mixin createMaterialIssueBox(issue)
+	div.mIssueBox
+
+		div.upper
+
+			div.innerContainer.main
+
+				div.area.score
+					div.holder
+
+						div.likes
+							p= "+" + issue.likes
+
+						div.stars
+
+							-
+								var stars
+								if      (issue.likes == 0)  { stars = 0 }
+								else if (issue.likes <  6)  { stars = 1 } 
+								else if (issue.likes <  16) { stars = 2 }
+								else                        { stars = 3 }
+
+							while stars > 0
+								img(src="/images/STAR.png").starImage
+								- stars = stars - 1
+
+				div.area.votesDesktop
+					+createVoteButtons(issue)
+
+				div.area.content
+
+					div.upper
+
+						div.votesMobile
+							+createVoteButtons(issue)
+
+						div.title
+							h1= issue.title
+							h3= "Submitted on " + issue.date.toDateString()
+
+					div.lower
+
+						div.description
+							p= issue.body
+
+		div.lower.clear
+			a(href="/issues/" + issue.id).link View
+			a(href="/issues/" + issue.id).link Comment
+			a(href="/issues/" + issue.id).link Share
+
+mixin createVoteButtons(issue)
+	a(href="/issues/" + issue.id + "?action=like").voteLink.upLink
+		div.mImageContainer
+			img(src="/images/ARROW_UP_LIGHT.png").imageMain
+	a(href="/issues/" + issue.id + "?action=dislike").voteLink.downLink
+		div.mImageContainer
+			img(src="/images/ARROW_DOWN_LIGHT.png").imageMain

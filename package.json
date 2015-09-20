@@ -20,6 +20,8 @@
 		"nib": "*",
 		"cli-color": "*",
 		"async": "*",
-		"serve-favicon": "*"
+		"serve-favicon": "*",
+		"email-templates" : "*",
+		"nodemailer" : "*"
 	}
 }

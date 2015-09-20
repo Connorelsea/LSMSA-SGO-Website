@@ -339,8 +339,8 @@ module.exports = function(app, passport, connection) {
 
 			res.redirect(alertLink(
 				req.params.issue_id,
-				"Downvoting is not allowed.",
-				"It is better to participate in community discussion. Leave a comment explaining why you disagree or what could be changed."
+				"Try commenting instead.",
+				"If you disagree with this issue, tell us why with a comment."
 			));
 		}
 
@@ -531,6 +531,14 @@ module.exports = function(app, passport, connection) {
 							keywords       : "lsmsa, submit issue, student government, lsmsa sgo, sgo, louisiana school",
 							description    : "The Issue Board is a place where students can view, share, and discuss issues about or ideas for LSMSA as a school.",
 							linkimage      : baseurl + "/images/facebook.png" 
+						},
+						function(err, html) {
+							if (err) {
+								console.log(err)
+							}
+							else {
+								res.send(html)
+							}
 						}
 					);	
 
