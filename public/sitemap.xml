@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+<url>
+  <loc>http://lsmsasgo.com/</loc>
+  <changefreq>daily</changefreq>
+  <priority>1.00</priority>
+</url>
+
+<url>
+  <loc>http://lsmsasgo.com/about</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+
+<url>
+  <loc>http://lsmsasgo.com/members</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+
+<url>
+  <loc>http://lsmsasgo.com/constitution</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+
+<url>
+  <loc>http://lsmsasgo.com/issues</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+
+<url>
+  <loc>http://lsmsasgo.com/issues/submit</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+
+<url>
+  <loc>http://lsmsasgo.com/news</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+
+<url>
+  <loc>http://lsmsasgo.com/events</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+
+<url>
+  <loc>http://lsmsasgo.com/login-welcome</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+
+<url>
+  <loc>http://lsmsasgo.com/Members</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+
+</urlset>
