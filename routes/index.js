@@ -2,6 +2,16 @@ var data = require("../info/index")
 
 module.exports = function(app, passport) {
 
+	app.get("/changelog", function(req, res) {
+
+		res.render("changelog.jade", {
+			mainNavigation : data.mainNavigation,
+			user           : req.user,
+			title          : "LSMSA SGO - Changelog"
+		});
+
+	})
+
 	app.get("/about", function(req, res) {
 
 		res.render("about.jade", {

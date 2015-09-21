@@ -14,7 +14,8 @@ var express      = require("express"),
     nodemailer   = require("nodemailer"),
     auth         = require("./config/auth"),
     EmailTemp    = require("email-templates").EmailTemplate,
-    path         = require("path")
+    path         = require("path"),
+    emails       = require("./email-code/emails")
 
 // Setup MySQL databases
 
@@ -121,6 +122,15 @@ app.listen(port, ip, function() {
     console.log("Application: Now running on " + ip + ":" + port)
 
     // var templateDir = path.join(__dirname, "emails", "email-welcome");
+
+    sendEmail = require("./email-code/emails")
+    
+    sendEmail("email-generic", {
+        input : "dynamic input of words"
+    }, {
+        to      : "connorelsea@gmail.com",
+        subject : "Hello from Node Test II"
+    })
 
     // var welcomeEmail = new EmailTemp(templateDir)
     // console.log(welcomeEmail)
