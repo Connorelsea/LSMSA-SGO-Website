@@ -192,7 +192,14 @@ mixin createMaterialIssueBox(issue, admin)
 			div.right
 
 				if admin
+
+					- var body    = "Hello " + issue.username + ",%0a%0a%0a%0a%0a%0aThank you,%0a" + user.name
+					- var subject = "LSMSA SGO, Official Response"
+					- var email   = "https://mail.google.com/mail/?view=cm&fs=1&to=" + issue.email + "&su=" + subject + "&body=" + body;
+
+					a(href=email target="_blank" style="target-new: tab;").link [Admin] Contact User
 					a(href="/issues/" + issue.id + "?action=delete").link [Admin] Delete
+
 					if issue.approved
 						a(href="/issues/" + issue.id + "?action=unapprove").link [Admin] Un-Approve
 					else

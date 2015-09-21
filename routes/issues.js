@@ -601,7 +601,8 @@ module.exports = function(app, passport, connection) {
 				"    SELECT elementID, COUNT(id) AS likeCount\n" + 
 				"    FROM likes\n" + 
 				"    GROUP BY elementID\n" + 
-				") L ON L.elementID = E.id",
+				") L ON L.elementID = E.id\n" +
+				"ORDER BY E.time DESC",
 
 				function(err, rows) {
 
@@ -680,7 +681,7 @@ module.exports = function(app, passport, connection) {
 		 * Sorts the post by number of votes in descending order
 		 * from the top of the page.
 		 */
-		if (req.query.filter == "top" || !req.query.filter) {
+		if (req.query.filter == "top") {
 
 			queryIssues(
 				"ORDER BY L.likeCount DESC",
@@ -736,11 +737,12 @@ module.exports = function(app, passport, connection) {
 		 * Sorts the most recent posts by dates in descending order
 		 * from the top of the page.
 		 */
-		else if (req.query.filter == "recent") {
+		else if (req.query.filter == "recent" || !req.query.filter) {
 
 			queryIssues(
 				"ORDER BY E.time DESC",
 				function(err, rows) {
+
 
 					if (err) {
 						res.send("ERROR " + err)
@@ -750,7 +752,9 @@ module.exports = function(app, passport, connection) {
 					 * Create issue objects to send to the page
 					 * being rendered
 					 */
-					 var issues = createIssues(rows, true)
+					var issues = createIssues(rows, true)
+
+					var baseurl = req.protocol + "://" + req.hostname;
 
 					/*
 					 * Render the issues page and send  it the 
@@ -763,11 +767,21 @@ module.exports = function(app, passport, connection) {
 							mainNavigation : data.mainNavigation,
 							user           : req.user,
 							rows           : issues,
-							filter         : "top"
+							filter         : "recent",
+							title          : "LSMSA SGO - Issue Board",
+							keywords       : "lsmsa, submit issue, student government, lsmsa sgo, sgo, louisiana school",
+							description    : "The Issue Board is a place where students can view, share, and discuss issues about or ideas for LSMSA as a school.",
+							linkimage      : baseurl + "/images/facebook.png" 
+						},
+						function(err, html) {
+							if (err) {
+								console.log(err)
+							}
+							else {
+								res.send(html)
+							}
 						}
-					);
-
-					// TODO: meta tag stuff goes in the render block
+					);	
 
 				}
 			);

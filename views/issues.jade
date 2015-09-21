@@ -11,6 +11,15 @@ block content
 		//div.issueContainer.ics
 		div.mIssueContainer
 
+			div.sortSwitcher
+				h4 Sort By...
+				if filter === "top"
+					a(href="/issues").first Recent
+					a(href="/issues?filter=top").highlight Top
+				else if filter === "recent"
+					a(href="/issues").first.highlight Recent
+					a(href="/issues?filter=top") Top
+
 			if rows.length > 0
 				each val in rows
 					// +createIssueBox(val)
