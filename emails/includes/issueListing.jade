@@ -1,0 +1,25 @@
+div.issueContainer
+
+	div.title
+		h2 *New* Issues
+		h4 Discuss relevant school issues with your peers
+
+	div.issueListing
+
+		each issue in issues
+
+			div.issue
+
+				div.top
+					h5= issue.title
+					div.paragraphContainer
+						p= issue.body + "  "
+						a(href="http://lsmsasgo.com/issues/" + issue.id) Read More
+
+
+				div.bottom
+					a(href="http://lsmsasgo.com/issues/" + issue.id + "?action=like") Upvote
+					p= " - "
+					a(href="http://lsmsasgo.com/issues/" + issue.id) View
+					p= " - "
+					a(href="http://lsmsasgo.com/issues/" + issue.id) Discuss

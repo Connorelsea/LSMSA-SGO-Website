@@ -20,6 +20,8 @@ var widthCorrection = function() {
 
 }
 
+var parallax = true;
+
 $(window).resize(widthCorrection);
 $(document).ready(widthCorrection);
 
@@ -52,40 +54,43 @@ $(window).scroll(function() {
 
 		}
 
-		// Apply parallax effects for the covers
+		if (parallax) {
+			// Apply parallax effects for the covers
 
-		var primaryScroll = scroll / 50;
-		var primaryRotate = -4 + (scroll / 100);
+			var primaryScroll = scroll / 50;
+			var primaryRotate = -4 + (scroll / 100);
 
-		$(".primaryCover").css({
-			"transform" : "translate(0px, -" + primaryScroll + "%) rotate(" + primaryRotate + "deg)"
-		})
-		
-		var secondaryScroll = scroll / 8;
-		var secondaryRotate = -1 + (scroll / -80)
+			$(".primaryCover").css({
+				"transform" : "translate(0px, -" + primaryScroll + "%) rotate(" + primaryRotate + "deg)"
+			})
+			
+			var secondaryScroll = scroll / 8;
+			var secondaryRotate = -1 + (scroll / -80)
 
-		$(".secondaryCover").css({
-			"transform" : "translate(0px, -" + secondaryScroll + "%) rotate(" + secondaryRotate + "deg)"
-		})
+			$(".secondaryCover").css({
+				"transform" : "translate(0px, -" + secondaryScroll + "%) rotate(" + secondaryRotate + "deg)"
+			})
 
-		var foregroundScroll = topWidthNormal - (scroll / 5)
+			var foregroundScroll = topWidthNormal - (scroll / 5)
 
-		$(".foreground").css({
-			"top" : foregroundScroll
-		})
+			$(".foreground").css({
+				"top" : foregroundScroll
+			})
 
-		var tertiaryScroll = scroll / 200;
-		var tertiaryRotate = -1.5 + (scroll / -150)
+			var tertiaryScroll = scroll / 200;
+			var tertiaryRotate = -1.5 + (scroll / -150)
 
-		$(".tertiaryCover").css({
-			"transform" : "translate(0px, -" + tertiaryScroll + "%) rotate(" + tertiaryRotate + "deg)"
-		})
+			$(".tertiaryCover").css({
+				"transform" : "translate(0px, -" + tertiaryScroll + "%) rotate(" + tertiaryRotate + "deg)"
+			})
 
-		var actionScale = 1 - (scroll / 100)
+			var actionScale = 1 - (scroll / 100)
 
-		$(".innerBar .action").css({
-			"transform" : "scale(" + actionScale + "%)"
-		})
+			$(".innerBar .action").css({
+				"transform" : "scale(" + actionScale + "%)"
+			})
+
+		}
 
 		// Change the position of the content of a normal page
 		// so that it is always shown under the navigation, no

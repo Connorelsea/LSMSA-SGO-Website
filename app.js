@@ -124,12 +124,12 @@ app.listen(port, ip, function() {
     // var templateDir = path.join(__dirname, "emails", "email-welcome");
 
     sendEmail = require("./email-code/emails")
-    
-    sendEmail("email-generic", {
-        input : "dynamic input of words"
+
+    sendEmail("email-welcome", {
+        input : "dynamic input of words for new includes test"
     }, {
         to      : "connorelsea@gmail.com",
-        subject : "Hello from Node Test II"
+        subject : "Includes test"
     })
 
     // var welcomeEmail = new EmailTemp(templateDir)

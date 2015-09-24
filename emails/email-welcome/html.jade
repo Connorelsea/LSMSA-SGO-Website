@@ -1,6 +1,15 @@
 div.emailContainer
-	div.header
-		h1 LSMSA SGO Website
-		h5 Official Automated Email System
-	div.paragraph
-		p= inputWord
+
+	include ../includes/header.jade
+
+	div.messageContainer
+		div.title
+			h2 Welcome, #{user.name}!
+		div.body
+			p Welcome and thank you for registering for LSMSA's Student Government Organization website. The purpose of this website is twofold - to give students another avenue by which to express their concerns, and to keep the student body more informed about the process of Student Government at LSMSA.
+			
+			a(href="http://lsmsasgo.com/") Go to Website
+			a(href="http://lsmsasgo.com/issues/") View All Issues
+			a(href="http://lsmsasgo.com/about/") View About
+
+	include ../includes/issueListing.jade

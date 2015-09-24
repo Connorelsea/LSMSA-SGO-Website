@@ -162,6 +162,16 @@ module.exports = function(app, passport, connection) {
 				var ogurl   = req.protocol + "://" + req.hostname + req.originalUrl;
 				var baseurl = req.protocol + "://" + req.hostname;
 
+				sendEmail = require("../email-code/emails")
+
+			    sendEmail("email-welcome", {
+			    	user   : req.user,
+			        issues : issues
+			    }, {
+			        to      : "connorelsea@student.lsmsa.edu",
+			        subject : "Welcome to the SGO Website"
+			    })
+
 				res.render("index.jade", {
 					mainNavigation : data.mainNavigation,
 					user           : req.user,
