@@ -1,0 +1,85 @@
+* {
+	color: black; !important
+}
+
+.emailContainer {
+	width: 90%;
+}
+
+header {
+	border-bottom: 1px solid gray;
+	padding: 20px 0px;
+}
+
+.messageContainer {
+	padding: 20px 0px;
+}
+
+.messageContainer .body a {
+	display: block;
+}
+
+.header h1 {
+	font-size: 3em;
+	padding-bottom: 5px;
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+.title {
+	padding-bottom: 5px;
+	margin-bottom: 5px;
+}
+
+h2 {
+	font-size: 2em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-weight: bold;
+	padding: 0px;
+	margin: 0px;
+}
+
+.title {
+	border-bottom: 1px solid gray;
+}
+
+.body p {
+	font-size: 1.2em;
+	padding-top: 20px;
+}
+
+.issue {
+	padding: 14px;
+	margin: 10px 0px;
+	border: 1px solid gray;
+}
+
+.issue .top h5 {
+	font-size: 1.6em;
+	font-weight: bold;
+}
+
+.issue .top .paragraphContainer {
+	padding: 10px 0px;
+}
+
+.issue .top .paragraphContainer * {
+	display: inline;
+}
+
+.issue .top .paragraphContainer {
+	font-weight: bold;
+}
+
+.issue .bottom {
+	padding: 0px; !important
+	margin: 0px; !important
+}
+
+.issue .bottom * {
+	font-size: 1.2em;
+	display: inline-block;
+	padding-right: 12px;
+}

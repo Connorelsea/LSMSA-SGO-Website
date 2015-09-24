@@ -34,6 +34,7 @@ function createIssues(rows, wrap) {
 			likes    : ((rows[i].likeCount == null) ? 0 : rows[i].likeCount),
 			views    : rows[i].views,
 			admin    : false,
+			resolved : rows[i].resolved,
 			comments : []
 		});
 
@@ -500,6 +501,7 @@ module.exports = function(app, passport, connection) {
 							likes    : ((row.likeCount == null) ? 0 : row.likeCount),
 							views    : row.views,
 							admin    : false,
+							resolved : row.resolved,
 							comments : []
 						};
 

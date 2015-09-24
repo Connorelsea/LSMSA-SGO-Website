@@ -1,0 +1,10 @@
+.header h1 {
+	width: 100%;
+	background-color: gray;
+	padding: 20px;
+	font-family: sans-serif;
+	font-color: blue;
+	font-weight: bold;
+	border: 1px solid black;
+	border-radius: 20px;
+}

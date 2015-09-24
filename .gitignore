@@ -4,4 +4,3 @@ config/auth.js
 .idea
 .idea/
 public/css/*.css
-*.css
