@@ -50,6 +50,11 @@ h1, h2, h3, h4, h5, h6 {
 	padding-top: 20px;
 }
 
+.body a {
+	display: inline-block;
+	padding-right: 20px;
+}
+
 .issue {
 	padding: 14px;
 	margin: 10px 0px;
@@ -82,4 +87,8 @@ h1, h2, h3, h4, h5, h6 {
 	font-size: 1.2em;
 	display: inline-block;
 	padding-right: 12px;
+}
+
+a {
+	text-decoration: underline;
 }

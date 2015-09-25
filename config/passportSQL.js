@@ -144,9 +144,62 @@ module.exports = function(passport, connection) {
 						function(err, rows) {
 
 							if (err) {
+
 								log("Middleware: Fatal error while inserting new user into database.");
 								console.log("ERROR MESSAGE: " + err);
 								return done(err);
+
+							} else {
+
+								// If registration was successful, send them a
+								// registration email with information and new issues, etc.
+
+								connection.query(
+									/*
+									 * Return list of posts with numbers of upvotes.
+									 * Posts that have no upvotes have a NULL value
+									 * in the likeCount column.
+									 */
+									"SELECT E.id, E.time, E.title, E.body, E.type, E.approved, E.views, C.comments, E.googleID, L.likeCount\n" + 
+									"FROM elements E\n" + 
+									"LEFT JOIN(\n" + 
+									"    SELECT elementID, GROUP_CONCAT(CASE WHEN approved = 1 THEN body ELSE NULL END ORDER BY time DESC SEPARATOR '|-|') AS comments\n" + 
+									"    FROM comments\n" + 
+									"    GROUP BY elementID\n" + 
+									") C on C.elementID = E.id\n" + 
+									"LEFT JOIN (\n" + 
+									"    SELECT elementID, COUNT(id) AS likeCount\n" + 
+									"    FROM likes\n" + 
+									"    GROUP BY elementID\n" + 
+									") L ON L.elementID = E.id\nWHERE E.approved = 1\n" +
+									"ORDER BY E.id DESC LIMIT 4",
+
+									function(err, rows) {
+
+										if (err) {
+
+											console.log("Error upon registration of " + req.user)
+
+										} else {
+
+											var iutil      = require("../utility/issueFunctions")
+											var issues     = iutil.createIssues(rows, true)
+											var sendEmail  = require("../email-code/emails")
+
+										    sendEmail("email-welcome", {
+										    	user   : user,
+										        issues : issues
+										    }, {
+										        to      : "connorelsea@student.lsmsa.edu",
+										        subject : "Welcome " + user.first + " - SGO Website"
+										    })
+
+										} // End of if(err) {} else {}
+
+									}
+
+								);// End of query for registration email issues
+
 							}
 
 							log("Middleware: New user created successfully.");

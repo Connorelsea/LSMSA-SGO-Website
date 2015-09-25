@@ -143,6 +143,11 @@ mixin createMaterialIssueBox(issue, admin)
 								img(src="/images/STAR.png").starImage
 								- stars = stars - 1
 
+						if issue.resolved == 1
+							a(href="/issues/" + issue.id).resolved
+								div.resolvedDiv
+									p Resolved
+
 				div.area.right
 					div.area.votesDesktop
 						+createVoteButtons(issue)
@@ -196,14 +201,20 @@ mixin createMaterialIssueBox(issue, admin)
 					- var body    = "Hello " + issue.username + ",%0a%0a%0a%0a%0a%0aThank you,%0a" + user.name
 					- var subject = "LSMSA SGO, Official Response"
 					- var email   = "https://mail.google.com/mail/?view=cm&fs=1&to=" + issue.email + "&su=" + subject + "&body=" + body;
+					- console.log(issue)
 
-					a(href=email target="_blank" style="target-new: tab;").link [Admin] Contact User
-					a(href="/issues/" + issue.id + "?action=delete").link [Admin] Delete
+					a(href=email target="_blank" style="target-new: tab;").link Contact User
+					a(href="/issues/" + issue.id + "?action=delete").link Delete
+
+					if issue.resolved
+						a(href="/issues/" + issue.id + "?action=unresolve") Un-Resolve
+					else
+						a(href="/issues/" + issue.id + "?action=resolve") Mark as Resolved
 
 					if issue.approved
-						a(href="/issues/" + issue.id + "?action=unapprove").link [Admin] Un-Approve
+						a(href="/issues/" + issue.id + "?action=unapprove").link Un-Approve
 					else
-						a(href="/issues/" + issue.id + "?action=approve").link [Admin] Approve
+						a(href="/issues/" + issue.id + "?action=approve").link Approve
 
 				else
 					a(href="/issues/" + issue.id).link View

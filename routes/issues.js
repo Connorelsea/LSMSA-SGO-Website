@@ -1,74 +1,11 @@
 var data  = require("../info/index")
 var async = require("async")
+var iutil = require("../utility/issueFunctions.js")
 
-function createIssues(rows, wrap) {
-	var issues = [];
-
-	// Loop throug every issue that was
-	// returned by the SQL query.
-	for (var i = 0; i < rows.length; i++) {
-
-		var new_body  = rows[i].body;
-		var new_title = rows[i].title;
-
-		if (wrap == true) {
-
-			if (new_body.length > 105) {
-				new_body = new_body.substring(0, 105) + "...";
-			}
-
-			if (new_title.length > 50) {
-				new_title = new_title.substring(0, 50) + "...";
-			}
-
-		}
-
-		// Push the initial issues object to
-		// the  issues  array  with an empty
-		// comments array.
-		issues.push({
-			id       : rows[i].id,
-			title    : new_title,
-			date     : rows[i].time,
-			body     : new_body,
-			likes    : ((rows[i].likeCount == null) ? 0 : rows[i].likeCount),
-			views    : rows[i].views,
-			admin    : false,
-			resolved : rows[i].resolved,
-			comments : []
-		});
-
-		console.log("VIEWS: " + rows[i].views)
-
-		// Split concatenated string of comments,
-		// making an array of all comments
-		var comments = [];
-
-		if (rows[i].comments) {
-			comments = rows[i].comments.split("|-|");
-		}
-
-		// Fill the empty comments array in the
-		// issues  object  with  its respective
-		// comments.
-		for (var c = 0; c < comments.length; c++) {
-
-			// ADD IN SECOND QUERY FOR COMMENTS SIMILAR TO LOWER
-			// QUERY IN ORDER TO CHECK FOR ADMIN OR NOT. CURRENTLY
-			// COMMENTS ARE ONLY BEING RETURNED AS TEXT. Need to
-			// check for admin so the issue box itself can show
-			// the alert. This query for the issue box needs to
-			// be modernized like it was modernized for the issue
-			// page as a whole. MAYBE GROUP_CONCAT 1s and 0s.
-
-			issues[i].comments.push({
-				body : comments[c]
-			});
-		}
-	}
-
-	return issues;
-}
+// TODO : There are way too many different places calling basically
+//        the same SQL to draw down issues. It needs to be standardized
+//        so I don't have to change things in like four different places
+//        to get it to work.
 
 module.exports = function(app, passport, connection) {
 
@@ -94,7 +31,7 @@ module.exports = function(app, passport, connection) {
 			 * Posts that have no upvotes have a NULL value
 			 * in the likeCount column.
 			 */
-			"SELECT E.id, E.time, E.title, E.body, E.type, E.approved, E.views, C.comments, E.googleID, L.likeCount\n" + 
+			"SELECT E.id, E.time, E.title, E.body, E.type, E.approved, E.views, E.resolved, C.comments, E.googleID, L.likeCount\n" + 
 			"FROM elements E\n" + 
 			"LEFT JOIN(\n" + 
 			"    SELECT elementID, GROUP_CONCAT(CASE WHEN approved = 1 THEN body ELSE NULL END ORDER BY time DESC SEPARATOR '|-|') AS comments\n" + 
@@ -148,8 +85,6 @@ module.exports = function(app, passport, connection) {
 	 */
 	app.get("/", function(req, res) {
 
-		console.log("HERE")
-
 		queryIssues(
 		"ORDER BY L.likeCount DESC LIMIT 3\n",
 			function(err, rows) {
@@ -158,20 +93,10 @@ module.exports = function(app, passport, connection) {
 					res.send("ERROR " + err)
 				}
 
-				var issues = createIssues(rows, true)
+				var issues = iutil.createIssues(rows, true)
 
 				var ogurl   = req.protocol + "://" + req.hostname + req.originalUrl;
 				var baseurl = req.protocol + "://" + req.hostname;
-
-				sendEmail = require("../email-code/emails")
-
-			    sendEmail("email-welcome", {
-			    	user   : req.user,
-			        issues : issues
-			    }, {
-			        to      : "connorelsea@student.lsmsa.edu",
-			        subject : "Welcome to the SGO Website"
-			    })
 
 				res.render("index.jade", {
 					mainNavigation : data.mainNavigation,
@@ -366,6 +291,50 @@ module.exports = function(app, passport, connection) {
 		}
 
 		/*
+		 * ADMIN - Resolve:
+		 *
+		 * Mark this issue as resolved
+		 * URL: /issues/:issue_id?action=resolve
+		 */
+		if (req.query.action == "resolve") {
+
+			if (isAdmin(req)) {
+
+				connection.query(
+					"UPDATE elements SET resolved = 1 WHERE id = ?", req.params.issue_id,
+					function(err, rows) {
+						if (err) console.log(err)
+					}
+				)
+
+				res.redirect("/admin")
+			}
+
+		}
+
+		/*
+		 * ADMIN - Un-Resolve:
+		 *
+		 * Un-mark this issue as resolved.
+		 * URL: /issues/:issue_id?action=unresolve
+		 */
+		if (req.query.action == "unresolve") {
+
+			if (isAdmin(req)) {
+
+				connection.query(
+					"UPDATE elements SET resolved = 0 WHERE id = ?", req.params.issue_id,
+					function(err, rows) {
+						if (err) console.log(err)
+					}
+				)
+
+				res.redirect("/admin")
+			}
+
+		}
+
+		/*
 		 * Like:
 		 *
 		 * Do a like action on this issue.
@@ -459,7 +428,7 @@ module.exports = function(app, passport, connection) {
 		 * Load the page for the specific issue.
 		 */
 		connection.query(
- 			"SELECT E.id, E.time, E.title, E.body, E.type, E.views, C.comments, E.googleID, L.likeCount\n" + 
+ 			"SELECT E.id, E.time, E.title, E.body, E.type, E.views, C.comments, E.googleID, E.resolved, L.likeCount\n" + 
 			"FROM elements E\n" + 
 			"LEFT JOIN(\n" + 
 			"    SELECT elementID, GROUP_CONCAT(CASE WHEN approved = 1 THEN body ELSE NULL END ORDER BY time DESC SEPARATOR '|-|') AS comments\n" + 
@@ -606,7 +575,7 @@ module.exports = function(app, passport, connection) {
 
 			connection.query(
 
-				"SELECT E.id, E.time, E.googleID, E.title, E.body, E.views, E.approved, users.name, users.email, L.likeCount\n" +
+				"SELECT E.id, E.time, E.googleID, E.title, E.resolved, E.body, E.views, E.approved, users.name, users.email, L.likeCount\n" +
 				"FROM elements E\n" +
 				"LEFT JOIN users ON E.googleID = users.googleID\n" +
 				"LEFT JOIN (\n" + 
@@ -632,6 +601,7 @@ module.exports = function(app, passport, connection) {
 								likes    : ((row.likeCount == null) ? 0 : row.likeCount),
 								views    : row.views,
 								approved : row.approved,
+								resolved : row.resolved,
 								email    : row.email,
 								username : row.name
 							})
@@ -707,7 +677,7 @@ module.exports = function(app, passport, connection) {
 					 * Create issue objects to send to the page
 					 * being rendered
 					 */
-					var issues = createIssues(rows, true)
+					var issues = iutil.createIssues(rows, true)
 
 					var baseurl = req.protocol + "://" + req.hostname;
 
@@ -764,7 +734,7 @@ module.exports = function(app, passport, connection) {
 					 * Create issue objects to send to the page
 					 * being rendered
 					 */
-					var issues = createIssues(rows, true)
+					var issues = iutil.createIssues(rows, true)
 
 					var baseurl = req.protocol + "://" + req.hostname;
 
