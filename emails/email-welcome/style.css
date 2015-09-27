@@ -40,10 +40,13 @@
 
 .title {
 	padding: 20px;
-	color: #1B2E5D;
-	background-color: #EBEBEB;
+	background-color: #1B2E5D;
 	margin-bottom: 5px;
-	border-left: 5px solid gray;
+	border-left: 5px solid #FEBB47;
+}
+
+.title * {
+	color: #FEBB47;
 }
 
 h2 {

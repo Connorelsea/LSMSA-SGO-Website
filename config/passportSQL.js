@@ -188,10 +188,7 @@ module.exports = function(passport, connection) {
 												title : "Hello\, " + user.first,
 												body  : "Welcome and thank you for registering for LSMSA's Student Government Organization website. The purpose of this website is twofold - to give students another avenue by which to express their concerns, and to keep the student body more informed about the process of Student Government at LSMSA."
 											}], [{
-												name : user.name,
-												first : user.first,
-												last  : user.last,
-												email : user.email,
+												user    : user,
 												subject : "Welcome " + user.first + " - LSMSA SGO Website"
 											}], connection)
 

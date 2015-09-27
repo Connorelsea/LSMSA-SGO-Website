@@ -1,6 +1,7 @@
-var data  = require("../info/index")
-var async = require("async")
-var iutil = require("../utility/issueFunctions.js")
+var data    = require("../info/index")
+var async   = require("async")
+var iutil   = require("../utility/issueFunctions.js")
+var emailer = require("../utility/emailer")
 
 // TODO : There are way too many different places calling basically
 //        the same SQL to draw down issues. It needs to be standardized
@@ -153,11 +154,27 @@ module.exports = function(app, passport, connection) {
 
 		connection.query(
 			"INSERT INTO elements SET ?", issue,
-			function(rows, err) {
-				if (err)
+			function(err, rows) {
+
+				if (err) {
 					console.log(err)
+				}
+				else {
+
+					emailer.sendEmail([{
+						title : "Issue Submission",
+						body  : "Thanks " + req.user.name + " for submitting an issue. The members of LSMSA's Student Goverment will review your issue and decide whether or not to approve it. You will get a notification if your issue is approve or denied."
+					}, {
+						title : "Your Issue",
+						body  : "Your issue, \"" + issue.title + "\" was submitted and is awaiting approval. If you have any questions please respond to this email. The body of your issue is \"" + issue.body + "\""
+					}], [{
+						user    : req.user,
+						subject : "LSMSA SGO Website - Issue Submission"
+					}], connection)
+
+				} // End of if (err) { } else { }
 			}
-		)
+		) // End of connection.query
 
 		res.redirect("/issues");
 	});
@@ -237,7 +254,11 @@ module.exports = function(app, passport, connection) {
 				connection.query(
 					"DELETE FROM elements WHERE id = ?", req.params.issue_id,
 					function(err, rows) {
-						if (err) console.log(err)
+
+						if (err) {
+							console.log(err)
+						}
+
 					}
 				)
 
@@ -259,7 +280,23 @@ module.exports = function(app, passport, connection) {
 				connection.query(
 					"UPDATE elements SET approved = 1 WHERE id = ?", req.params.issue_id,
 					function(err, rows) {
-						if (err) console.log(err)
+
+						if (err) {
+							console.log(err)
+						}
+
+						else {
+
+							emailer.sendEmail([{
+								title : "Issue Approved!",
+								body  : "Thanks " + req.user.name + " for submitting an issue. Your Issue has been approved and can be found at ( http://www.lsmsasgo.com/issues/" + req.params.issue_id + " )"
+							}], [{
+								user    : req.user,
+								subject : "LSMSA SGO Website - Issue Approved!"
+							}], connection)
+
+						} // End of if (err) { } 
+
 					}
 				)
 
@@ -307,15 +344,13 @@ module.exports = function(app, passport, connection) {
 					}
 				)
 
-				var sendEmail  = require("../email-code/emails")
-
-				sendEmail("email-welcome", {
-				   	user   : user,
-					issues : issues
-				}, {
-					to      : "connorelsea@student.lsmsa.edu",
-					subject : "Welcome " + user.first + " - SGO Website"
-				})
+					emailer.sendEmail([{
+						title : "Marked as Resolved.",
+						body  : "Hello " + req.user.name + ". Your issue ( http://www.lsmsasgo.com/issues/" + req.params.issue_id + " ) has been marked by the admins as \"resolved.\" If you do not think that this is the case, please respond to this email and let us know why."
+					}], [{
+						user    : req.user,
+						subject : "LSMSA SGO Website - Issue Resolved"
+					}], connection)
 
 				res.redirect("/admin")
 			}
