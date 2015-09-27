@@ -2,13 +2,25 @@
 	color: black; !important
 }
 
+.linkBox {
+	padding: 20px 0px;
+}
+
+.linkBox a {
+	font-size: 1.4em;
+	font-weight: bold;
+	display: inline-block;
+	padding-right: 20px;
+	text-decoration: underline;
+}
+
 .emailContainer {
 	width: 90%;
 }
 
-header {
-	border-bottom: 1px solid gray;
-	padding: 20px 0px;
+.header {
+	border-bottom: 1px solid #ADADAD;
+	padding: 20px;
 }
 
 .messageContainer {
@@ -27,8 +39,11 @@ header {
 }
 
 .title {
-	padding-bottom: 5px;
+	padding: 20px;
+	color: #1B2E5D;
+	background-color: #EBEBEB;
 	margin-bottom: 5px;
+	border-left: 5px solid gray;
 }
 
 h2 {
@@ -41,24 +56,15 @@ h1, h2, h3, h4, h5, h6 {
 	margin: 0px;
 }
 
-.title {
-	border-bottom: 1px solid gray;
-}
-
 .body p {
-	font-size: 1.2em;
+	font-size: 1.3em;
 	padding-top: 20px;
-}
-
-.body a {
-	display: inline-block;
-	padding-right: 20px;
 }
 
 .issue {
 	padding: 14px;
 	margin: 10px 0px;
-	border: 1px solid gray;
+	border-bottom: 1px solid gray;
 }
 
 .issue .top h5 {
@@ -87,8 +93,4 @@ h1, h2, h3, h4, h5, h6 {
 	font-size: 1.2em;
 	display: inline-block;
 	padding-right: 12px;
-}
-
-a {
-	text-decoration: underline;
 }

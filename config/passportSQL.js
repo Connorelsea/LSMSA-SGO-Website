@@ -182,17 +182,18 @@ module.exports = function(passport, connection) {
 
 										} else {
 
-											var iutil      = require("../utility/issueFunctions")
-											var issues     = iutil.createIssues(rows, true)
-											var sendEmail  = require("../email-code/emails")
+											var emailer = require("../utility/emailer")
 
-										    sendEmail("email-welcome", {
-										    	user   : user,
-										        issues : issues
-										    }, {
-										        to      : "connorelsea@student.lsmsa.edu",
-										        subject : "Welcome " + user.first + " - SGO Website"
-										    })
+											emailer.sendEmail([{
+												title : "Hello\, " + user.first,
+												body  : "Welcome and thank you for registering for LSMSA's Student Government Organization website. The purpose of this website is twofold - to give students another avenue by which to express their concerns, and to keep the student body more informed about the process of Student Government at LSMSA."
+											}], [{
+												name : user.name,
+												first : user.first,
+												last  : user.last,
+												email : user.email,
+												subject : "Welcome " + user.first + " - LSMSA SGO Website"
+											}], connection)
 
 										} // End of if(err) {} else {}
 

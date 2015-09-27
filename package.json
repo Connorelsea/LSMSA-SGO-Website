@@ -22,6 +22,7 @@
 		"async": "*",
 		"serve-favicon": "*",
 		"email-templates" : "*",
-		"nodemailer" : "*"
+		"nodemailer" : "*",
+		"bluebird" : "*"
 	}
 }

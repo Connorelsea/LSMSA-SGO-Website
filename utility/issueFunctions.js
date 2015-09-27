@@ -1,3 +1,6 @@
+var Promise = require("bluebird")
+var async   = require("async")
+
 exports.createIssues = function (rows, wrap) {
 	var issues = [];
 
@@ -67,6 +70,72 @@ exports.createIssues = function (rows, wrap) {
 	}
 
 	return issues;
+}
+
+exports.buildIssues = function(rows) {
+
+	return new Promise(function(resolve, reject) {
+
+		var issues    = []
+
+		async.forEach(rows,
+			function(row, callback) {
+
+				var new_body  = row.body;
+				var new_title = row.title;
+
+				if (new_body.length > 105) new_body = new_body.substring(0, 105) + "...";
+				if (new_title.length > 50) new_title = new_title.substring(0, 50) + "...";
+			
+				issues.push({
+					id       : row.id,
+					title    : new_title,
+					date     : row.time,
+					body     : new_body,
+					likes    : ((row.likeCount == null) ? 0 : row.likeCount),
+					views    : row.views,
+					admin    : false,
+					resolved : row.resolved
+				})
+
+				callback()
+			},
+			function(err) {
+
+				if (err) reject(err)
+				else resolve(issues)
+
+			}
+		)
+
+	})
+
+}
+
+exports.getIssues = function(orderBy, connection) {
+
+	return new Promise(function(resolve, reject) {
+
+		connection.query(
+
+			"SELECT E.id, E.time, E.title, E.body, E.type, E.resolved, E.approved, E.views, E.googleID, L.likeCount\n" + 
+			"FROM elements E\n" + 
+			"LEFT JOIN (\n" + 
+			"    SELECT elementID, COUNT(id) AS likeCount\n" + 
+			"    FROM likes\n" + 
+			"    GROUP BY elementID\n" + 
+			") L ON L.elementID = E.id\nWHERE E.approved = 1\n" + orderBy,
+
+			function(err, rows) {
+
+				if (err) reject(err)
+				else resolve(rows)
+			}
+
+		)
+
+	})
+
 }
 
 exports.queryIssues = function(orderBy, connection, callback) {

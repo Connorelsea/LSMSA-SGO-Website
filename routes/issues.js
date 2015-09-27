@@ -307,6 +307,16 @@ module.exports = function(app, passport, connection) {
 					}
 				)
 
+				var sendEmail  = require("../email-code/emails")
+
+				sendEmail("email-welcome", {
+				   	user   : user,
+					issues : issues
+				}, {
+					to      : "connorelsea@student.lsmsa.edu",
+					subject : "Welcome " + user.first + " - SGO Website"
+				})
+
 				res.redirect("/admin")
 			}
 

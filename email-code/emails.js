@@ -5,7 +5,6 @@ var path           = require("path")
 
 function sendEmail(templateName, templateInput, mailInput) {
 
-	//var directory = path.join("..emails", templateName)
 	var template  = new EmailTemplate("./emails/" + templateName)
 	console.log("TEMPLATE: " + JSON.stringify(template))
 
