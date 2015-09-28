@@ -108,6 +108,7 @@ app.use(function(err, req, res, next) {
     }
 
     if (err) {
+        console.log("\n\n\nFATAL GLOBAL ERROR:\n\n" + err + "\n\n\n")
         res.redirect("/");
     }
 

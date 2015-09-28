@@ -1,7 +1,8 @@
 var data    = require("../info/index")
 var async   = require("async")
-var iutil   = require("../utility/issueFunctions.js")
 var emailer = require("../utility/emailer")
+var iutil   = require("../utility/issueFunctions")
+var Promise = require("bluebird")
 
 // TODO : There are way too many different places calling basically
 //        the same SQL to draw down issues. It needs to be standardized
@@ -337,12 +338,20 @@ module.exports = function(app, passport, connection) {
 
 			if (isAdmin(req)) {
 
-				connection.query(
-					"UPDATE elements SET resolved = 1 WHERE id = ?", req.params.issue_id,
-					function(err, rows) {
-						if (err) console.log(err)
-					}
-				)
+				(query = function() {
+					return new Promise(function(resolve, reject) {
+
+						var query = "UPDATE elements SET resolved = 1 WHERE id = " + req.params.issue_id
+
+						connection.query(query, function(err, rows) {
+							if (err) reject(err)
+							else resolve(rows)
+						})
+
+					})
+				})()
+
+				.then(function(rows) {
 
 					emailer.sendEmail([{
 						title : "Marked as Resolved.",
@@ -351,6 +360,12 @@ module.exports = function(app, passport, connection) {
 						user    : req.user,
 						subject : "LSMSA SGO Website - Issue Resolved"
 					}], connection)
+
+				})
+
+				.catch(function(err) {
+					console.log(err)
+				})
 
 				res.redirect("/admin")
 			}
@@ -472,142 +487,107 @@ module.exports = function(app, passport, connection) {
 		 *
 		 * Load the page for the specific issue.
 		 */
-		connection.query(
- 			"SELECT E.id, E.time, E.title, E.body, E.type, E.views, C.comments, E.googleID, E.resolved, L.likeCount\n" + 
-			"FROM elements E\n" + 
-			"LEFT JOIN(\n" + 
-			"    SELECT elementID, GROUP_CONCAT(CASE WHEN approved = 1 THEN body ELSE NULL END ORDER BY time DESC SEPARATOR '|-|') AS comments\n" + 
-			"    FROM comments\n" + 
-			"    GROUP BY elementID\n" + 
-			") C on C.elementID = E.id\n" + 
-			"LEFT JOIN (\n" + 
-			"  SELECT elementID, COUNT(id) AS likeCount\n" +
-			"  FROM likes\n" +
-			"  GROUP BY elementID\n" +
-			") L ON L.elementID = E.id\n" +
-			"WHERE E.id = " + req.params.issue_id + " AND E.approved = 1;",
 
-			function(err, rows) {
+		iutil.getIssues("AND E.id = " + req.params.issue_id, connection)
 
-				if (err) {
+		.then(iutil.buildFullIssues)
 
-					console.log(err);
-					res.redirect("/issues");
+		.then(function(issues) {
 
-				} else {
+			console.log("FUNCTION ISSUES YES")
 
-					var issues = [];
+			return new Promise(function(resolve, reject) {
 
-					rows.forEach(function (row, index) {
+				connection.query("SELECT comments.id, comments.elementID, comments.googleID, comments.time, comments.body, users.name, users.admin FROM comments LEFT JOIN users ON comments.googleID = users.googleID WHERE comments.elementID = ? AND comments.approved = 1 ORDER BY comments.time DESC", req.params.issue_id,
+					function (err, rows) {
+						if (err) reject(err)
+						else resolve({ rows : rows, issues : issues}) 
+					}
+				)
 
-						var new_body  = row.body;
-						var new_title = row.title;
+			})
 
-						// Push the initial issues object to
-						// the  issues  array  with an empty
-						// comments array.
+		})
 
-						var issue = {
-							id       : row.id,
-							title    : new_title,
-							date     : row.time,
-							body     : new_body,
-							likes    : ((row.likeCount == null) ? 0 : row.likeCount),
-							views    : row.views,
-							admin    : false,
-							resolved : row.resolved,
-							comments : []
-						};
+		.then(function(returns) {
 
-						// Query comments for individual post
-						connection.query(
-							"SELECT comments.id, comments.elementID, comments.googleID, comments.time, comments.body, users.name, users.admin FROM comments LEFT JOIN users ON comments.googleID = users.googleID WHERE comments.elementID = ? AND comments.approved = 1 ORDER BY comments.time DESC", issue.id,
+			return new Promise(function(resolve, reject) {
 
-							function (err, rows_comments)
-							{
-								if (err) {
-									console.log(err)
-								} 
-								else
-								{
+				var rows   = returns.rows
+				var issues = returns.issues
 
-									// Loop through all comments, create each
-									// object and push it to the 
-									rows_comments.forEach(function(comment, comment_index)
-									{
-										if (comment.admin === true) {
-											issue.admin = true;
-										}
+				issues.forEach(function(issue) {
 
-										issue.comments.push({
-											id    : comment.id,
-											time  : comment.time.toUTCString(),
-											body  : comment.body,
-											name  : comment.name,
-											admin : comment.admin
-										});
-									})
+					// Loop through all comments, create each
+					// object and push it to the 
+					rows.forEach(function(comment)
+					{
 
-									issues.push(issue);
+						if (comment.admin === true) {
+							issue.admin = true;
+						}
 
-									var alertTitle = req.query.alertTitle;
-									var alertBody  = req.query.alertBody;
+						issue.comments.push({
+							id    : comment.id,
+							time  : comment.time.toUTCString(),
+							body  : comment.body,
+							name  : comment.name,
+							admin : comment.admin
+						});
+					})
 
-									/*
-									 * QUERY: Do view
-									 *
-									 * This query adds a view to the specific element/issue/
-									 */
-									connection.query(
+					issues.push(issue);
+				})
 
-										"UPDATE elements SET views = views + 1 WHERE id = " + req.params.issue_id,
+				resolve(issues)
 
-										function(err, rows) {
+			})
 
-											if (err) {
-												console.log("Database: Unable to add views to " + req.params.issue_id);
-												console.log(err);
-											}
+		})
 
-											var baseurl = req.protocol + "://" + req.hostname;
-											var ogurl   = req.protocol + "://" + req.hostname + req.originalUrl;
+		.then(function(issues) {
 
-											console.log("\n\nISSUE BEING RENDERED:\n" + JSON.stringify(issues[0]) + "\n\n")
+			return new Promise(function(resolve, reject) {
 
-											res.render(
-												"issue-page.jade",
-												{
-													mainNavigation : data.mainNavigation,
-													user           : req.user,
-													issue          : issues[0],
-													alert          : (req.query.alertTitle && req.query.alertBody) ? true : false,
-													alertTitle     : alertTitle,
-													alertBody      : alertBody,
-													title          : "LSMSA SGO - " + issues[0].title,
-													keywords       : "lsmsa, submit issue, student government, lsmsa sgo, sgo, louisiana school",
-													description    : "Issue Description: " + issues[0].body,
-													linkimage      : baseurl + "/images/facebook.png",
-													ogurl          : ogurl
-												}
-											); // End of render
+				connection.query("UPDATE elements SET views = views + 1 WHERE id = " + req.params.issue_id,
+					function(err, rows) {
+						if (err) reject(err)
+						else resolve(issues)
+					}
+				);
 
-										}
-									); // End of view query
-									
-								} // end of else
+			})
 
-							} // end of function(err, rows_comments)
-						)
+		})
 
-					});
+		.then(function(issues) {
 
-				} // End of else
+			var alertTitle = req.query.alertTitle;
+			var alertBody  = req.query.alertBody;
+			var baseurl    = req.protocol + "://" + req.hostname;
+			var ogurl      = req.protocol + "://" + req.hostname + req.originalUrl;
 
-			}
+			res.render("issue-page.jade", {
+				mainNavigation : data.mainNavigation,
+				user           : req.user,
+				issue          : issues[0],
+				alert          : (req.query.alertTitle && req.query.alertBody) ? true : false,
+				alertTitle     : alertTitle,
+				alertBody      : alertBody,
+				title          : "LSMSA SGO - " + issues[0].title,
+				keywords       : "lsmsa, submit issue, student government, lsmsa sgo, sgo, louisiana school",
+				description    : "Issue Description: " + issues[0].body,
+				linkimage      : baseurl + "/images/facebook.png",
+				ogurl          : ogurl
+			})
 
-		);
+		})
 
-	});
+		.catch(function(err) {
+			console.log("PROMISE LOADING ERROR:\n\n" + err  + "\n\n")
+		})
+
+	}) // End of app.get
 
 	/*
 	 * ADMIN PAGE

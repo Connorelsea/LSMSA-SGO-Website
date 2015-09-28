@@ -72,13 +72,51 @@ exports.createIssues = function (rows, wrap) {
 	return issues;
 }
 
+exports.buildFullIssues = function(rows) {
+
+	return new Promise(function(resolve, reject) {
+
+		var issues = []
+
+		async.each(rows,
+			function(row, callback) {
+
+				var new_body  = row.body;
+				var new_title = row.title;
+				
+				issues.push({
+					id       : row.id,
+					title    : new_title,
+					date     : row.time,
+					body     : new_body,
+					likes    : ((row.likeCount == null) ? 0 : row.likeCount),
+					views    : row.views,
+					admin    : false,
+					comments : [],
+					resolved : row.resolved
+				})
+
+				callback()
+			},
+			function(err) {
+
+				if (err) reject(err)
+				else resolve(issues)
+
+			}
+		)
+
+	})
+
+}
+
 exports.buildIssues = function(rows) {
 
 	return new Promise(function(resolve, reject) {
 
-		var issues    = []
+		var issues = []
 
-		async.forEach(rows,
+		async.each(rows,
 			function(row, callback) {
 
 				var new_body  = row.body;
@@ -95,6 +133,7 @@ exports.buildIssues = function(rows) {
 					likes    : ((row.likeCount == null) ? 0 : row.likeCount),
 					views    : row.views,
 					admin    : false,
+					comments : [],
 					resolved : row.resolved
 				})
 
