@@ -164,7 +164,7 @@ module.exports = function(app, passport, connection) {
 
 					emailer.sendEmail([{
 						title : "Issue Submission",
-						body  : "Thanks " + req.user.name + " for submitting an issue. The members of LSMSA's Student Goverment will review your issue and decide whether or not to approve it. You will get a notification if your issue is approve or denied."
+						body  : "Thanks " + req.user.name + " for submitting an issue. The members of LSMSA's Student Goverment will review your issue and decide whether or not to approve it. You will get a notification if your issue is approved or denied."
 					}, {
 						title : "Your Issue",
 						body  : "Your issue, \"" + issue.title + "\" was submitted and is awaiting approval. If you have any questions please respond to this email. The body of your issue is \"" + issue.body + "\""
@@ -278,28 +278,63 @@ module.exports = function(app, passport, connection) {
 
 			if (isAdmin(req)) {
 
-				connection.query(
-					"UPDATE elements SET approved = 1 WHERE id = ?", req.params.issue_id,
-					function(err, rows) {
+				(query = function() {
+					return new Promise(function(resolve, reject) {
 
-						if (err) {
-							console.log(err)
-						}
+						var query = "UPDATE elements SET approved = 1 WHERE id = " + req.params.issue_id
 
-						else {
+						connection.query(query, function(err, rows) {
+							if (err) reject(err)
+							else resolve(rows)
+						})
 
-							emailer.sendEmail([{
-								title : "Issue Approved!",
-								body  : "Thanks " + req.user.name + " for submitting an issue. Your Issue has been approved and can be found at ( http://www.lsmsasgo.com/issues/" + req.params.issue_id + " )"
-							}], [{
-								user    : req.user,
-								subject : "LSMSA SGO Website - Issue Approved!"
-							}], connection)
+					})
+				})()
 
-						} // End of if (err) { } 
+				.then(function(return_rows) {
+					return new Promise(function(resolve, reject) {
 
-					}
-				)
+						var query = "SELECT E.id, users.name, users.first, users.last, users.email\n" +
+									"FROM elements E\n" +
+									"LEFT JOIN users ON E.googleID = users.googleID\n" +
+									"WHERE E.id = " + req.params.issue_id
+
+						connection.query(query, function(err, rows) {
+
+							if (err) reject(err)
+							else resolve({
+								name   : rows[0].name,
+								first  : rows[0].first,
+								last   : rows[0].last,
+								email  : rows[0].email,
+								id     : rows[0].id
+							})
+
+						})
+
+					})
+				})
+
+				.then(function(info) {
+
+					emailer.sendEmail([{
+						title : "Issue Approved!",
+						body  : "Thanks " + info.name + " for submitting an issue. Your Issue has been approved and can be found at ( http://www.lsmsasgo.com/issues/" + info.id + " )"
+					}], [{
+						user : {
+							name  : info.name,
+							first : info.first,
+							last  : info.last,
+							email : info.email
+						},
+						subject : "LSMSA SGO Website - Issue Approved!"
+					}], connection)
+
+				})
+
+				.catch(function(err) {
+					console.log(err)
+				})
 
 				res.redirect("/admin")
 			}
@@ -351,13 +386,42 @@ module.exports = function(app, passport, connection) {
 					})
 				})()
 
-				.then(function(rows) {
+				.then(function(return_rows) {
+					return new Promise(function(resolve, reject) {
+
+						var query = "SELECT E.id, users.name, users.first, users.last, users.email\n" +
+									"FROM elements E\n" +
+									"LEFT JOIN users ON E.googleID = users.googleID\n" +
+									"WHERE E.id = " + req.params.issue_id
+
+						connection.query(query, function(err, rows) {
+
+							if (err) reject(err)
+							else resolve({
+								name   : rows[0].name,
+								first  : rows[0].first,
+								last   : rows[0].last,
+								email  : rows[0].email,
+								id     : rows[0].id
+							})
+
+						})
+
+					})
+				})
+
+				.then(function(info) {
 
 					emailer.sendEmail([{
 						title : "Marked as Resolved.",
-						body  : "Hello " + req.user.name + ". Your issue ( http://www.lsmsasgo.com/issues/" + req.params.issue_id + " ) has been marked by the admins as \"resolved.\" If you do not think that this is the case, please respond to this email and let us know why."
+						body  : "Hello " + info.name + ". Your issue ( http://www.lsmsasgo.com/issues/" + info.id + " ) has been marked by the admins as \"resolved.\" If you do not think that this is the case, please respond to this email and let us know why."
 					}], [{
-						user    : req.user,
+						user : {
+							name  : info.name,
+							first : info.first,
+							last  : info.last,
+							email : info.email
+						},
 						subject : "LSMSA SGO Website - Issue Resolved"
 					}], connection)
 
@@ -493,8 +557,6 @@ module.exports = function(app, passport, connection) {
 		.then(iutil.buildFullIssues)
 
 		.then(function(issues) {
-
-			console.log("FUNCTION ISSUES YES")
 
 			return new Promise(function(resolve, reject) {
 
