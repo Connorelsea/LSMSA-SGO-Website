@@ -81,8 +81,14 @@ exports.buildFullIssues = function(rows) {
 		async.each(rows,
 			function(row, callback) {
 
-				var new_body  = row.body;
+				var new_body  = "";
 				var new_title = row.title;
+
+				// Convert newline characters to break tags
+				for (var i = 0; i < row.body.length; i++) {
+					if (row.body[i] === '\n') new_body += "<br/>"
+					else  new_body += row.body[i]
+				};
 				
 				issues.push({
 					id       : row.id,
