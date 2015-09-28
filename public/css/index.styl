@@ -468,7 +468,7 @@ header nav ul li ul li .desc
 				display flex
 				flex-direction column
 				justify-content space-between
-				padding-bottom 20px
+				padding-bottom 5px
 				
 				.upper
 					margin-top 10px
@@ -500,6 +500,44 @@ header nav ul li ul li .desc
 						font-family Futura
 						font-size 1.3em
 						color _navy
+						
+				.lowerAlert
+					display -webkit-flex
+					display flex
+					flex-direction row
+					align-items center
+					justify-content center
+					text-align center
+					padding-top 30px
+					padding-bottom 0px
+					
+					p
+						color _navy
+						font-size 1.3em
+						font-family Futura
+						padding-right 15px
+						
+						.bold
+							font-weight bold
+					
+					a
+						padding 10px 20px
+						font-family Futura
+						font-weight bold
+						font-size 0.82em
+						text-decoration none
+						text-transform uppercase
+						color darken(_green, 55%)
+						background-color _green
+						border-radius 20px
+						border 3px solid _green
+						
+						transition all 0.4s
+						
+						&:hover
+							background-color _grey
+							
+						
 
 		// Issue header buttons
 			

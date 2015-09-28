@@ -14,7 +14,6 @@ html(lang="en")
 			  fjs.parentNode.insertBefore(js, fjs);
 			}(document, 'script', 'facebook-jssdk'));
 
-
 		include navigation
 
 		div.body
@@ -26,6 +25,12 @@ html(lang="en")
 						p.abody!= alertBody
 
 			div.singleIssue.bar
+				div.topBar
+					div.left
+						a(href="/issues") Back
+						a(href="/") Home
+					div.right
+						a(href="/issues/" + issue.id + "?action=like") Upvote
 
 				div.container
 
@@ -36,8 +41,7 @@ html(lang="en")
 							h3= "Submitted On " + issue.date.toDateString() + " at " + issue.date.getHours() + ":" + issue.date.getMinutes() + ":" + issue.date.getSeconds()
 
 						div.bottom
-							//h5 Hover for easy reading mode
-							p= issue.body
+							p!= issue.body
 
 					div.right
 

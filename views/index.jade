@@ -32,9 +32,9 @@ include html
 						div.news
 
 							div.story
-								h2 Senior Senator Runoff Election
+								h2 Sophomore and Junior Class Councils Run-off Election
 								h5 Latest News, Written By Eli Langley
-								p The first election will be a run-off for the fifth Senior Class Senator spot on Monday, September 14th. The candidates are Justin Blanchard, Emily Schultz, and Nikhil Gopalam. 
+								p The run-off election for the Sophomore and Junior Class Councils will be held Monday, September 28th between 11 AM - 1 PM in the CPT Atrium. 
 
 							div.buttons
 								a(href="/news").button.secondary Read More News
@@ -63,11 +63,16 @@ include html
 
 											div.buttons
 												a(href="/issues/submit").button.secondary Submit an Issue
-												a(href="/issues").button.primary View All Issues
+												a(href="/issues").button.primary View More Issues
 
 										div.lower
-
 											p Issues and the Issue Board are tools created by the community for the community. Issues are submitted by students, reviewed by the SGO, and then put on the site for students to vote on and discuss.
+
+										div.lowerAlert
+											p
+												span.bold Alert: 
+												span There are new issues!
+											a(href="/issues") View New Issues
 
 									div.mfIssueContainer
 
@@ -76,10 +81,10 @@ include html
 												//+createIssueBox(val)
 												+createMaterialIssueBox(val)
 											div.addMore
-												h1 You can be the voice of change
+												h1 These aren't the only issues. There are more!
 												div.multButtons
 													a(href="/issues/submit").submit-button.first Submit an Issue
-													a(href="/issues").submit-button View All Issues
+													a(href="/issues").submit-button View More Issues
 										else
 											div.addMore
 												h1 There are no issues currently
