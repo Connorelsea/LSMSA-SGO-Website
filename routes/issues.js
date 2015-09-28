@@ -197,6 +197,17 @@ module.exports = function(app, passport, connection) {
 		 */
 		if (req.body.comment && req.user) {
 
+			// Redirect user first
+
+			res.redirect(alertLink(
+				req.params.issue_id,
+				"You commented.",
+				"Thank you for participating in the community discussion. Check back to see if anyone replies to your words of wisdom!"
+			));
+
+			// Then create the comment information and insert the
+			// unapproved comment into the database.
+
 			var comment = {
 				elementID : req.params.issue_id,
 				googleID  : req.user.googleID,
@@ -209,12 +220,6 @@ module.exports = function(app, passport, connection) {
 					if (err) console.log(err)
 				}
 			);
-
-			res.redirect(alertLink(
-				req.params.issue_id,
-				"You commented.",
-				"Thank you for participating in the community discussion. Check back to see if anyone replies to your words of wisdom!"
-			));
 
 		} else {
 			res.redirect(alertLink(
@@ -252,6 +257,8 @@ module.exports = function(app, passport, connection) {
 
 			if (isAdmin(req)) {
 
+				res.redirect("/admin")
+
 				connection.query(
 					"DELETE FROM elements WHERE id = ?", req.params.issue_id,
 					function(err, rows) {
@@ -263,7 +270,6 @@ module.exports = function(app, passport, connection) {
 					}
 				)
 
-				res.redirect("/admin")
 			}
 
 		}
@@ -277,6 +283,8 @@ module.exports = function(app, passport, connection) {
 		if (req.query.action == "approve") {
 
 			if (isAdmin(req)) {
+
+				res.redirect("/admin")
 
 				(query = function() {
 					return new Promise(function(resolve, reject) {
@@ -336,7 +344,6 @@ module.exports = function(app, passport, connection) {
 					console.log(err)
 				})
 
-				res.redirect("/admin")
 			}
 
 		}
@@ -351,6 +358,8 @@ module.exports = function(app, passport, connection) {
 
 			if (isAdmin(req)) {
 
+				res.redirect("/admin")
+
 				connection.query(
 					"UPDATE elements SET approved = 0 WHERE id = ?", req.params.issue_id,
 					function(err, rows) {
@@ -358,7 +367,6 @@ module.exports = function(app, passport, connection) {
 					}
 				)
 
-				res.redirect("/admin")
 			}
 
 		}
@@ -372,6 +380,8 @@ module.exports = function(app, passport, connection) {
 		if (req.query.action == "resolve") {
 
 			if (isAdmin(req)) {
+
+				res.redirect("/admin")
 
 				(query = function() {
 					return new Promise(function(resolve, reject) {
@@ -431,7 +441,6 @@ module.exports = function(app, passport, connection) {
 					console.log(err)
 				})
 
-				res.redirect("/admin")
 			}
 
 		}
@@ -446,6 +455,8 @@ module.exports = function(app, passport, connection) {
 
 			if (isAdmin(req)) {
 
+				res.redirect("/admin")
+
 				connection.query(
 					"UPDATE elements SET resolved = 0 WHERE id = ?", req.params.issue_id,
 					function(err, rows) {
@@ -453,7 +464,6 @@ module.exports = function(app, passport, connection) {
 					}
 				)
 
-				res.redirect("/admin")
 			}
 
 		}
@@ -743,6 +753,7 @@ module.exports = function(app, passport, connection) {
 	app.get("/issues", function(req, res) {
 
 		var separator = "|-|"
+		var baseurl = req.protocol + "://" + req.hostname;
 
 		/*
 		 * FILTER: Top
@@ -752,27 +763,13 @@ module.exports = function(app, passport, connection) {
 		 */
 		if (req.query.filter == "top") {
 
-			queryIssues(
-				"ORDER BY L.likeCount DESC",
-				function(err, rows) {
+			iutil.getIssues("ORDER BY L.likeCount DESC", connection)
 
-					if (err) {
-						res.send("ERROR " + err)
-					}
+			.then(iutil.buildIssues)
 
-					/*
-					 * Create issue objects to send to the page
-					 * being rendered
-					 */
-					var issues = iutil.createIssues(rows, true)
+			.then(function(issues) {
+				return new Promise(function(resolve, reject) {
 
-					var baseurl = req.protocol + "://" + req.hostname;
-
-					/*
-					 * Render the issues page and send  it the 
-					 * array of issues and their data/comments
-					 * to use when displaying them on the page.
-					 */
 					res.render(
 						"issues.jade",
 						{
@@ -787,16 +784,24 @@ module.exports = function(app, passport, connection) {
 						},
 						function(err, html) {
 							if (err) {
-								console.log(err)
+								reject(err)
 							}
 							else {
-								res.send(html)
+								resolve(html)
 							}
 						}
 					);	
 
-				}
-			);
+				})
+			})
+
+			.then(function(html) {
+				res.send(html)
+			})
+
+			.catch(function(err) {
+				console.log("Error while sorting by top: " + err)
+			})
 
 		}
 
@@ -808,28 +813,13 @@ module.exports = function(app, passport, connection) {
 		 */
 		else if (req.query.filter == "recent" || !req.query.filter) {
 
-			queryIssues(
-				"ORDER BY E.time DESC",
-				function(err, rows) {
+			iutil.getIssues("ORDER BY E.time DESC", connection)
 
+			.then(iutil.buildIssues)
 
-					if (err) {
-						res.send("ERROR " + err)
-					}
+			.then(function(issues) {
+				return new Promise(function(resolve, reject) {
 
-					/*
-					 * Create issue objects to send to the page
-					 * being rendered
-					 */
-					var issues = iutil.createIssues(rows, true)
-
-					var baseurl = req.protocol + "://" + req.hostname;
-
-					/*
-					 * Render the issues page and send  it the 
-					 * array of issues and their data/comments
-					 * to use when displaying them on the page.
-					 */
 					res.render(
 						"issues.jade",
 						{
@@ -844,16 +834,24 @@ module.exports = function(app, passport, connection) {
 						},
 						function(err, html) {
 							if (err) {
-								console.log(err)
+								reject(err)
 							}
 							else {
-								res.send(html)
+								resolve(html)
 							}
 						}
 					);	
 
-				}
-			);
+				})
+			})
+
+			.then(function(html) {
+				res.send(html)
+			})
+
+			.catch(function(err) {
+				console.log("Error while sorting by recent: " + err)
+			})
 
 		}
 
