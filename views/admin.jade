@@ -11,6 +11,30 @@ block content
 		//div.issueContainer.ics
 		div.mIssueContainer
 
+			h1.title Comments
+
+			if comments.length > 0
+				each comment in comments
+					div.commentBox
+						h3
+							span.name= comment.username
+							span.on= " on "
+							span.issue= comment.elementTitle
+							if comment.approved === 1
+								span.approved  [Approved]
+							else
+								span.unapproved  [Unapproved]
+						h2.date= comment.time
+						p= comment.body
+						div.linkContainer
+							if comment.approved === 1
+								a(href="/issues/" + comment.elementID + "?action=comment-unapprove") Un-Approve
+							else
+								a(href="/issues/" + comment.elementID + "?action=comment-approve") Approve
+							a(href="/issues/" + comment.elementID + "?action=comment-delete") Delete
+
+			h1.title Issues
+
 			if rows.length > 0
 				each val in rows
 					// +createIssueBox(val)

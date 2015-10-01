@@ -469,6 +469,79 @@ module.exports = function(app, passport, connection) {
 		}
 
 		/*
+		 * ADMIN - Comment Unapprove
+		 *
+		 * Approve this comment. Sends a number of email alerts to
+		 * relevant users.
+		 * URL: /issues/:issue_id?action=comment-approve
+		 */
+
+		 if (req.query.action == "comment-approve") {
+
+			(query = function() {
+				return new Promise(function(resolve, reject) {
+
+					if (isAdmin(req)) resolve(true)
+					else reject(false)
+
+				})
+			})()
+
+			.then(function(result) {
+				return new Promise(function(resolve, reject) {
+
+					var query = "SELECT users.email, users.name, users.first, users.last, elements.title, elements.id AS elementID\n" +
+								"FROM elements\n" +
+								"JOIN users ON users.googleID = elements.googleID\n" +
+								"WHERE elements.id = " + req.params.issue_id + ";"
+
+					connection.query(query, function(err, rows) {
+						if (err) reject(err)
+						else resolve(rows)
+					})
+
+				})
+			})
+
+			.then(function(rows) {
+
+				console.log("here")
+
+				var info = {
+					email : rows[0].email,
+					name  : rows[0].name,
+					first : rows[0].first,
+					last  : rows[0].last,
+					id    : rows[0].elementID
+				}
+
+				emailer.sendEmail([{
+					title : "A Comment on Your Issue",
+					body  : "Hello " + info.name + ". A comment on your issue ( http://www.lsmsasgo.com/issues/" + info.id + " ) has been approved. To respond or see what this anonymous user commented, click on the link."
+				}], [{
+					user : {
+						name  : info.name,
+						first : info.first,
+						last  : info.last,
+						email : info.email
+					},
+					subject : "LSMSA SGO Website - Comment on Your Issue"
+				}], connection)
+
+			})
+
+			.catch(function(err) {
+				if (err === false) {
+					console.log("Not admin...")
+					res.redirect("/")
+				} else {
+					console.log(err)
+				}
+			})
+
+		 }
+
+		/*
 		 * Like:
 		 *
 		 * Do a like action on this issue.
@@ -670,76 +743,145 @@ module.exports = function(app, passport, connection) {
 
 		if (isAdmin(req)) {
 
-			connection.query(
+			(query = function() {
+				return new Promise(function(resolve, reject) {
 
-				"SELECT E.id, E.time, E.googleID, E.title, E.resolved, E.body, E.views, E.approved, users.name, users.email, L.likeCount\n" +
-				"FROM elements E\n" +
-				"LEFT JOIN users ON E.googleID = users.googleID\n" +
-				"LEFT JOIN (\n" + 
-				"    SELECT elementID, COUNT(id) AS likeCount\n" + 
-				"    FROM likes\n" + 
-				"    GROUP BY elementID\n" + 
-				") L ON L.elementID = E.id\n" +
-				"ORDER BY E.time DESC",
+					var query =
+						"SELECT E.id, E.time, E.googleID, E.title, E.resolved, E.body, E.views, E.approved, users.name, users.email, L.likeCount\n" +
+						"FROM elements E\n" +
+						"LEFT JOIN users ON E.googleID = users.googleID\n" +
+						"LEFT JOIN (\n" + 
+						"    SELECT elementID, COUNT(id) AS likeCount\n" + 
+						"    FROM likes\n" + 
+						"    GROUP BY elementID\n" + 
+						") L ON L.elementID = E.id\n" +
+						"ORDER BY E.time DESC"
 
-				function(err, rows) {
+					connection.query(query, function(err, rows) {
+						if (err) reject(err)
+						else resolve(rows)
+					})
 
-					var issues = [];
+				})
+			})()
 
-					async.each(
-						rows,
-						function(row, callback) {
+			.then(function(rows) {
+				return new Promise(function(resolve, reject) {
 
-							issues.push({
-								id       : row.id,
-								title    : row.title,
-								body     : row.body,
-								date     : row.time,
-								likes    : ((row.likeCount == null) ? 0 : row.likeCount),
-								views    : row.views,
-								approved : row.approved,
-								resolved : row.resolved,
-								email    : row.email,
-								username : row.name
-							})
+					var issues = []
 
-							console.log(row.title)
+					async.each(rows, function(row, callback) {
 
-							callback()
+						issues.push({
+							id       : row.id,
+							title    : row.title,
+							body     : row.body,
+							date     : row.time,
+							likes    : ((row.likeCount == null) ? 0 : row.likeCount),
+							views    : row.views,
+							approved : row.approved,
+							resolved : row.resolved,
+							email    : row.email,
+							username : row.name
+						})
+
+						callback()
+
+					}, function(err) {
+						if (err) reject(err)
+						else resolve(issues)
+					})
+
+				})
+			})
+
+			.then(function(issues) {
+				return new Promise(function(resolve, reject) {
+
+					var query =
+						"SELECT C.id, C.elementID, C.googleID, C.time, C.body, C.approved, users.name, elements.title as elementTitle\n" +
+						"FROM comments C\n" +
+						"JOIN users ON C.googleID = users.googleID\n" +
+						"JOIN elements ON C.elementID = elements.id\n" +
+						"ORDER BY C.time DESC"
+
+					connection.query(query, function(err, rows) {
+						if (err) reject(err)
+						else resolve({
+							issues : issues,
+							rows   : rows
+						})
+					})
+
+				})
+			})
+
+			.then(function(container) {
+				return new Promise(function(resolve, reject) {
+
+					var issues   = container.issues
+					var comments = []
+					var rows     = container.rows
+
+					async.each(rows, function(row, callback) {
+
+						comments.push({
+							id           : row.id,
+							elementID    : row.elementID,
+							time         : row.time,
+							body         : row.body,
+							approved     : row.approved,
+							username     : row.name,
+							elementTitle : row.elementTitle
+						})
+
+						callback()
+
+					}, function(err) {
+						if (err) reject(err)
+						else resolve({
+							issues   : issues,
+							comments : comments
+						})
+					})
+
+				})
+			})
+
+			.then(function(container) {
+				return new Promise(function(resolve, reject) {
+
+					var issues   = container.issues
+					var comments = container.comments
+
+					res.render(
+						"admin.jade",
+						{
+							mainNavigation : data.mainNavigation,
+							user           : req.user,
+							rows           : issues,
+							comments       : comments,
+							filter         : "top",
+							title          : "LSMSA SGO - Admin Board"
 						},
-
-						function(err) {
-
-							if (err) {
-								console.log(err)
-							}
-
-							res.render(
-								"admin.jade",
-								{
-									mainNavigation : data.mainNavigation,
-									user           : req.user,
-									rows           : issues,
-									filter         : "top",
-									title          : "LSMSA SGO - Admin Board"
-								},
-								function(err, html) {
-									if (err) {
-										console.log(err)
-									}
-									else {
-										res.send(html)
-									}
-								}
-							);	
-
+						function(err, html) {
+							if (err) reject(err)
+							else resolve(html)
 						}
-					); // End of async.each
+					);	
 
-				} // End of query callback
-			)
+				})
+			})
 
-		} // End of user checking
+			.then(function(html) {
+				res.send(html)
+			})
+
+			.catch(function(err) {
+				console.log("Error while loading admin panel: " + err)
+			})
+
+		}
 
 	})
 
