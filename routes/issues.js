@@ -490,7 +490,7 @@ module.exports = function(app, passport, connection) {
 			.then(function(result) {
 				return new Promise(function(resolve, reject) {
 
-					var query = "SELECT users.email, users.name, users.first, users.last, elements.title, elements.id AS elementID\n" +
+					var query = "SELECT users.googleID, users.email, users.name, users.first, users.last, elements.title, elements.id AS elementID\n" +
 								"FROM elements\n" +
 								"JOIN users ON users.googleID = elements.googleID\n" +
 								"WHERE elements.id = " + req.params.issue_id + ";"
@@ -504,30 +504,48 @@ module.exports = function(app, passport, connection) {
 			})
 
 			.then(function(rows) {
+				return new Promise(function(resolve, reject) {
 
-				console.log("here")
+					var info = {
+						uid   : rows[0].googleID,
+						email : rows[0].email,
+						name  : rows[0].name,
+						first : rows[0].first,
+						last  : rows[0].last,
+						id    : rows[0].elementID
+					}
 
-				var info = {
-					email : rows[0].email,
-					name  : rows[0].name,
-					first : rows[0].first,
-					last  : rows[0].last,
-					id    : rows[0].elementID
-				}
+					emailer.sendEmail([{
+						title : "A Comment on Your Issue",
+						body  : "Hello " + info.name + ". A comment on your issue ( http://www.lsmsasgo.com/issues/" + info.id + " ) has been approved. To respond or see what this anonymous user commented, click on the link."
+					}], [{
+						user : {
+							name  : info.name,
+							first : info.first,
+							last  : info.last,
+							email : info.email
+						},
+						subject : "LSMSA SGO Website - Comment on Your Issue"
+					}], connection)
 
-				emailer.sendEmail([{
-					title : "A Comment on Your Issue",
-					body  : "Hello " + info.name + ". A comment on your issue ( http://www.lsmsasgo.com/issues/" + info.id + " ) has been approved. To respond or see what this anonymous user commented, click on the link."
-				}], [{
-					user : {
-						name  : info.name,
-						first : info.first,
-						last  : info.last,
-						email : info.email
-					},
-					subject : "LSMSA SGO Website - Comment on Your Issue"
-				}], connection)
+					resolve(info)
+				})
 
+			})
+
+			.then(function(info) {
+				return new Promise(function(resolve, reject) {
+
+					connection.query(
+						"UPDATE comments SET approved = 1 WHERE elementID = " + req.params.issue_id +
+						" AND googleID = " + info.uid,
+						function(err, rows) {
+							if (err) reject(err)
+							else resolve(rows)
+						}
+					)
+
+				})
 			})
 
 			.catch(function(err) {
