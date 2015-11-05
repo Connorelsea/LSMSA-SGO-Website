@@ -28,13 +28,15 @@ function sendEmail(templateName, templateInput, mailInput) {
 				html    : results.html
 			}
 
+			console.log(finalMailInput);
+
 			transporter.sendMail(finalMailInput, function(err, info) {
 
 				if (err) {
 					console.log("\n\nTransporter Error\n\n" + err + "\n\n")
 				}
 				else {
-					console.log("Message Sent: " + info.response)
+					console.log("Message Sent: (" + mailInput.to + ")" + info.response)
 				}
 
 			})

@@ -103,7 +103,7 @@ exports.sendRawEmail = function (templateName, templateInput, mailInput) {
 					console.log("\n\nTransporter Error\n\n" + err + "\n\n")
 				}
 				else {
-					console.log("Message Sent: " + info.response)
+					console.log("Message Sent: (" + mailInput.to + ")" + info.response)
 				}
 
 			})

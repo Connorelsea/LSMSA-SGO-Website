@@ -28,10 +28,10 @@ block content
 						p= comment.body
 						div.linkContainer
 							if comment.approved === 1
-								a(href="/issues/" + comment.elementID + "?action=comment-unapprove") Un-Approve
+								a(href="/admin-command/?action=comment-unapprove&comment_id=" + comment.id + "&issue_id="  + comment.elementID) Un-Approve
 							else
-								a(href="/issues/" + comment.elementID + "?action=comment-approve") Approve
-							a(href="/issues/" + comment.elementID + "?action=comment-delete") Delete
+								a(href="/admin-command/?action=comment-approve&comment_id=" + comment.id + "&issue_id="  + comment.elementID) Approve
+							a(href="/admin-command/?action=comment-delete&comment_id=" + comment.id + "&issue_id="  + comment.elementID) Delete
 
 			h1.title Issues
 

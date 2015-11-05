@@ -469,97 +469,6 @@ module.exports = function(app, passport, connection) {
 		}
 
 		/*
-		 * ADMIN - Comment Unapprove
-		 *
-		 * Approve this comment. Sends a number of email alerts to
-		 * relevant users.
-		 * URL: /issues/:issue_id?action=comment-approve
-		 */
-
-		 if (req.query.action == "comment-approve") {
-
-			(query = function() {
-				return new Promise(function(resolve, reject) {
-
-					if (isAdmin(req)) resolve(true)
-					else reject(false)
-
-				})
-			})()
-
-			.then(function(result) {
-				return new Promise(function(resolve, reject) {
-
-					var query = "SELECT users.googleID, users.email, users.name, users.first, users.last, elements.title, elements.id AS elementID\n" +
-								"FROM elements\n" +
-								"JOIN users ON users.googleID = elements.googleID\n" +
-								"WHERE elements.id = " + req.params.issue_id + ";"
-
-					connection.query(query, function(err, rows) {
-						if (err) reject(err)
-						else resolve(rows)
-					})
-
-				})
-			})
-
-			.then(function(rows) {
-				return new Promise(function(resolve, reject) {
-
-					var info = {
-						uid   : rows[0].googleID,
-						email : rows[0].email,
-						name  : rows[0].name,
-						first : rows[0].first,
-						last  : rows[0].last,
-						id    : rows[0].elementID
-					}
-
-					emailer.sendEmail([{
-						title : "A Comment on Your Issue",
-						body  : "Hello " + info.name + ". A comment on your issue ( http://www.lsmsasgo.com/issues/" + info.id + " ) has been approved. To respond or see what this anonymous user commented, click on the link."
-					}], [{
-						user : {
-							name  : info.name,
-							first : info.first,
-							last  : info.last,
-							email : info.email
-						},
-						subject : "LSMSA SGO Website - Comment on Your Issue"
-					}], connection)
-
-					resolve(info)
-				})
-
-			})
-
-			.then(function(info) {
-				return new Promise(function(resolve, reject) {
-
-					connection.query(
-						"UPDATE comments SET approved = 1 WHERE elementID = " + req.params.issue_id +
-						" AND googleID = " + info.uid,
-						function(err, rows) {
-							if (err) reject(err)
-							else resolve(rows)
-						}
-					)
-
-				})
-			})
-
-			.catch(function(err) {
-				if (err === false) {
-					console.log("Not admin...")
-					res.redirect("/")
-				} else {
-					console.log(err)
-				}
-			})
-
-		 }
-
-		/*
 		 * Like:
 		 *
 		 * Do a like action on this issue.
@@ -751,6 +660,106 @@ module.exports = function(app, passport, connection) {
 		})
 
 	}) // End of app.get
+
+	app.get("/admin-command", function(req, res) {
+
+		// req.params.comment_id
+
+		/*
+		 * ADMIN - Comment Unapprove
+		 *
+		 * Approve this comment. Sends a number of email alerts to
+		 * relevant users.
+		 * URL: /issues/:issue_id?action=comment-approve&comment_id=123&issue_id=123
+		 */
+
+		 if (req.query.action == "comment-approve") {
+
+			(query = function() {
+				return new Promise(function(resolve, reject) {
+
+					if (isAdmin(req)) resolve(true)
+					else reject(false)
+
+				})
+			})()
+
+			.then(function(result) {
+				return new Promise(function(resolve, reject) {
+
+					console.log(req.query.issue_id)
+
+					var query = "SELECT users.googleID, users.email, users.name, users.first, users.last, elements.title, elements.id AS elementID\n" +
+								"FROM elements\n" +
+								"JOIN users ON users.googleID = elements.googleID\n" +
+								"WHERE elements.id = " + req.query.issue_id + ";"
+
+					connection.query(query, function(err, rows) {
+						if (err) reject(err)
+						else resolve(rows)
+					})
+
+				})
+			})
+
+			.then(function(rows) {
+				return new Promise(function(resolve, reject) {
+
+					var info = {
+						uid   : rows[0].googleID,
+						email : rows[0].email,
+						name  : rows[0].name,
+						first : rows[0].first,
+						last  : rows[0].last,
+						id    : rows[0].elementID
+					}
+
+					emailer.sendEmail([{
+						title : "A Comment on Your Issue",
+						body  : "Hello " + info.name + ". A comment on your issue ( http://www.lsmsasgo.com/issues/" + info.id + " ) has been approved. To respond or see what this anonymous user commented, click on the link."
+					}], [{
+						user : {
+							name  : info.name,
+							first : info.first,
+							last  : info.last,
+							email : info.email
+						},
+						subject : "LSMSA SGO Website - Comment on Your Issue"
+					}], connection)
+
+					resolve(info)
+				})
+
+			})
+
+			.then(function(info) {
+				return new Promise(function(resolve, reject) {
+
+					console.log("UPDATE comments SET approved = 1 WHERE elementID = " + req.query.issue_id)
+
+					connection.query(
+						"UPDATE comments SET approved = 1 WHERE elementID = " + req.query.issue_id,
+						function(err, rows) {
+							if (err) reject(err)
+							else resolve(rows)
+						}
+					)
+
+				})
+			})
+
+			.catch(function(err) {
+				if (err === false) {
+					console.log("Not admin...")
+					res.redirect("/")
+				} else {
+					console.log(err)
+				}
+			})
+
+		 }
+
+	})
 
 	/*
 	 * ADMIN PAGE
