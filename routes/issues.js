@@ -1,8 +1,9 @@
-var data    = require("../info/index")
-var async   = require("async")
-var emailer = require("../utility/emailer")
-var iutil   = require("../utility/issueFunctions")
-var Promise = require("bluebird")
+var data    = require("../info/index");
+var async   = require("async");
+var emailer = require("../utility/emailer");
+var iutil   = require("../utility/issueFunctions");
+var isAdmin = require("../utility/adminFunctions")().isAdmin;
+var Promise = require("bluebird");
 
 // TODO : There are way too many different places calling basically
 //        the same SQL to draw down issues. It needs to be standardized
@@ -10,20 +11,6 @@ var Promise = require("bluebird")
 //        to get it to work.
 
 module.exports = function(app, passport, connection) {
-
-	var isAdmin = function(req) {
-		var email = req.user.email.toLowerCase()
-		console.log("Checking if is admin " + email)
-
-		if (email === "elilangley@student.lsmsa.edu"  ||
-			email === "connorelsea@student.lsmsa.edu" ||
-			email === "sgo@lsmsa.edu") {
-			return true
-		}
-		else {
-			return false
-		}
-	}
 
 	var queryIssues = function(orderBy, callback) {
 
@@ -745,6 +732,12 @@ module.exports = function(app, passport, connection) {
 						}
 					)
 
+				})
+			})
+
+			.then(function(rows) {
+				return new Promise(function(resolve, reject) {
+					res.redirect("/admin");
 				})
 			})
 

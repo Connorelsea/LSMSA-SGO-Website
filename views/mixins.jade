@@ -20,6 +20,12 @@ mixin createMainNav(list, user)
 								p.desc You are logged in under a verified LSMSA email account. Your account is currently under the email #{user.email}.
 							li
 								a(href="/logout") Logout
+							if user.isAdmin
+								li
+									a(href="/admin") Admin Panel
+							else
+								li
+									p= user.isAdmin
 					else
 						a(href="/login-welcome") Login
 

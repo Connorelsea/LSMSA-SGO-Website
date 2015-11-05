@@ -15,7 +15,8 @@ var express      = require("express"),
     auth         = require("./config/auth"),
     EmailTemp    = require("email-templates").EmailTemplate,
     path         = require("path"),
-    emails       = require("./email-code/emails")
+    emails       = require("./email-code/emails"),
+    isAdmin      = require("./utility/adminFunctions")().isAdmin
 
 // Setup MySQL databases
 
@@ -77,6 +78,18 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(flash())
+
+// Check if user is admin on each request
+app.use(function (req, res, next) {
+
+    if (req.user) {
+        if (isAdmin(req)) req.user.isAdmin = true;
+        else req.user.isAdmin = false;
+    }
+
+    next();
+})
+
 
 app.use(favicon(__dirname + '/public/favicon.ico'));
 
