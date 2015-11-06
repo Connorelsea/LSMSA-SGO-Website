@@ -1031,4 +1031,44 @@ module.exports = function(app, passport, connection) {
 
 	});
 
+	/*
+	 * GET: News Page
+	 *
+	 * Renders the submit an issue page. Does not actually
+	 * submit an issue since it is a GET request.
+	 */
+	app.get("/news", function(req, res) {
+
+		(query = function() {
+			return new Promise(function(resolve, reject) {
+
+				var query = `
+					SELECT E.id, E.time, E.googleID, E.title, E.body, E.type, E.views, users.name
+					FROM elements E
+					LEFT JOIN users ON ER.googleID = users.googleID
+					WHERE TYPE = 'news'
+					ORDER BY E.time DESC
+				`;
+
+				connection.query(query, function(err, rows) {
+					if (err) reject(err)
+					else resolve(rows)
+				})
+
+			})
+		})()
+
+		.then(function(issues) {
+				return new Promise(function(resolve, reject) {
+
+				}
+		});
+
+		res.render("news.jade", {
+			mainNavigation : data.mainNavigation,
+			user           : req.user,
+			title          : "LSMSA SGO - News"
+		});
+	}
+
 }
