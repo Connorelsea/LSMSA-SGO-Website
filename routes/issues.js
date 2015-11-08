@@ -17,7 +17,7 @@ module.exports = function(app, passport, connection) {
 		connection.query(
 			/*
 			 * Return list of posts with numbers of upvotes.
-			 * Posts that have no upvotes have a NULL value
+			 * Posts that have no upvotes have a NULL value.newsfeed
 			 * in the likeCount column.
 			 */
 			"SELECT E.id, E.time, E.title, E.body, E.type, E.approved, E.views, E.resolved, C.comments, E.googleID, L.likeCount\n" + 
@@ -1042,13 +1042,12 @@ module.exports = function(app, passport, connection) {
 		(query = function() {
 			return new Promise(function(resolve, reject) {
 
-				var query = `
-					SELECT E.id, E.time, E.googleID, E.title, E.body, E.type, E.views, users.name
-					FROM elements E
-					LEFT JOIN users ON ER.googleID = users.googleID
-					WHERE TYPE = 'news'
-					ORDER BY E.time DESC
-				`;
+				var query =
+					"SELECT E.id, E.time, E.googleID, E.title, E.body, E.type, E.views, users.name" +
+					"FROM elements E" +
+					"LEFT JOIN users ON ER.googleID = users.googleID" +
+					"WHERE TYPE = 'news'" +
+					"ORDER BY E.time DESC";
 
 				connection.query(query, function(err, rows) {
 					if (err) reject(err)
@@ -1061,7 +1060,7 @@ module.exports = function(app, passport, connection) {
 		.then(function(issues) {
 				return new Promise(function(resolve, reject) {
 
-				}
+				})
 		});
 
 		res.render("news.jade", {
@@ -1069,6 +1068,6 @@ module.exports = function(app, passport, connection) {
 			user           : req.user,
 			title          : "LSMSA SGO - News"
 		});
-	}
+	})
 
 }

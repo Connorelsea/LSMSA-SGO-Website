@@ -1,5 +1,4 @@
 var express      = require("express"),
-    mongoose     = require("mongoose"),
     passport     = require("passport"),
     flash        = require("connect-flash"),
     morgan       = require("morgan"),
@@ -22,21 +21,7 @@ var express      = require("express"),
 
 require("./config/createdb")
 
-var connection;
-
-if (process.env.OPENSHIFT_NODEJS_IP) {
-
-    connection = mysql.createConnection(database.connection);
-
-} else {
-
-    connection = mysql.createConnection({
-        host     : database.connection_local.host,
-        user     : database.connection_local.user,
-        database : database.database
-    });
-
-}
+var connection  = require("./utility/connection").getConnection();
 
 // Express Application Setup
 
@@ -98,6 +83,8 @@ app.use(favicon(__dirname + '/public/favicon.ico'));
 require("./routes/index.js") (app, passport)
 require("./routes/auth.js")  (app, passport)
 require("./routes/issues.js")(app, passport, connection)
+
+require("./routes/food.js").createRoutes(app, passport)
 
 // Error Handling
 

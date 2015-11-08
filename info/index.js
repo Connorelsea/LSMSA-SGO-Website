@@ -42,8 +42,8 @@ var mainNavigation = [
 		sub  : []
 	},
 	{
-		name : "Events",
-		link : "/events",
+		name : "Food",
+		link : "/food",
 		sub  : []
 	},
 	{
