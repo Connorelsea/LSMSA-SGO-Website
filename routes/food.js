@@ -34,6 +34,7 @@ module.exports.getReviewsByDays = function getReviewsByDays(days) {
 
 			reviews.forEach(review => {
 
+				if (!currentDate) currentDate = review.date;
 
 				// If the next  review is not  from the date  currently  being processed,
 				// push the current data set into the reviews array and begin processing
@@ -41,14 +42,6 @@ module.exports.getReviewsByDays = function getReviewsByDays(days) {
 				if (currentDate !== review.date) {
 
 					console.log("CHANGING DATE");
-
-					console.log(JSON.stringify({
-						date      : currentDate,
-						breakfast : breakfast,
-						brunch    : brunch,
-						lunch     : lunch,
-						dinner    : dinner
-					}))
 
 					reviews.push({
 						date      : currentDate,
