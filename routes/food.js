@@ -27,6 +27,8 @@ module.exports.getReviewsByDays = function getReviewsByDays(days) {
 		return new Promise(function(resolve, reject) {
 
 			var currentDate;
+			var dates = [];
+
 			var breakfast = [];
 			var brunch    = [];
 			var lunch     = [];
@@ -39,42 +41,50 @@ module.exports.getReviewsByDays = function getReviewsByDays(days) {
 				// If the next  review is not  from the date  currently  being processed,
 				// push the current data set into the reviews array and begin processing
 				// the next date. This  assumes that  dates are put  into order by MySQL.
-				if (currentDate !== review.date) {
+				if (currentDate.getTime() != review.date.getTime()) {
 
-					console.log("CHANGING DATE");
+					console.log("Adding date to dates");
 
-					reviews.push({
+					// Add the current date object to an  array of all  dates. The
+					// date object contains a JS date object and an array for each
+					// meal. The array for each meal contains reviews.
+					dates.push({
 						date      : currentDate,
-						breakfast : breakfast,
-						brunch    : brunch,
-						lunch     : lunch,
-						dinner    : dinner
+						meals     : { breakfast, brunch, lunch, dinner }
 					});
 
+					// Clear each meal array so that they can be filled with the reviews
+					// from the next day that will be processed.
 					breakfast = [];
 					brunch    = [];
 					lunch     = [];
 					dinner    = [];
 
+					// Update the current date
+					currentDate = review.date;
 				}
 
-				console.log("REVIEW " + review);
-
+				// Add the current date to it's specific meal array
 				if      (review.meal === "BREAKFAST") breakfast.push(review);
 				else if (review.meal === "BRUNCH")    brunch.push(review);
 				else if (review.meal === "LUNCH")     lunch.push(review);
 				else if (review.meal === "DINNER")    dinner.push(review);
-
-				currentDate = review.date;
-				reviews.push(review)
-
 			});
 
-			console.log("REVIEWS " + JSON.stringify(reviews));
+			// Add the final date object if there are any more
+			if (breakfast.length > 0 || brunch.length > 0 || lunch.length > 0 || dinner.length > 0) {
+				dates.push({
+					date: currentDate,
+					meals: {breakfast, brunch, lunch, dinner}
+				});
+			}
 
-			resolve(reviews);
-
+			resolve(dates);
 		})
+	})
+
+	.then(dates => {
+		return dates;
 	})
 
 	.catch(err => console.log(err))
@@ -84,8 +94,9 @@ module.exports.getReviewsByDays = function getReviewsByDays(days) {
 module.exports.createRoutes = function createRoutes(app, passport) {
 
 	app.get("/food", function(req, res) {
-		module.exports.getReviewsByDays(5);
-		res.send("TEST");
+		var response = module.exports.getReviewsByDays(5);
+		console.log("RESPONSE: " + response);
+		res.send(response);
 	})
 
 };
