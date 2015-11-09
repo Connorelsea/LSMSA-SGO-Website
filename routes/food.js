@@ -11,9 +11,11 @@ module.exports.getReviewsByDays = function getReviewsByDays(days) {
 
 	return new Promise(function(resolve, reject) {
 
-		var query = 'SELECT FR.id, FR.rating, FR.body, FR.googleID, FR.date, FR.meal\n' +
-				"FROM food AS FR\n" +
-				"ORDER BY FR.date";
+		var query = `
+			SELECT FR.id, FR.rating, FR.body, FR.googleID, FR.date, FR.meal
+			FROM food AS FR
+			ORDER BY FR.date
+		`
 
 		connection.query(query, function(err, rows) {
 			if (err) reject(err);
@@ -81,7 +83,7 @@ module.exports.getReviewsByDays = function getReviewsByDays(days) {
 
 module.exports.createRoutes = function createRoutes(app, passport) {
 
-	app.get("/food", function(req, res) {
+	app.get("/food", (req, res) => {
 
 		module.exports.getReviewsByDays(5)
 
