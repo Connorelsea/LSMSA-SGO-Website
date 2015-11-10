@@ -1,3 +1,70 @@
+mixin mealTimeline(dates)
+
+    each date in dates
+
+        div.dateContainer
+
+            div.left
+                +dateBox(date.date)
+
+            div.right
+                if date.date.getUTCDay() == 0
+                    +meal("Brunch",    date.meals["brunch"])
+                    +meal("Dinner",    date.meals["dinner"])
+                else
+                    +meal("Breakfast", date.meals["breakfast"])
+                    +meal("Lunch",      date.meals["lunch"])
+                    +meal("Dinner",     date.meals["dinner"])
+
+
+mixin meal(name, reviews)
+
+    div.mealContainer
+
+        h1.mealTitle= name.toUpperCase()
+
+        if reviews.length > 0
+            each review in reviews
+                +reviewContainer(review)
+        else
+            h2.mealSubtitle No reviews available
+
+mixin reviewContainer(review)
+
+    div.reviewContainer
+
+        div.left
+            div.rating= review.rating
+
+        div.right
+            div.content= review.body
+            div.time= review.date.getTime()
+
+mixin dateBox(date)
+
+    - var monthNames = ["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December" ];
+
+    - var dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+
+    div.dateBox
+
+        div.upper-date
+
+            h2.date
+                span.month= date.getUTCMonth() + 1
+                span /
+                span.day= date.getDate()
+                span /
+                span.year= date.getFullYear().toString().substr(2, 2)
+
+            h3.dateSub
+                span= monthNames[date.getMonth()].toUpperCase()
+                span  -
+                span= dayNames[date.getDay()].toUpperCase()
+
+        div.lower-date
+            div.example content here below
+
 doctype html
 html(lang="en")
 
@@ -17,21 +84,7 @@ html(lang="en")
                     div.mealSubmit
                         p meal submit content goes here
 
-            block content
+            div.basicTextContainer
+                +mealTimeline(dates)
 
     include footer
-
-    div.basicTextContainer
-        each date in dates
-            p= date.date.toLocaleDateString()
-
-            if date.meals["breakfast"].length > 0
-               each review in date.meals["breakfast"]
-                p= JSON.stringify(review, 2, 4)
-
-            each meal in date.meals
-                if meal.length > 0
-                    h1.mealTitle= meal[0].meal
-                    pre= JSON.stringify(meal, 4, 5)
-
-mixin
