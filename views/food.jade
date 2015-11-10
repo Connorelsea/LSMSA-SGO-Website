@@ -1,12 +1,37 @@
-extends template
+doctype html
+html(lang="en")
 
-block t-title-h1
-    h1 Food
+    include header
 
-block t-title-h2
-    h2 Food example
+    body
 
-block content
+        include navigation
+
+        div.bod
+
+            div.bar.t-header
+                div.mealHeader
+                    div.mealTitle
+                        h1.primary Meal Review
+                        h2.secondary Make Meals Better
+                    div.mealSubmit
+                        p meal submit content goes here
+
+            block content
+
+    include footer
 
     div.basicTextContainer
-        pre= dates
+        each date in dates
+            p= date.date.toLocaleDateString()
+
+            if date.meals["breakfast"].length > 0
+               each review in date.meals["breakfast"]
+                p= JSON.stringify(review, 2, 4)
+
+            each meal in date.meals
+                if meal.length > 0
+                    h1.mealTitle= meal[0].meal
+                    pre= JSON.stringify(meal, 4, 5)
+
+mixin
