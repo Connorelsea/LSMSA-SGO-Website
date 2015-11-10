@@ -1,20 +1,22 @@
 mixin mealTimeline(dates)
 
-    each date in dates
+    div.dateTimeline
 
-        div.dateContainer
+        each date in dates
 
-            div.left
-                +dateBox(date.date)
+            div.dateContainer
 
-            div.right
-                if date.date.getUTCDay() == 0
-                    +meal("Brunch",    date.meals["brunch"])
-                    +meal("Dinner",    date.meals["dinner"])
-                else
-                    +meal("Breakfast", date.meals["breakfast"])
-                    +meal("Lunch",      date.meals["lunch"])
-                    +meal("Dinner",     date.meals["dinner"])
+                div.left
+                    +dateBox(date.date)
+
+                div.right
+                    if date.date.getUTCDay() == 0
+                        +meal("Brunch",    date.meals["brunch"])
+                        +meal("Dinner",    date.meals["dinner"])
+                    else
+                        +meal("Breakfast", date.meals["breakfast"])
+                        +meal("Lunch",      date.meals["lunch"])
+                        +meal("Dinner",     date.meals["dinner"])
 
 
 mixin meal(name, reviews)
@@ -34,11 +36,30 @@ mixin reviewContainer(review)
     div.reviewContainer
 
         div.left
-            div.rating= review.rating
+
+            div.starContainer
+
+                if review.rating === 1
+                    img(src="images/red.png")
+                    h4.worst Worst
+                else if review.rating === 2
+                    img(src="images/red-light.png")
+                    h4.bad Bad
+                else if review.rating === 3
+                    img(src="images/grey.png")
+                    h4.okay Okay
+                else if review.rating === 4
+                    img(src="images/gold-light.png")
+                    h4.good Good
+                else if review.rating === 5
+                    img(src="images/gold.png")
+                    h4.best Best
 
         div.right
-            div.content= review.body
-            div.time= review.date.getTime()
+            div.contentContainer
+                div.content
+                    span.content= review.body
+                    span.time= "Posted at " + review.date.getHours() + ":" + review.date.getMinutes()
 
 mixin dateBox(date)
 

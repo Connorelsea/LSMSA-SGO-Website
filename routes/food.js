@@ -14,7 +14,7 @@ module.exports.getReviewsByDays = function getReviewsByDays(days) {
 		var query = `
 			SELECT FR.id, FR.rating, FR.body, FR.googleID, FR.date, FR.meal
 			FROM food AS FR
-			ORDER BY FR.date
+			ORDER BY FR.date DESC
 		`
 
 		connection.query(query, function(err, rows) {
