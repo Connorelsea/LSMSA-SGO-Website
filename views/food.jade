@@ -138,50 +138,54 @@ mixin stars(meal)
         else
             h4 No Data Currently
 
+mixin generateMealSubmit()
+    div.mealSubmit
+        if user
+            +mealSubmit()
+        else
+            p log the fuck in
+
 
 mixin mealSubmit()
-    div.mealSubmit
+    div.choiceBox.ratingBox
+         +mealSubmitButton(1)
+         +mealSubmitButton(2)
+         +mealSubmitButton(3)
+         +mealSubmitButton(4)
+         +mealSubmitButton(5)
 
-        div.choiceBox.ratingBox
+    div.choiceBox.formBox
+        form(action="/food/submit" method="post")
+            input(name="rating" value="3").rating
+            textarea(name="text" placeholder="Select a rating and type your review")
+            - var now = new Date()
 
-            +mealSubmitButton(1)
-            +mealSubmitButton(2)
-            +mealSubmitButton(3)
-            +mealSubmitButton(4)
-            +mealSubmitButton(5)
+            div.bottomContainer
 
-        div.choiceBox.formBox
-            form
-                input(type="rating" value="3").rating
-                textarea(placeholder="Select a rating and type your review")
-                - var now = new Date()
+                h4 Okay
 
-                div.bottomContainer
-
-                    h4 Okay
-
-                    if now.getDate() == 0
-                        select
-                            option Brunch
+                if now.getDate() == 0
+                    select(name="select")
+                        option Brunch
+                        option Dinner
+                else
+                    if now.getHours() < 10
+                        select(name="select")
+                            option Breakfast
+                            option Lunch
                             option Dinner
+                    else if now.getHours() < 3
+                        select(name="select")
+                            option Lunch
+                            option Dinner
+                            option Breakfast
                     else
-                        if now.getHours() < 10
-                            select
-                                option Breakfast
-                                option Lunch
-                                option Dinner
-                        else if now.getHours() < 3
-                            select
-                                option Lunch
-                                option Dinner
-                                option Breakfast
-                        else
-                            select
-                                option Dinner
-                                option Lunch
-                                option Breakfast
+                        select(name="select")
+                            option Dinner
+                            option Lunch
+                            option Breakfast
 
-                    input(type="submit" value="Submit")
+                input(type="submit" name="submit" value="Submit")
 
 mixin mealSubmitButton(type)
 
@@ -289,7 +293,7 @@ html(lang="en")
                         h1.primary Meal Review
                         h2.secondary Make Meals Better
 
-                    +mealSubmit()
+                    +generateMealSubmit()
 
             div.basicTextContainer
                 +mealTimeline(dates)

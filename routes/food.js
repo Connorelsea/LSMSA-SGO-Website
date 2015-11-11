@@ -7,6 +7,10 @@ var curseWords = [
 		"slut", "tit", "vagina", "vag", "boob", "hore", "piss", "homo", "fag"
 ]
 
+module.exports.postReview = function postReview(review) {
+
+}
+
 module.exports.getReviewsByDays = function getReviewsByDays(days) {
 
 	return new Promise(function(resolve, reject) {
@@ -95,6 +99,11 @@ module.exports.createRoutes = function createRoutes(app, passport) {
 
 		.catch(err => console.log(err));
 
-	})
+	});
+
+	app.post("/food/submit", (req, res) => {
+		console.log(req.body);
+		res.redirect("/food");
+	});
 
 };
