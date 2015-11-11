@@ -11,12 +11,12 @@ mixin mealTimeline(dates)
 
                 div.right
                     if date.date.getDay() == 0
-                        +meal("Brunch",    date.meals["brunch"])
                         +meal("Dinner",    date.meals["dinner"])
+                        +meal("Brunch",    date.meals["brunch"])
                     else
-                        +meal("Breakfast", date.meals["breakfast"])
-                        +meal("Lunch",      date.meals["lunch"])
                         +meal("Dinner",     date.meals["dinner"])
+                        +meal("Lunch",      date.meals["lunch"])
+                        +meal("Breakfast", date.meals["breakfast"])
 
 
 mixin meal(name, reviews)
@@ -93,26 +93,26 @@ mixin mealRating(date)
             if date.date.getDay() === 0
 
                 div.mealRatingInner
-                    h3 Brunch
-                    +stars(date.meals["brunch"])
-
-                div.mealRatingInner
                     h3 Dinner
                     +stars(date.meals["dinner"])
+
+                div.mealRatingInner
+                    h3 Brunch
+                    +stars(date.meals["brunch"])
 
             else
 
                 div.mealRatingInner
-                    h3 Breakfast
-                    +stars(date.meals["breakfast"])
+                    h3 Dinner
+                    +stars(date.meals["dinner"])
 
                 div.mealRatingInner
                     h3 Lunch
                     +stars(date.meals["lunch"])
 
                 div.mealRatingInner
-                    h3 Dinner
-                    +stars(date.meals["dinner"])
+                    h3 Breakfast
+                    +stars(date.meals["breakfast"])
 
 mixin stars(meal)
 
@@ -138,6 +138,50 @@ mixin stars(meal)
         else
             h4 No Data Currently
 
+
+mixin mealSubmit()
+    div.mealSubmit
+
+        div.choiceBox.ratingBox
+
+            +mealSubmitButton(1)
+            +mealSubmitButton(2)
+            +mealSubmitButton(3)
+            +mealSubmitButton(4)
+            +mealSubmitButton(5)
+
+        div.choiceBox.formBox
+            form
+                input(type="rating" value="1").rating
+                textarea
+                input(type="submit" value="Submit")
+
+mixin mealSubmitButton(type)
+    div.star-button
+        if type === 1
+            a(href="").starContainer
+                img(src="images/red.png")
+                h4.worst Worst
+        else if type === 2
+            a(href="").starContainer
+                img(src="images/red-light.png")
+                h4.bad Bad
+
+        else if type === 3
+            a(href="").starContainer
+                img(src="images/grey.png")
+                h4.okay Okay
+
+        else if type === 4
+            a(href="").starContainer
+                img(src="images/gold-light.png")
+                h4.good Good
+
+        else if type === 5
+            a(href="").starContainer
+                img(src="images/gold.png")
+                h4.best Best
+
 doctype html
 html(lang="en")
 
@@ -150,12 +194,14 @@ html(lang="en")
         div.bod
 
             div.bar.t-header
+
                 div.mealHeader
+
                     div.mealTitle
                         h1.primary Meal Review
                         h2.secondary Make Meals Better
-                    div.mealSubmit
-                        p meal submit content goes here
+
+                    +mealSubmit()
 
             div.basicTextContainer
                 +mealTimeline(dates)
