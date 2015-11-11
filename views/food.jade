@@ -152,33 +152,121 @@ mixin mealSubmit()
 
         div.choiceBox.formBox
             form
-                input(type="rating" value="1").rating
+                input(type="rating" value="3").rating
                 textarea
-                input(type="submit" value="Submit")
+                - var now = new Date()
+
+                div.bottomContainer
+
+                    h4 Okay
+
+                    if now.getDate() == 0
+                        select
+                            option Brunch
+                            option Dinner
+                    else
+                        if now.getHours() < 10
+                            select
+                                option Breakfast
+                                option Lunch
+                                option Dinner
+                        else if now.getHours() < 3
+                            select
+                                option Lunch
+                                option Dinner
+                                option Breakfast
+                        else
+                            select
+                                option Dinner
+                                option Lunch
+                                option Breakfast
+
+                    input(type="submit" value="Submit")
 
 mixin mealSubmitButton(type)
+
     div.star-button
+
         if type === 1
-            a(href="").starContainer
+            div.starContainer.worst
+                script.
+                    $(".starContainer.worst").on("click", function () {
+
+                        $(".bottomContainer h4").css({
+                            "color" : "#d36661"
+                        })
+
+                        $(".bottomContainer h4").html("WORST")
+
+                    });
                 img(src="images/red.png")
                 h4.worst Worst
+
         else if type === 2
-            a(href="").starContainer
+
+            div.starContainer.bad
+
+                script.
+                    $(".starContainer.bad").on("click", function () {
+
+                        $(".bottomContainer h4").css({
+                            "color": "#bf8b89"
+                        })
+
+                        $(".bottomContainer h4").html("BAD")
+
+                    })
+
                 img(src="images/red-light.png")
                 h4.bad Bad
 
         else if type === 3
-            a(href="").starContainer
+
+            div.starContainer.okay
+
+                script.
+                    $(".starContainer.okay").on("click", function () {
+
+                        $(".bottomContainer h4").css({
+                            "color": "#929292"
+                        })
+
+                        $(".bottomContainer h4").html("OKAY")
+
+                    })
+
                 img(src="images/grey.png")
                 h4.okay Okay
 
         else if type === 4
-            a(href="").starContainer
+
+            div.starContainer.good
+
+                script.
+                    $(".starContainer.good").on("click", function () {
+                        $(".bottomContainer h4").css({
+                            "color": "#e0b264"
+                        })
+
+                        $(".bottomContainer h4").html("GOOD")
+                    })
+
                 img(src="images/gold-light.png")
                 h4.good Good
 
         else if type === 5
-            a(href="").starContainer
+
+            div.starContainer.best
+
+                script.
+                    $(".starContainer.best").on("click", function () {
+                        $(".bottomContainer h4").css({
+                            "color": "#fec163"
+                        })
+
+                        $(".bottomContainer h4").html("BEST")
+                    })
+
                 img(src="images/gold.png")
                 h4.best Best
 

@@ -27,7 +27,7 @@
 		top -20px
 		right 0px
 
-		padding 30px
+		padding 10px 30px
 
 		border-radius 6px
 		background-color white
@@ -41,6 +41,16 @@
 				min-width 80px
 				padding-right 0px
 				text-align center
+
+				box-sizing border-box
+
+				transition all 0.2s
+
+				padding-top 10px
+
+				&:hover
+					cursor pointer
+					padding-top 5px
 
 				a
 					text-decoration none
@@ -57,20 +67,71 @@
 				textarea
 					min-width 100%
 					margin-top 25px
-					height 70px
+					height 90px
+
+					font-family Futura
+					font-size 1.3em
+
+					box-sizing border-box
+					padding 14px
+					color lightslategrey
 
 					border none
 					border-radius 6px
 					background-color lighten(lightslategrey, 80%)
 
-				input
-					border none
-					border-radius 6px
-					background-color lighten(lightslategrey, 80%)
+					&:focus
+						outline none
+						outline-width 0
 
-					min-width 30%
-					min-height 35px
-					margin-top 20px
+
+				.bottomContainer
+					display flex
+					justify-content flex-end
+					align-items center
+					width 100%
+
+					padding-bottom 10px
+
+					h4
+						justify-self flex-start
+						margin-top 20px
+						width 100%
+						text-align center
+						font-family Futura
+						font-weight bold
+						text-transform uppercase
+						color lightslategrey
+
+					input, select
+						text-transform uppercase
+						font-family Futura
+						font-weight bold
+						color lightslategrey
+
+						cursor pointer
+
+						padding 0px 20px
+						margin-left 10px
+						border none
+						border-radius 6px
+						background-color lighten(lightslategrey, 80%)
+
+						border 4px solid lighten(lightslategrey, 80%)
+
+						min-height 35px
+						margin-top 20px
+
+						transition all 0.4s
+
+						&:focus
+							outline none
+							outline-width 0
+
+					input:hover
+						background-color white
+
+
 
 .starContainer
 
