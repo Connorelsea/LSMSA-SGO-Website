@@ -7,10 +7,10 @@ mixin mealTimeline(dates)
             div.dateContainer
 
                 div.left
-                    +dateBox(date.date)
+                    +dateBox(date)
 
                 div.right
-                    if date.date.getUTCDay() == 0
+                    if date.date.getDay() == 0
                         +meal("Brunch",    date.meals["brunch"])
                         +meal("Dinner",    date.meals["dinner"])
                     else
@@ -72,19 +72,71 @@ mixin dateBox(date)
         div.upper-date
 
             h2.date
-                span.month= date.getUTCMonth() + 1
+                span.month= date.date.getUTCMonth() + 1
                 span /
-                span.day= date.getDate()
+                span.day= date.date.getDate()
                 span /
-                span.year= date.getFullYear().toString().substr(2, 2)
+                span.year= date.date.getFullYear().toString().substr(2, 2)
 
             h3.dateSub
-                span= monthNames[date.getMonth()].toUpperCase()
+                span= monthNames[date.date.getMonth()].toUpperCase()
                 span  -
-                span= dayNames[date.getDay()].toUpperCase()
+                span= dayNames[date.date.getDay()].toUpperCase()
 
         div.lower-date
-            div.example content here below
+           +mealRating(date)
+
+mixin mealRating(date)
+
+    div.mealRating
+
+            if date.date.getDay() === 0
+
+                div.mealRatingInner
+                    h3 Brunch
+                    +stars(date.meals["brunch"])
+
+                div.mealRatingInner
+                    h3 Dinner
+                    +stars(date.meals["dinner"])
+
+            else
+
+                div.mealRatingInner
+                    h3 Breakfast
+                    +stars(date.meals["breakfast"])
+
+                div.mealRatingInner
+                    h3 Lunch
+                    +stars(date.meals["lunch"])
+
+                div.mealRatingInner
+                    h3 Dinner
+                    +stars(date.meals["dinner"])
+
+mixin stars(meal)
+
+    div.starBody
+        if meal.length > 0
+            - var average = 0
+
+            each review in meal
+                - average += parseInt(review.rating)
+
+            - average = average / meal.length
+
+            - var leftOver = 5 - average
+
+            while average > 0
+                - average--
+                img(src="images/gold.png")
+
+            while leftOver > 0
+                - leftOver--
+                img(src="images/grey.png")
+
+        else
+            h4 No Data Currently
 
 doctype html
 html(lang="en")
