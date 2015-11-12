@@ -124,10 +124,9 @@ mixin stars(meal)
                 - average += parseInt(review.rating)
 
             - average = average / meal.length
+            - var leftOver = 5 - Math.round(average)
 
-            - var leftOver = 5 - average
-
-            while average > 0
+            while Math.round(average) > 0
                 - average--
                 img(src="images/gold.png")
 
@@ -143,7 +142,10 @@ mixin generateMealSubmit()
         if user
             +mealSubmit()
         else
-            p log the fuck in
+            div.explainer
+                h2 Login to Submit a Review
+                p Submit completely anonymous reviews of the cafeteria food. This helps the food become better!
+                a(href="/login?redirect=/food") Login Anonymously
 
 
 mixin mealSubmit()
@@ -303,7 +305,8 @@ html(lang="en")
 
                     div.mealTitle
                         h1.primary Meal Review
-                        h2.secondary Make Meals Better
+                        h2.secondary Anonymous Food Rating
+                        h3.tertiary Reviews are submitted anonymously by students
 
                     +generateMealSubmit()
 

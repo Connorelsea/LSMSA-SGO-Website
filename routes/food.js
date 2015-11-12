@@ -9,11 +9,38 @@ var curseWords = [
 
 module.exports.postReview = function postReview(review) {
 
-	var query = `INSERT INTO food SET ?`
+	(function() {
+		return new Promise(function(resolve, reject) {
+			if (review.googleID) resolve(review);
+			else reject();
+		})
+	})()
 
-	connection.query(query, review, function(err, rows) {
-		if (err) console.log(err);
+	.then(review => {
+
+		var hasWord = false;
+
+		curseWords.forEach(word => {
+			if (review.body.toLowerCase().indexOf(word) > -1) hasWord = true;
+		})
+
+		if (hasWord) throw new Error("CURSE WORD!!!!!")
+		else return review;
+
 	})
+
+	.then(review => {
+
+		var query = `INSERT INTO food SET ?`
+
+		connection.query(query, review, function(err, rows) {
+			if (err) throw err;
+		})
+
+	})
+
+	.catch(err => console.log(err));
+
 }
 
 module.exports.getReviewsByDays = function getReviewsByDays(days) {
@@ -98,6 +125,7 @@ module.exports.createRoutes = function createRoutes(app, passport) {
 
 		.then(dates => res.render("food.jade", {
 			mainNavigation : data.mainNavigation,
+			title           : "Meal Review",
 			user            : req.user,
 			dates           : dates
 		}))
@@ -109,9 +137,10 @@ module.exports.createRoutes = function createRoutes(app, passport) {
 	app.post("/food/submit", (req, res) => {
 
 		module.exports.postReview({
-			rating : req.body.rating,
-			body   : req.body.text,
-			meal   : req.body.select.toUpperCase()
+			rating   : req.body.rating,
+			body     : req.body.text,
+			meal     : req.body.select.toUpperCase(),
+			googleID : req.user.googleID
 		})
 
 		res.redirect("/food");

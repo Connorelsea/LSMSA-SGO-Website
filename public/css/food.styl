@@ -21,11 +21,24 @@
 		h2
 			font-family FuturaCond
 			font-size 2.2em
+			padding-bottom 12px
+
+		h3
+			font-family Futura
+			font-weight bold
+			font-size 0.8em
+			opacity 0.5
+
 
 	.mealSubmit
 		position absolute
 		top -40px
 		right 0px
+
+		width 400px
+		min-width 400px
+		height 280px
+		min-height 280px
 
 		padding 10px 30px
 
@@ -33,6 +46,50 @@
 		background-color white
 		box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)
 		margin-top 180px
+
+		.explainer
+			display flex
+			flex-direction column
+			justify-content center
+			align-items center
+
+			height 100%
+
+			font-family Futura
+			color lightslategrey
+
+			> *
+				padding-bottom 30px
+
+			h2
+				font-weight bold
+				text-transform uppercase
+				font-size 1.2em
+
+			p
+				font-size 1.2em
+
+			a
+				padding 10px
+				width 50%
+				background-color lightslategrey
+				border-radius 6px
+
+				font-weight bold
+				text-transform uppercase
+				font-size 0.9em
+				text-decoration none
+				color white
+
+				border 4px solid lightslategrey
+
+				&:hover
+					background-color white
+					color lightslategrey
+
+
+		.choiceBox
+			margin 0 auto
 
 		.ratingBox
 			display flex

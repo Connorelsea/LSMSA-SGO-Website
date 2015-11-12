@@ -60,6 +60,10 @@ module.exports = function(app, passport) {
 
 	app.get("/login", function(req, res) {
 
+		console.log("QUERY: " + req.query.redirect);
+
+		req.session.redirectURL = req.query.redirect;
+
 		if (req.user) {
 			console.log("User " + req.user.name + " already logged in.")
 			res.redirect("/")
@@ -80,14 +84,28 @@ module.exports = function(app, passport) {
 		)
 	)
 
-	app.get(
-		"/auth/google/callback",
-		passport.authenticate(
-			"google",
-			{
-				successRedirect: "/",
-				failureRedirect: "/failure"
+	// Changed to allow redirect after login
+
+	app.get("/auth/google/callback", function(req, res, next) {
+
+		passport.authenticate("google", function(err, user, info) {
+
+			var redirectURL = "/";
+
+			if (err) return next(err);
+			if (!user) return res.redirect("/");
+
+			if (req.session.redirectURL) {
+				redirectURL = req.session.redirectURL;
 			}
-		)
-	)
+
+			req.logIn(user, function(err) {
+				console.log(err);
+			})
+
+			res.redirect(redirectURL);
+
+		})(req, res, next);
+
+	});
 }
