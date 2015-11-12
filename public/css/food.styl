@@ -7,8 +7,16 @@
 	display flex
 	justify-content space-between
 
+	.starContainer
+		margin 0px
+		width 80px
+
+		h4
+			font-size 1.1em
+
 	.mealTitle
-		margin-top 180px
+		margin-top 190px
+		margin-bottom 30px
 		text-align left
 		text-transform uppercase
 
@@ -32,7 +40,7 @@
 
 	.mealSubmit
 		position absolute
-		top -40px
+		top -20px
 		right 0px
 
 		width 400px
@@ -360,3 +368,70 @@
 					color lighten(lightslategrey, 30%)
 					font-size 1.2em
 					padding 10px 0px
+
+@media screen and (max-width: 1000px)
+
+	.ratingBox
+		display flex
+		justify-content space-around
+
+	.star-button
+		width 50px !important
+		max-width 50px !important
+		min-width 50px !important
+
+		.starContainer
+			margin 0px !important
+			padding 0px !important
+			width 60px
+
+			h4
+				font-size 0.8em
+
+	.t-header.t-mealHeader
+		height inherit
+
+	.dateTimeline
+		padding-top 0px
+
+	.mealHeader
+		width 100%
+		flex-direction column
+		display block
+		position static
+
+		> .mealTitle
+			width 80%
+			text-align center
+			padding 20px 0px
+
+		.mealSubmit
+			box-sizing border-box
+			margin-top 0px
+			min-width 100%
+			width 100%
+			height inherit
+			border-radius 0px
+			position static
+			top 0
+
+			form .bottomContainer
+
+				> *
+					width 100%
+
+				display flex
+				flex-direction column
+
+		> *
+			margin 0 auto
+			display block
+
+	.dateContainer
+		width 90%
+		flex-direction column
+
+		> .left, .right
+			margin 0px
+			margin-top 20px
+			width 100%
