@@ -165,16 +165,21 @@ mixin mealSubmit()
                 h4 Okay
 
                 if now.getDate() == 0
-                    select(name="select")
-                        option Brunch
-                        option Dinner
+                    if now.getHours() < 15
+                        select(name="select")
+                            option Brunch
+                            option Dinner
+                    else
+                        select(name="select")
+                            option Dinner
+                            option Brunch
                 else
                     if now.getHours() < 10
                         select(name="select")
                             option Breakfast
                             option Lunch
                             option Dinner
-                    else if now.getHours() < 3
+                    else if now.getHours() < 15
                         select(name="select")
                             option Lunch
                             option Dinner
@@ -201,6 +206,7 @@ mixin mealSubmitButton(type)
                         })
 
                         $(".bottomContainer h4").html("WORST")
+                        $("form .rating").attr("value", "1")
 
                     });
                 img(src="images/red.png")
@@ -218,6 +224,7 @@ mixin mealSubmitButton(type)
                         })
 
                         $(".bottomContainer h4").html("BAD")
+                        $("form .rating").attr("value", "2")
 
                     })
 
@@ -236,6 +243,7 @@ mixin mealSubmitButton(type)
                         })
 
                         $(".bottomContainer h4").html("OKAY")
+                        $("form .rating").attr("value", "3")
 
                     })
 
@@ -248,11 +256,14 @@ mixin mealSubmitButton(type)
 
                 script.
                     $(".starContainer.good").on("click", function () {
+
                         $(".bottomContainer h4").css({
                             "color": "#e0b264"
                         })
 
                         $(".bottomContainer h4").html("GOOD")
+                        $("form .rating").attr("value", "4")
+
                     })
 
                 img(src="images/gold-light.png")
@@ -269,6 +280,7 @@ mixin mealSubmitButton(type)
                         })
 
                         $(".bottomContainer h4").html("BEST")
+                        $("form .rating").attr("value", "5")
                     })
 
                 img(src="images/gold.png")

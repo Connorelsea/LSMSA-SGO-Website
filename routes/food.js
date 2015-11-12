@@ -9,6 +9,11 @@ var curseWords = [
 
 module.exports.postReview = function postReview(review) {
 
+	var query = `INSERT INTO food SET ?`
+
+	connection.query(query, review, function(err, rows) {
+		if (err) console.log(err);
+	})
 }
 
 module.exports.getReviewsByDays = function getReviewsByDays(days) {
@@ -44,7 +49,7 @@ module.exports.getReviewsByDays = function getReviewsByDays(days) {
 			// If the next  review is not  from the date  currently  being processed,
 			// push the current data set into the reviews array and begin processing
 			// the next date. This  assumes that  dates are put  into order by MySQL.
-			if (currentDate.getTime() != review.date.getTime()) {
+			if (currentDate.toDateString() != review.date.toDateString()) {
 
 				// Add the current date object to an  array of all  dates. The
 				// date object contains a JS date object and an array for each
@@ -102,7 +107,13 @@ module.exports.createRoutes = function createRoutes(app, passport) {
 	});
 
 	app.post("/food/submit", (req, res) => {
-		console.log(req.body);
+
+		module.exports.postReview({
+			rating : req.body.rating,
+			body   : req.body.text,
+			meal   : req.body.select.toUpperCase()
+		})
+
 		res.redirect("/food");
 	});
 
