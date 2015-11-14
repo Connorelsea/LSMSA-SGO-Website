@@ -1,10 +1,11 @@
 var connection = require("../utility/connection").getConnection();
 var data       = require("../info/index");
-var Promise   = require("bluebird");
+var Promise    = require("bluebird");
+var moment     = require("moment");
 
 var curseWords = [
 		"fuck", "shit", "nigger", "cock", "cum", "bitch", "ass", "whore", "arse",
-		"slut", "tit", "vagina", "vag", "boob", "hore", "piss", "homo", "fag"
+		"slut", "vagina", "vag", "boob", "piss", "homo", "fag", "dick"
 ]
 
 module.exports.postReview = function postReview(review) {
@@ -24,7 +25,7 @@ module.exports.postReview = function postReview(review) {
 			if (review.body.toLowerCase().indexOf(word) > -1) hasWord = true;
 		})
 
-		if (hasWord) throw new Error("CURSE WORD!!!!!")
+		if (hasWord) throw new Error("Curse Word Detected")
 		else return review;
 
 	})
@@ -45,7 +46,36 @@ module.exports.postReview = function postReview(review) {
 
 module.exports.getReviewsByDays = function getReviewsByDays(days) {
 
-	return new Promise(function(resolve, reject) {
+	return new Promise((resolve, reject) => {
+
+		var currentDate = moment().format();
+		var dates = [];
+
+		// Create an array of date objects that contain a range  from
+		// the current date to x amount of days ago. X amount of days
+		// is determined by the "days" argument.
+		for (var i = 0; i < days; i++) {
+			dates.push(moment().subtract(i, "days"));
+		}
+
+		resolve(dates);
+	})
+
+	.then(dates => {
+
+		var dateObjects = [];
+
+		// Create an object the will encapsulate the information
+		// for each date in the previously specified range.
+		dates.forEach(date => dateObjects.push({
+			date  : new Date(date),
+			meals : {}
+		}))
+
+		return dateObjects;
+	})
+
+	.then(dateObjects => {
 
 		var query = `
 			SELECT FR.id, FR.rating, FR.body, FR.googleID, FR.date, FR.meal
@@ -53,66 +83,88 @@ module.exports.getReviewsByDays = function getReviewsByDays(days) {
 			ORDER BY FR.date DESC
 		`
 
-		connection.query(query, function(err, rows) {
-			if (err) reject(err);
-			else resolve(rows);
+		return Promise.fromCallback(function(callback) {
+			connection.query(query, (err, rows) => {
+				if (err) callback(err);
+				else callback(null, {dateObjects, rows});
+			})
 		});
+
 	})
 
-	.then(reviews => {
+	.then(container => {
 
-		var currentDate;
-		var dates = [];
+		var dateObjects = container.dateObjects;
+		var rows        = container.rows;
 
-		var breakfast = [];
-		var brunch    = [];
-		var lunch     = [];
-		var dinner    = [];
+		// Cycle through each date object in that range
+		dateObjects.forEach(object => {
 
-		reviews.forEach(review => {
+			// Get the reviews that match the date of the current date object
+			// and then fill that date object with those reviews.
 
-			if (!currentDate) currentDate = review.date;
+			var reviews = rows.filter(row => {
+				return row.date.toDateString() === object.date.toDateString()
+			})
 
-			// If the next  review is not  from the date  currently  being processed,
-			// push the current data set into the reviews array and begin processing
-			// the next date. This  assumes that  dates are put  into order by MySQL.
-			if (currentDate.toDateString() != review.date.toDateString()) {
+			// Filter the reviews into their respective meal arrays
 
-				// Add the current date object to an  array of all  dates. The
-				// date object contains a JS date object and an array for each
-				// meal. The array for each meal contains reviews.
-				dates.push({
-					date      : currentDate,
-					meals     : { breakfast, brunch, lunch, dinner }
-				});
+			var breakfast = reviews.filter(r => { return r.meal === "BREAKFAST" });
+			var brunch    = reviews.filter(r => { return r.meal === "BRUNCH" });
+			var lunch     = reviews.filter(r => { return r.meal === "LUNCH" });
+			var dinner    = reviews.filter(r => { return r.meal === "DINNER" });
 
-				// Clear each meal array so that they can be filled with the reviews
-				// from the next day that will be processed.
-				breakfast = [];
-				brunch    = [];
-				lunch     = [];
-				dinner    = [];
+			// Populate the dataObject with their meal arrays
 
-				// Update the current date
-				currentDate = review.date;
+			object.meals.breakfast = breakfast;
+			object.meals.brunch    = brunch;
+			object.meals.lunch     = lunch;
+			object.meals.dinner    = dinner;
+
+		})
+
+		return dateObjects;
+
+	})
+
+	.then(dateObjects => {
+
+		// Find average of the review ratings for each meal and
+		// for the entire day
+
+		dateObjects.forEach(object => {
+
+			function findAverage(mealName) {
+
+				var meal    = object.meals[mealName];
+				var avg     = 0;
+				var length  = meal.length;
+
+				meal.forEach(review => avg = avg + review.rating);
+				
+				avg = Math.round((avg / length) * 100) / 100;
+				if (isNaN(avg)) avg = 0;
+
+				return (avg);
+
 			}
 
-			// Add the current date to it's specific meal array
-			if      (review.meal === "BREAKFAST") breakfast.push(review);
-			else if (review.meal === "BRUNCH")    brunch.push(review);
-			else if (review.meal === "LUNCH")     lunch.push(review);
-			else if (review.meal === "DINNER")    dinner.push(review);
-		});
+			var avg_bf = findAverage("breakfast");
+			var avg_br = findAverage("brunch");
+			var avg_lu = findAverage("lunch");
+			var avg_di = findAverage("dinner");
 
-			// Add the final date object if there are any more
-		if (breakfast.length > 0 || brunch.length > 0 || lunch.length > 0 || dinner.length > 0) {
-			dates.push({
-				date: currentDate,
-				meals: {breakfast, brunch, lunch, dinner}
-			});
-		}
+			object.statistics = {
+				avg_breakfast : avg_bf,
+				avg_brunch     : avg_br,
+				avg_lunch      : avg_lu,
+				avg_dinner     : avg_di,
+				avg_day        : (avg_bf + avg_br + avg_lu + avg_di) / 4
+			}
 
-		return dates;
+		})
+
+		return dateObjects;
 	})
 
 };

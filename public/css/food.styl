@@ -4,6 +4,10 @@
 	width 1000px
 	max-width 1000px
 
+	margin-top 180px
+
+	top 0px
+
 	display flex
 	justify-content space-between
 
@@ -15,8 +19,6 @@
 			font-size 1.1em
 
 	.mealTitle
-		margin-top 190px
-		margin-bottom 30px
 		text-align left
 		text-transform uppercase
 
@@ -40,8 +42,9 @@
 
 	.mealSubmit
 		position absolute
-		top -20px
+
 		right 0px
+		top -40px
 
 		width 400px
 		min-width 400px
@@ -53,7 +56,6 @@
 		border-radius 6px
 		background-color white
 		box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)
-		margin-top 180px
 
 		.explainer
 			display flex
@@ -130,6 +132,7 @@
 					display none
 
 				textarea
+					box-sizing border-box
 					min-width 100%
 					margin-top 25px
 					height 110px
@@ -137,7 +140,6 @@
 					font-family Futura
 					font-size 1.3em
 
-					box-sizing border-box
 					padding 14px
 					color lightslategrey
 
@@ -284,9 +286,7 @@
 		text-align center
 
 	> .right
-		//width 100%
 		font-family Futura
-		position relative
 
 		display flex
 		align-items center
@@ -298,13 +298,18 @@
 				line-height 1.2em
 				font-size 1.3em
 
+				> *
+					display inline-block
+
+				.content
+					padding-right 10px
+
 				.time
 					text-transform uppercase
 					text-align right
 					font-size 0.6em
 					font-weight bold
 					color lighten(lightslategrey, 40%)
-					padding-left 10px
 
 
 
@@ -360,6 +365,9 @@
 					font-size 1.4em
 					font-family FuturaCond
 					color lightslategrey
+					
+					.stat
+						font-size  0.7em
 
 				h4
 					text-align center
@@ -400,17 +408,27 @@
 		display block
 		position static
 
+		margin-top 120px
+
 		> .mealTitle
 			width 80%
 			text-align center
-			padding 20px 0px
+			padding-top 20px
+			padding-bottom 35px
+
+			h1
+				font-size 2.8em
+
+			h2
+				font-size 1.6em
 
 		.mealSubmit
 			box-sizing border-box
+			padding 20px
 			margin-top 0px
 			min-width 100%
 			width 100%
-			height inherit
+			height 100%
 			border-radius 0px
 			position static
 			top 0
@@ -419,6 +437,9 @@
 
 				> *
 					width 100%
+
+				input, select
+					margin-left 0px !important
 
 				display flex
 				flex-direction column
@@ -431,7 +452,23 @@
 		width 90%
 		flex-direction column
 
-		> .left, .right
+		> .left, > .right
 			margin 0px
 			margin-top 20px
 			width 100%
+
+	.mealContainer
+
+		.reviewContainer
+
+			> .right
+				padding-left 0px
+
+				width 100% !important
+				max-width 100% !important
+
+			> .left
+
+				.starContainer
+					width 60px
+					padding-right

@@ -98,8 +98,14 @@ var create_responses =
 	"PRIMARY KEY (id)"          +
 	");";
 
+var create_food_trigger =
+	"CREATE TRIGGER `FOOD_INSERT` BEFORE INSERT ON `food`\n" +
+	"FOR EACH ROW BEGIN\n" +
+	"    SET new.date = now();\n" +
+	"END;";
+
 var queries = [
-	create, use, create_users, create_elements, create_elements_trigger, create_comments, create_comments_trigger, create_likes, create_responses, fixes
+	use, create_users, create_elements, create_elements_trigger, create_comments, create_comments_trigger, create_food_trigger, create_likes, create_responses, fixes
 ]
 
 console.log("Database: Checking database...")
@@ -115,39 +121,27 @@ console.log("Database: Attempting table creation.");
 
 connection.query(use, function(err) {
 
-	connection.query(show, function(err, rows, fields) {
+	async.forEach(
+		queries,
+		function(query, callback) {
 
-		if (err) {
-			console.log(err)
-		}
+			connection.query(query, function(err) {
 
-		if (rows.length <= 0) {
+				console.log("QUERY");
 
-			async.forEach(
-				queries,
-				function(query, callback) {
-
-					connection.query(query, function(err) {
-
-						if (err) {
-							console.log("Database: There was an error during async query.");
-							console.log(err);
-						}
-
-						callback();
-					});
-
-				},
-				function(err) {
-					connection.end();
+				if (err) {
+					console.log("Database: There was an error during async query.");
+					console.log(err);
 				}
-			);
 
-		} else {
-			console.log("Database: Database sgo already exists.")
+				callback();
+			});
+
+		},
+		function(err) {
+			connection.end();
 		}
-
-	})
+	);
 
 });
 

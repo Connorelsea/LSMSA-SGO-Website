@@ -23,6 +23,7 @@
 		"serve-favicon": "*",
 		"email-templates" : "*",
 		"nodemailer" : "*",
-		"bluebird" : "*"
+		"bluebird" : "*",
+		"moment" : "*"
 	}
 }

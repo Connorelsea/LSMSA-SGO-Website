@@ -20,7 +20,7 @@ var widthCorrection = function() {
 
 }
 
-var parallax = true;
+var parallax = false;
 
 $(window).resize(widthCorrection);
 $(document).ready(widthCorrection);
@@ -98,15 +98,11 @@ $(window).scroll(function() {
 
 		if (small) {
 
-			$(".body").css({
-				"top" : topWidthSmall
-			})
+			$(".body").css({ "top" : topWidthSmall })
 
 		} else {
 
-			$(".body").css({
-				"top" : topWidthNormal
-			})
+			$(".body").css({ "top" : topWidthNormal })
 
 		}
 

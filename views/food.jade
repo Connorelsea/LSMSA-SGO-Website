@@ -1,316 +1,326 @@
 mixin mealTimeline(dates)
 
-    div.dateTimeline
+	div.dateTimeline
 
-        each date in dates
+		each date in dates
 
-            div.dateContainer
+			div.dateContainer
 
-                div.left
-                    +dateBox(date)
+				div.left
+					+dateBox(date)
 
-                div.right
-                    if date.date.getDay() == 0
-                        +meal("Dinner",    date.meals["dinner"])
-                        +meal("Brunch",    date.meals["brunch"])
-                    else
-                        +meal("Dinner",   	date.meals["dinner"])
-                        +meal("Lunch",     date.meals["lunch"])
-                        +meal("Breakfast", date.meals["breakfast"])
+				div.right
+					if date.date.getDay() == 0
+						+meal("Dinner",    date.meals["dinner"])
+						+meal("Brunch",    date.meals["brunch"])
+					else
+						+meal("Dinner",   	date.meals["dinner"])
+						+meal("Lunch",     date.meals["lunch"])
+						+meal("Breakfast", date.meals["breakfast"])
 
 
 mixin meal(name, reviews)
 
-    div.mealContainer
+	div.mealContainer
 
-        h1.mealTitle= name.toUpperCase()
+		h1.mealTitle= name.toUpperCase()
 
-        if reviews.length > 0
-            each review in reviews
-                +reviewContainer(review)
-        else
-            h2.mealSubtitle No reviews available
+		if reviews.length > 0
+			each review in reviews
+				+reviewContainer(review)
+		else
+			h2.mealSubtitle No reviews available
 
 mixin reviewContainer(review)
 
-    div.reviewContainer
+	div.reviewContainer
 
-        div.left
+		div.left
 
-            div.starContainer
+			div.starContainer
 
-                if review.rating === 1
-                    img(src="images/red.png")
-                    h4.worst Worst
-                else if review.rating === 2
-                    img(src="images/red-light.png")
-                    h4.bad Bad
-                else if review.rating === 3
-                    img(src="images/grey.png")
-                    h4.okay Okay
-                else if review.rating === 4
-                    img(src="images/gold-light.png")
-                    h4.good Good
-                else if review.rating === 5
-                    img(src="images/gold.png")
-                    h4.best Best
+				if review.rating === 1
+					img(src="images/red.png")
+					h4.worst Worst
+				else if review.rating === 2
+					img(src="images/red-light.png")
+					h4.bad Bad
+				else if review.rating === 3
+					img(src="images/grey.png")
+					h4.okay Okay
+				else if review.rating === 4
+					img(src="images/gold-light.png")
+					h4.good Good
+				else if review.rating === 5
+					img(src="images/gold.png")
+					h4.best Best
 
-        div.right
-            div.contentContainer
-                div.content
-                    span.content= review.body
-                    span.time= "Posted at " + review.date.getHours() + ":" + review.date.getMinutes()
+		div.right
+			div.contentContainer
+				div.content
+					span.content= review.body
+					span.time= "Posted at " + review.date.getHours() + ":" + review.date.getMinutes()
 
 mixin dateBox(date)
 
-    - var monthNames = ["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December" ];
+	- var monthNames = ["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December" ];
 
-    - var dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+	- var dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
-    div.dateBox
+	div.dateBox
 
-        div.upper-date
+		div.upper-date
 
-            h2.date
-                span.month= date.date.getUTCMonth() + 1
-                span /
-                span.day= date.date.getDate()
-                span /
-                span.year= date.date.getFullYear().toString().substr(2, 2)
+			h2.date
+				span.month= date.date.getUTCMonth() + 1
+				span /
+				span.day= date.date.getDate()
+				span /
+				span.year= date.date.getFullYear().toString().substr(2, 2)
 
-            h3.dateSub
-                span= monthNames[date.date.getMonth()].toUpperCase()
-                span  -
-                span= dayNames[date.date.getDay()].toUpperCase()
+			h3.dateSub
+				span= monthNames[date.date.getMonth()].toUpperCase()
+				span  - 
+				span= dayNames[date.date.getDay()].toUpperCase()
 
-        div.lower-date
-           +mealRating(date)
+		div.lower-date
+			+mealRating(date)
 
 mixin mealRating(date)
 
-    div.mealRating
+	div.mealRating
 
-            if date.date.getDay() === 0
+			if date.date.getDay() === 0
 
-                div.mealRatingInner
-                    h3 Dinner
-                    +stars(date.meals["dinner"])
+				div.mealRatingInner
+					h3
+						span Dinner 
+						span.stat (#{date.statistics.avg_dinner} / 5)
+					+stars(date.meals["dinner"])
 
-                div.mealRatingInner
-                    h3 Brunch
-                    +stars(date.meals["brunch"])
+				div.mealRatingInner
+					h3
+						span Brunch 
+						span.stat (#{date.statistics.avg_brunch} / 5)
+					+stars(date.meals["brunch"])
 
-            else
+			else
 
-                div.mealRatingInner
-                    h3 Dinner
-                    +stars(date.meals["dinner"])
+				div.mealRatingInner
+					h3
+						span Dinner 
+						span.stat (#{date.statistics.avg_dinner} / 5)
+					+stars(date.meals["dinner"])
 
-                div.mealRatingInner
-                    h3 Lunch
-                    +stars(date.meals["lunch"])
+				div.mealRatingInner
+					h3
+						span Lunch 
+						span.stat (#{date.statistics.avg_lunch} / 5)
+					+stars(date.meals["lunch"])
 
-                div.mealRatingInner
-                    h3 Breakfast
-                    +stars(date.meals["breakfast"])
+				div.mealRatingInner
+					h3
+						span Breakfast 
+						span.stat (#{date.statistics.avg_breakfast} / 5)
+					+stars(date.meals["breakfast"])
 
 mixin stars(meal)
 
-    div.starBody
-        if meal.length > 0
-            - var average = 0
+	div.starBody
+		if meal.length > 0
+			- var average = 0
 
-            each review in meal
-                - average += parseInt(review.rating)
+			each review in meal
+				- average += parseInt(review.rating)
 
-            - average = average / meal.length
-            - var leftOver = 5 - Math.round(average)
+			- average = average / meal.length
+			- var leftOver = 5 - Math.round(average)
 
-            while Math.round(average) > 0
-                - average--
-                img(src="images/gold.png")
+			while Math.round(average) > 0
+				- average--
+				img(src="images/gold.png")
 
-            while leftOver > 0
-                - leftOver--
-                img(src="images/grey.png")
+			while leftOver > 0
+				- leftOver--
+				img(src="images/grey.png")
 
-        else
-            h4 No Data Currently
+		else
+			h4 No Data Currently
 
 mixin generateMealSubmit()
-    div.mealSubmit
-        if user
-            +mealSubmit()
-        else
-            div.explainer
-                h2 Login to Submit a Review
-                p Submit completely anonymous reviews of the cafeteria food. This helps the food become better!
-                a(href="/login?redirect=/food") Login Anonymously
+	div.mealSubmit
+		if user
+			+mealSubmit()
+		else
+			div.explainer
+				h2 Login to Submit a Review
+				p Submit completely anonymous reviews of the cafeteria food. This helps the food become better!
+				a(href="/login?redirect=/food") Login Anonymously
 
 
 mixin mealSubmit()
-    div.choiceBox.ratingBox
-         +mealSubmitButton(1)
-         +mealSubmitButton(2)
-         +mealSubmitButton(3)
-         +mealSubmitButton(4)
-         +mealSubmitButton(5)
+	div.choiceBox.ratingBox
+		+mealSubmitButton(1)
+		+mealSubmitButton(2)
+		+mealSubmitButton(3)
+		+mealSubmitButton(4)
+		+mealSubmitButton(5)
 
-    div.choiceBox.formBox
-        form(action="/food/submit" method="post")
-            input(name="rating" value="3").rating
-            textarea(name="text" placeholder="Select a rating and type your review")
-            - var now = new Date()
+	div.choiceBox.formBox
+		form(action="/food/submit" method="post")
+			input(name="rating" value="3").rating
+			textarea(name="text" placeholder="Select a rating and type your review")
+			- var now = new Date()
 
-            div.bottomContainer
+			div.bottomContainer
 
-                h4 Okay
+				h4 Okay
 
-                if now.getDate() == 0
-                    if now.getHours() < 15
-                        select(name="select")
-                            option Brunch
-                            option Dinner
-                    else
-                        select(name="select")
-                            option Dinner
-                            option Brunch
-                else
-                    if now.getHours() < 10
-                        select(name="select")
-                            option Breakfast
-                            option Lunch
-                            option Dinner
-                    else if now.getHours() < 15
-                        select(name="select")
-                            option Lunch
-                            option Dinner
-                            option Breakfast
-                    else
-                        select(name="select")
-                            option Dinner
-                            option Lunch
-                            option Breakfast
+				if now.getDate() == 0
+					if now.getHours() < 15
+						select(name="select")
+							option Brunch
+							option Dinner
+					else
+						select(name="select")
+							option Dinner
+							option Brunch
+				else
+					if now.getHours() < 10
+						select(name="select")
+							option Breakfast
+							option Lunch
+							option Dinner
+					else if now.getHours() < 15
+						select(name="select")
+							option Lunch
+							option Dinner
+							option Breakfast
+					else
+						select(name="select")
+							option Dinner
+							option Lunch
+							option Breakfast
 
-                input(type="submit" name="submit" value="Submit")
+				input(type="submit" name="submit" value="Submit")
 
 mixin mealSubmitButton(type)
 
-    div.star-button
+	div.star-button
 
-        if type === 1
-            div.starContainer.worst
-                script.
-                    $(".starContainer.worst").on("click", function () {
+		if type === 1
+			div.starContainer.worst
+				script.
+					$(".starContainer.worst").on("click", function () {
 
-                        $(".bottomContainer h4").css({
-                            "color" : "#d36661"
-                        })
+						$(".bottomContainer h4").css({
+							"color" : "#d36661"
+						})
 
-                        $(".bottomContainer h4").html("WORST")
-                        $("form .rating").attr("value", "1")
+						$(".bottomContainer h4").html("WORST")
+						$("form .rating").attr("value", "1")
 
-                    });
-                img(src="images/red.png")
-                h4.worst Worst
+					});
+				img(src="images/red.png")
+				h4.worst Worst
 
-        else if type === 2
+		else if type === 2
 
-            div.starContainer.bad
+			div.starContainer.bad
 
-                script.
-                    $(".starContainer.bad").on("click", function () {
+				script.
+					$(".starContainer.bad").on("click", function () {
 
-                        $(".bottomContainer h4").css({
-                            "color": "#bf8b89"
-                        })
+						$(".bottomContainer h4").css({
+							"color": "#bf8b89"
+						})
 
-                        $(".bottomContainer h4").html("BAD")
-                        $("form .rating").attr("value", "2")
+						$(".bottomContainer h4").html("BAD")
+						$("form .rating").attr("value", "2")
 
-                    })
+					})
 
-                img(src="images/red-light.png")
-                h4.bad Bad
+				img(src="images/red-light.png")
+				h4.bad Bad
 
-        else if type === 3
+		else if type === 3
 
-            div.starContainer.okay
+			div.starContainer.okay
 
-                script.
-                    $(".starContainer.okay").on("click", function () {
+				script.
+					$(".starContainer.okay").on("click", function () {
 
-                        $(".bottomContainer h4").css({
-                            "color": "#929292"
-                        })
+						$(".bottomContainer h4").css({
+							"color": "#929292"
+						})
 
-                        $(".bottomContainer h4").html("OKAY")
-                        $("form .rating").attr("value", "3")
+						$(".bottomContainer h4").html("OKAY")
+						$("form .rating").attr("value", "3")
 
-                    })
+					})
 
-                img(src="images/grey.png")
-                h4.okay Okay
+				img(src="images/grey.png")
+				h4.okay Okay
 
-        else if type === 4
+		else if type === 4
 
-            div.starContainer.good
+			div.starContainer.good
 
-                script.
-                    $(".starContainer.good").on("click", function () {
+				script.
+					$(".starContainer.good").on("click", function () {
 
-                        $(".bottomContainer h4").css({
-                            "color": "#e0b264"
-                        })
+						$(".bottomContainer h4").css({
+							"color": "#e0b264"
+						})
 
-                        $(".bottomContainer h4").html("GOOD")
-                        $("form .rating").attr("value", "4")
+						$(".bottomContainer h4").html("GOOD")
+						$("form .rating").attr("value", "4")
 
-                    })
+					})
 
-                img(src="images/gold-light.png")
-                h4.good Good
+				img(src="images/gold-light.png")
+				h4.good Good
 
-        else if type === 5
+		else if type === 5
 
-            div.starContainer.best
+			div.starContainer.best
 
-                script.
-                    $(".starContainer.best").on("click", function () {
-                        $(".bottomContainer h4").css({
-                            "color": "#fec163"
-                        })
+				script.
+					$(".starContainer.best").on("click", function () {
+						$(".bottomContainer h4").css({
+							"color": "#fec163"
+						})
 
-                        $(".bottomContainer h4").html("BEST")
-                        $("form .rating").attr("value", "5")
-                    })
+						$(".bottomContainer h4").html("BEST")
+						$("form .rating").attr("value", "5")
+					})
 
-                img(src="images/gold.png")
-                h4.best Best
+				img(src="images/gold.png")
+				h4.best Best
 
 doctype html
 html(lang="en")
 
-    include header
+	include header
 
-    body
+	body
 
-        include navigation
+		include navigation
 
-        div.bod
+		div.bod
 
-            div.bar.t-header.t-mealHeader
+			div.bar.t-header.t-mealHeader
 
-                div.mealHeader
+				div.mealHeader
 
-                    div.mealTitle
-                        h1.primary Meal Review
-                        h2.secondary Anonymous Food Rating
-                        h3.tertiary Reviews are submitted anonymously by students
+					div.mealTitle
+						h1.primary Meal Review
+						h2.secondary Anonymous Food Rating
+						h3.tertiary Reviews are submitted anonymously by students
 
-                    +generateMealSubmit()
+					+generateMealSubmit()
 
-            div.basicTextContainer
-                +mealTimeline(dates)
+			div.basicTextContainer
+				+mealTimeline(dates)
 
-    include footer
+	include footer
