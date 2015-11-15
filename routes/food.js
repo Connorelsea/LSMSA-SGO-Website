@@ -44,6 +44,37 @@ module.exports.postReview = function postReview(review) {
 
 }
 
+module.exports.deleteByID = function deleteByID(id) {
+
+	return Promise.fromCallback(function(callback) {
+		connection.query("DELETE FROM food WHERE id = ?", id,
+		(err, rows) => {
+			if (err) callback(err);
+			else callback(null, rows);
+		})
+	});
+	
+}
+
+module.exports.getAllData = function getAllData() {
+
+	var query = `
+			SELECT FR.id, FR.rating, FR.body, FR.googleID, FR.date, FR.meal,
+			users.name, users.googleID
+			FROM food AS FR
+			LEFT JOIN users ON FR.googleID = users.googleID
+			ORDER BY FR.date DESC
+		`
+
+	return Promise.fromCallback(function(callback) {
+		connection.query(query, (err, rows) => {
+			if (err) callback(err);
+			else callback(null, rows);
+		})
+	});
+	
+}
+
 module.exports.getReviewsByDays = function getReviewsByDays(days) {
 
 	return new Promise((resolve, reject) => {
@@ -76,6 +107,8 @@ module.exports.getReviewsByDays = function getReviewsByDays(days) {
 	})
 
 	.then(dateObjects => {
+	
+		// TODO: Filter MySQL by date range
 
 		var query = `
 			SELECT FR.id, FR.rating, FR.body, FR.googleID, FR.date, FR.meal
@@ -177,6 +210,7 @@ module.exports.createRoutes = function createRoutes(app, passport) {
 
 		.then(dates => res.render("food.jade", {
 			mainNavigation : data.mainNavigation,
+			mobileNav      : data.mobileNavigation,
 			title           : "Meal Review",
 			user            : req.user,
 			dates           : dates
@@ -185,6 +219,34 @@ module.exports.createRoutes = function createRoutes(app, passport) {
 		.catch(err => console.log(err));
 
 	});
+	
+	app.get("/food/admin", (req, res) => {
+	
+		if (req.user.isAdmin) {
+
+			module.exports.getAllData()
+
+			.then(dates => res.render("food-admin.jade", {
+				mainNavigation : data.mainNavigation,
+				mobileNav      : data.mobileNavigation,
+				title           : "Meal Admin",
+				user            : req.user,
+				data          	 : dates
+			}))
+				
+			.catch(err => console.log(err))
+
+		} else res.redirect("/")
+	
+	})
+	
+	app.get("/food/admin/delete", (req, res) => {
+	
+		module.exports.deleteByID(req.query.id)
+		.then(data => res.redirect("/food/admin"))
+		.catch(err => console.log(err))
+		
+	})
 
 	app.post("/food/submit", (req, res) => {
 

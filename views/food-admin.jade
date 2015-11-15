@@ -1,0 +1,21 @@
+extends template
+
+block t-title-h1
+	h1 Admin Food
+
+block t-title-h2
+	h2 Food Review Admin Panel
+
+block content
+
+	div.adminFoodParent
+	
+		each item in data
+			div.adminReview
+			
+				div.top
+					h2 Review by #{item.name} on #{item.date.toDateString()}
+					a(href="/food/admin/delete?id=" + item.id) Delete Review
+					
+				div.bottoms
+					p #{item.body}

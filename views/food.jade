@@ -176,7 +176,7 @@ mixin mealSubmit()
 
 				h4 Okay
 
-				if now.getDate() == 0
+				if now.getDay() == 0
 					if now.getHours() < 15
 						select(name="select")
 							option Brunch

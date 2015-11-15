@@ -52,7 +52,9 @@ mixin createMainNav(list, user)
 									a(href="/logout") Logout
 								if user.isAdmin
 									li
-										a(href="/admin") Admin Panel
+										a(href="/admin") Issue Admin Panel
+									li
+										a(href="/food/admin") Meal Admin Panel
 								else
 									li
 										p= user.isAdmin
