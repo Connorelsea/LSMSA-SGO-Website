@@ -5,15 +5,34 @@ mixin list(list)
 				a(href= val.link)= val.name
 				
 mixin createMobileNav(list, user)
+
 	div.mobileNav
-		ul
-			each item in mobileNav
-				li
-					div.mobileContent
-						if item.isSmall
-							p.smaller= item.name
-						else
-							p.bigger= item.name
+	
+		div.mobileRow
+			div.mobileBlock.issueBlock
+				a(href="/issues").mobileLink Issue Board
+				a(href="/issues/submit").mobileLink Submit Issue
+		
+		div.mobileRow
+			div.mobileBlock.block.foodBlock
+				a(href="/food").mobileLink Meal Review
+				
+			div.mobileBlock.block.loginBlock
+				a(href="/login").mobileLink Login
+				
+		div.mobileRow
+			div.mobileBlock.block.aboutBlock
+				a(href="/about").mobileLink About
+
+			div.mobileBlock.block.membersBlock
+				a(href="/members").mobileLink Members
+				
+		div.mobileRow
+			div.mobileBlock.block.constitutionBlock
+				a(href="/constitution").mobileLink Constitution
+
+			div.mobileBlock.block.newsBlock
+				a(href="/news").mobileLink News
 
 // Main Navigation
 // This creates the main navigation list and children.

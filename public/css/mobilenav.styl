@@ -1,36 +1,64 @@
 .mobileNav
+	margin 0 auto
 	display none
+	width 90%
+	min-width 320px
+	max-width 500px
 	
-	ul
+	.mobileRow
+		margin 10px auto
+		width 90%
+		
+		display flex
+		justify-content space-between
+	
+	.mobileLink
+		padding 10px
+		background-color alpha(black, 0.65)
+		font-family FuturaCond
+		font-size 1.3em
+		color white
+		text-decoration none
+		text-align center
+		
+	.mobileBlock
+		border-radius 6px
 		display flex
 		justify-content space-around
-		flex-wrap wrap
+		align-items center
 	
-	li
-		padding 10px
-		margin 6px
-		display inline-block
+	.issueBlock
+		width 100%
+		margin 0px auto
+		height 60px
+		//background-color lighten(lightslategrey, 45%)
+		background-image url("/images/BG_lsmsa.png")
 		
-		width 80px
-		height 80px
-		
-		border-radius 6px
-		background-color lighten(lightslategrey, 40%)
-		
-		.mobileContent
-			width 100%
-			height 100%
+		.mobileLink
+			width 35%
 			
-			display flex
-			justify-content center
-			align-items center
+	.block
+		background-color lighten(lightslategrey, 45%)
+		width 48%
+		height 60px
+
+		.mobileLink
+			width 65%
 		
-			p
-				font-weight bold
-				text-transform uppercase
-				
-			.bigger
-				font-size 1.1em
-				
-			.smaller
-				font-size 0.4em
+	.foodBlock
+		background-image url("/images/BG_food.png")
+		
+	.loginBlock
+		background-image url("/images/BG_snow.png")
+		
+	.aboutBlock
+		background-image url("/images/BG_fountain.png")
+		
+	.membersBlock
+		background-image url("/images/BG_nsu.png")
+		
+	.constitutionBlock
+		background-image url("/images/BG_columns.png")
+		
+	.newsBlock
+		background-image url("/images/BG_ncppt.png")
