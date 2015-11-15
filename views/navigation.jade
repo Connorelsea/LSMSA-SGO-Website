@@ -1,5 +1,19 @@
 div.bar.barMain
 	div.innerBar
+	
+		script.
+			$(function () {
+				$('.menuImg').click(function () {
+					if ($('.realNav').css("display") == "none") {
+						$(".realNav > ul").css("display", "none");
+						$(".mobileNav").css("display", "block");
+						$('.realNav').slideDown("slow")
+					}
+					else {
+						$('.realNav').slideUp("slow");
+					}
+				});
+			});
 
 		header.navigationHeader
 
@@ -12,14 +26,7 @@ div.bar.barMain
 				div.navImage
 					img(src= "../images/menu.png").menuImg
 
-					script.
-						$(function() {
-							$('.menuImg').click(function() {
-								if ($('.realNav').css("display") == "none") $('.realNav').slideDown("slow")
-								else $('.realNav').slideUp("slow");
-							});
-						});
-
 			div.nav
 				nav.realNav
 					+createMainNav(list, user)
+					+createMobileNav(list, user)

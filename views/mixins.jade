@@ -3,40 +3,51 @@ mixin list(list)
 		each val in list
 			li(class!=attributes.class)
 				a(href= val.link)= val.name
+				
+mixin createMobileNav(list, user)
+	div.mobileNav
+		ul
+			each item in mobileNav
+				li
+					div.mobileContent
+						if item.isSmall
+							p.smaller= item.name
+						else
+							p.bigger= item.name
 
 // Main Navigation
 // This creates the main navigation list and children.
 mixin createMainNav(list, user)
-	ul
-		each val in mainNavigation
-			li
-
-				if val.name == 'Login'
-					if user
-						a(href="/")= user.first
-						ul.login
-							li= user.name
-							li
-								p.desc You are logged in under a verified LSMSA email account. Your account is currently under the email #{user.email}.
-							li
-								a(href="/logout") Logout
-							if user.isAdmin
+		ul
+			each val in mainNavigation
+				li
+	
+					if val.name == 'Login'
+						if user
+							a(href="/")= user.first
+							ul.login
+								li= user.name
 								li
-									a(href="/admin") Admin Panel
-							else
+									p.desc You are logged in under a verified LSMSA email account. Your account is currently under the email #{user.email}.
 								li
-									p= user.isAdmin
+									a(href="/logout") Logout
+								if user.isAdmin
+									li
+										a(href="/admin") Admin Panel
+								else
+									li
+										p= user.isAdmin
+						else
+							a(href="/login-welcome") Login
+	
 					else
-						a(href="/login-welcome") Login
-
-				else
-					a(href= val.link)= val.name
-
-					if val.sub.length > 0
-						ul.sub
-							each subval in val.sub
-								li
-									a(href= subval.link)= subval.name
+						a(href= val.link)= val.name
+	
+						if val.sub.length > 0
+							ul.sub
+								each subval in val.sub
+									li
+										a(href= subval.link)= subval.name
 
 // Issue Box
 // Creates a singular issue based on the argument

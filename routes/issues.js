@@ -628,6 +628,7 @@ module.exports = function(app, passport, connection) {
 
 			res.render("issue-page.jade", {
 				mainNavigation : data.mainNavigation,
+				mobileNav       : data.mobileNavigation,
 				user           : req.user,
 				issue          : issues[0],
 				alert          : (req.query.alertTitle && req.query.alertBody) ? true : false,
@@ -878,6 +879,7 @@ module.exports = function(app, passport, connection) {
 						"admin.jade",
 						{
 							mainNavigation : data.mainNavigation,
+							mobileNav       : data.mobileNavigation,
 							user           : req.user,
 							rows           : issues,
 							comments       : comments,
@@ -936,6 +938,7 @@ module.exports = function(app, passport, connection) {
 						"issues.jade",
 						{
 							mainNavigation : data.mainNavigation,
+							mobileNav       : data.mobileNavigation,
 							user           : req.user,
 							rows           : issues,
 							filter         : "top",
@@ -986,6 +989,7 @@ module.exports = function(app, passport, connection) {
 						"issues.jade",
 						{
 							mainNavigation : data.mainNavigation,
+							mobileNav       : data.mobileNavigation,
 							user           : req.user,
 							rows           : issues,
 							filter         : "recent",
@@ -1065,6 +1069,7 @@ module.exports = function(app, passport, connection) {
 
 		res.render("news.jade", {
 			mainNavigation : data.mainNavigation,
+			mobileNav       : data.mobileNavigation,
 			user           : req.user,
 			title          : "LSMSA SGO - News"
 		});

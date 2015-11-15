@@ -1,0 +1,30 @@
+extends template
+
+block t-title-h1
+	h1.tech-title-h1 Technology
+
+block t-title-h2
+	h2.tech-title-h2 How the site works
+
+block content
+
+	div.techContent
+
+		div.techContainer.techText
+		
+			h1.techHeader About
+			
+			p The LSMSA SGO Website was built from scratch for LSMSA in early 2015 by Connor Elsea. The site is primarily built using Node.JS and a number of other open source technologies.
+			
+	
+		div.techContainer.techList
+
+			h1.techHeader Technologies
+		
+			div.innerList
+			
+				ul
+					each tech in techs
+						li
+							h2.technology= tech.tech
+							p.description= tech.desc
