@@ -9,6 +9,7 @@ module.exports = function () {
 
 		if (email === "elilangley@student.lsmsa.edu"  ||
 			email === "connorelsea@student.lsmsa.edu" ||
+			email === "jallen@lsmsa.edu" ||
 			email === "sgo@lsmsa.edu") {
 			return true
 		}
