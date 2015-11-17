@@ -1,21 +1,22 @@
 var express      = require("express"),
-    passport     = require("passport"),
-    flash        = require("connect-flash"),
-    morgan       = require("morgan"),
-    cookieParser = require("cookie-parser"),
-    bodyParser   = require("body-parser"),
-    session      = require("express-session"),
-    stylus       = require("stylus"),
-    nib          = require("nib"),
-    mysql        = require("mysql"),
-    database     = require("./config/database"),
-    favicon      = require("serve-favicon"),
-    nodemailer   = require("nodemailer"),
-    auth         = require("./config/auth"),
-    EmailTemp    = require("email-templates").EmailTemplate,
-    path         = require("path"),
-    emails       = require("./email-code/emails"),
-    isAdmin      = require("./utility/adminFunctions")().isAdmin
+	passport     = require("passport"),
+	flash        = require("connect-flash"),
+	morgan       = require("morgan"),
+	cookieParser = require("cookie-parser"),
+	bodyParser   = require("body-parser"),
+	session      = require("express-session"),
+	stylus       = require("stylus"),
+	nib          = require("nib"),
+	mysql        = require("mysql"),
+	database     = require("./config/database"),
+	favicon      = require("serve-favicon"),
+	nodemailer   = require("nodemailer"),
+	auth         = require("./config/auth"),
+	EmailTemp    = require("email-templates").EmailTemplate,
+	path         = require("path"),
+	emails       = require("./email-code/emails"),
+	isAdmin      = require("./utility/adminFunctions")().isAdmin,
+	SessionStore = require("express-mysql-session")
 
 // Setup MySQL databases
 
@@ -28,9 +29,9 @@ var connection  = require("./utility/connection").getConnection();
 var app = express()
 
 function compile(str, path) {
-  return stylus(str)
-    .set('filename', path)
-    .use(nib())
+	return stylus(str)
+		.set('filename', path)
+		.use(nib())
 }
 
 app.use(morgan("dev"))
@@ -42,9 +43,9 @@ app.set('views', __dirname + '/views')
 app.set('view engine', 'jade')
 
 app.use(stylus.middleware(
-  { src: __dirname + '/public'
-  , compile: compile
-  }
+	{ src: __dirname + '/public'
+		, compile: compile
+	}
 ))
 
 app.use(express.static('public'));
@@ -55,9 +56,12 @@ require("./config/passportSQL.js")(passport, connection)
 
 var info = require("./config/auth")
 
+var sessionStore = new SessionStore({}/* session store options */, connection);
+
 app.use(session({
 	secret : info.cookie.secret,
-	maxAge : 360 * 5
+	store  : sessionStore
+	//maxAge : 360 * 5
 }))
 
 app.use(passport.initialize())
@@ -67,12 +71,12 @@ app.use(flash())
 // Check if user is admin on each request
 app.use(function (req, res, next) {
 
-    if (req.user) {
-        if (isAdmin(req)) req.user.isAdmin = true;
-        else req.user.isAdmin = false;
-    }
+	if (req.user) {
+		if (isAdmin(req)) req.user.isAdmin = true;
+		else req.user.isAdmin = false;
+	}
 
-    next();
+	next();
 })
 
 
@@ -90,27 +94,27 @@ require("./routes/food.js").createRoutes(app, passport)
 
 app.use(function(err, req, res, next) {
 
-    if (err.code === 404 || err.code == 404) {
+	if (err.code === 404 || err.code == 404) {
 
-        res.render("alert-page.jade", {
-            title   : "404: Page Not Found",
-            body    : "Page not found on the LSMSA SGO website. Try one of these.",
-            buttons : [
-                { title : "Home", link : "/" },
-                { title : "Issue Board", link : "/issues" }
-            ]
-        });
+		res.render("alert-page.jade", {
+			title   : "404: Page Not Found",
+			body    : "Page not found on the LSMSA SGO website. Try one of these.",
+			buttons : [
+				{ title : "Home", link : "/" },
+				{ title : "Issue Board", link : "/issues" }
+			]
+		});
 
-    }
+	}
 
-    if (err.code === 500) {
-        res.redirect("/failure");
-    }
+	if (err.code === 500) {
+		res.redirect("/failure");
+	}
 
-    if (err) {
-        console.log("\n\n\nFATAL GLOBAL ERROR:\n\n" + err + "\n\n\n")
-        res.redirect("/");
-    }
+	if (err) {
+		console.log("\n\n\nFATAL GLOBAL ERROR:\n\n" + err + "\n\n\n")
+		res.redirect("/");
+	}
 
 });
 
@@ -120,5 +124,5 @@ var ip   = process.env.OPENSHIFT_NODEJS_IP   || "localhost"
 var port = process.env.OPENSHIFT_NODEJS_PORT || 3000
 
 app.listen(port, ip, function() {
-    console.log("Application: Now running on " + ip + ":" + port)
+	console.log("Application: Now running on " + ip + ":" + port)
 });

@@ -24,6 +24,7 @@
 		"email-templates" : "*",
 		"nodemailer" : "*",
 		"bluebird" : "*",
-		"moment" : "*"
+		"moment" : "*",
+		"express-mysql-session" : "*"
 	}
 }

@@ -71,6 +71,7 @@
 			font-weight bold
 			font-size 0.8em
 			opacity 0.5
+			max-width 450px
 
 
 	.mealSubmit
@@ -307,8 +308,8 @@
 	border-radius 6px
 	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)
 
+	display -webkit-flex
 	display flex
-	flex-direction row
 
 	> *
 		padding 20px 20px
@@ -321,7 +322,8 @@
 	> .right
 		font-family Futura
 
-		display flex
+		display -webkit-flex
+		display felx
 		align-items center
 
 		.contentContainer
@@ -413,6 +415,7 @@
 @media screen and (max-width: 1000px)
 
 	.ratingBox
+		display -webkit-flex
 		display flex
 		justify-content space-around
 
@@ -474,6 +477,7 @@
 				input, select
 					margin-left 0px !important
 
+				display -webkit-flex
 				display flex
 				flex-direction column
 
@@ -496,9 +500,6 @@
 
 			> .right
 				padding-left 0px
-
-				width 100% !important
-				max-width 100% !important
 
 			> .left
 
