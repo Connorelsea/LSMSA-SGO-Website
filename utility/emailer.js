@@ -33,7 +33,7 @@ exports.sendEmail = function(containers, users, connection) {
 		// of the email can change based on user.
 		users.forEach(function(user_object) {
 
-			sendRawEmail("email-welcome", {
+			sendRawEmail("email-generic", {
 				containers : containers,
 				user       : user_object.user,
 				issues     : issues

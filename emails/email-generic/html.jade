@@ -1,5 +1,30 @@
 div.emailContainer
-	div.header
-		h1 LSMSA SGO Website
-		h5 Official Automated Email System
-		h6= input
+
+	div.sectionContainer
+			
+		div.section.section--material
+			h1.section__title Hello, #{user.name}
+			h3.section__note Note: This is an automated email sent by the LSMSA SGO Website.
+		
+		each container in containers
+			div.section.section--material
+				h1.section__subtitle #{container.title}
+				p.section__message #{container.body}
+				if (container.link === "issue")
+					a(href="http://lsmsasgo.com/issues/" + issue_id).section__call-action View New Issue
+
+		div.section.section--material
+			h1.section__subtitle Newest Issues
+		
+			each issue in issues
+				div.issue
+				
+					div.issue__info
+						h2.issue__title #{issue.title}
+						h5.issue__date #{issue.date.toLocaleDateString()}
+						p.issue__body #{issue.body} ...
+						
+					div.issue__actions
+						a(href="http://lsmsasgo.com/issues/" + issue.id + "?action=like").issue__link Upvote
+						a(href="http://lsmsasgo.com/issues/" + issue.id).issue__link View
+						a(href="http://lsmsasgo.com/issues/" + issue.id).issue__link Discuss

@@ -43,8 +43,6 @@ module.exports = function(app, passport, connection) {
 	 */
 	var doLike = function(req, elementID, googleID, callback) {
 
-		console.log("doing like")
-
 		var like = {
 			elementID : req.params.issue_id,
 			googleID  : req.user.googleID
@@ -270,9 +268,7 @@ module.exports = function(app, passport, connection) {
 		if (req.query.action == "approve") {
 
 			if (isAdmin(req)) {
-
-				res.redirect("/admin")
-
+			
 				(query = function() {
 					return new Promise(function(resolve, reject) {
 
@@ -289,7 +285,7 @@ module.exports = function(app, passport, connection) {
 				.then(function(return_rows) {
 					return new Promise(function(resolve, reject) {
 
-						var query = "SELECT E.id, users.name, users.first, users.last, users.email\n" +
+						var query = "SELECT E.id, E.title, users.name, users.first, users.last, users.email\n" +
 									"FROM elements E\n" +
 									"LEFT JOIN users ON E.googleID = users.googleID\n" +
 									"WHERE E.id = " + req.params.issue_id
@@ -302,28 +298,72 @@ module.exports = function(app, passport, connection) {
 								first  : rows[0].first,
 								last   : rows[0].last,
 								email  : rows[0].email,
-								id     : rows[0].id
+								id     : rows[0].id,
+								title  : rows[0].title
 							})
 
 						})
 
 					})
 				})
+				
+				.then(user_object => {
+				
+					var query = `SELECT users.name, users.first,
+								users.last, users.email
+								FROM users`
+								
+					return Promise.fromCallback(function(callback) {
+						connection.query(query, (err, rows) => {
+							if (err) callback(err);
+							else callback(null, {
+								user_object : user_object,
+								rows : rows
+							});
+						})
+					});
+					
+				})
 
-				.then(function(info) {
+				.then(function(object) {
 
 					emailer.sendEmail([{
 						title : "Issue Approved!",
-						body  : "Thanks " + info.name + " for submitting an issue. Your Issue has been approved and can be found at ( http://www.lsmsasgo.com/issues/" + info.id + " )"
+						body  : "Thanks " + object.user_object.name + " for submitting an issue. Your Issue has been officially approved and can now be found at ( http://www.lsmsasgo.com/issues/" + object.user_object.id + " ). To help it gain more traction, share it on a social network.",
+						link  : "issue",
+						issue_id : object.user_object.id
 					}], [{
 						user : {
-							name  : info.name,
-							first : info.first,
-							last  : info.last,
-							email : info.email
+							name  : object.user_object.name,
+							first : object.user_object.first,
+							last  : object.user_object.last,
+							email : object.user_object.email
 						},
-						subject : "LSMSA SGO Website - Issue Approved!"
+						subject : "Issue Approved!"
 					}], connection)
+					
+					// ALL USERS ANNOUNCEMENT
+					
+					object.rows.forEach(user => {
+					
+						//if (user.last === "Elsea")
+						if (true)
+							emailer.sendEmail([{
+								title : "New Issue: \"" + object.user_object.title + "\"",
+								body  : "A new issue, \"" + object.user_object.title + "\", has been posted on the LSMSA SGO website. To view, comment on, or discuss this issue, click this link. ( http://www.lsmsasgo.com/issues/" + object.user_object.id + " ). If you agree, comment to help it get the attention of the administration. If you disagree, comment to explain why.",
+								link  : "issue",
+								issue_id : object.user_object.id
+							}], [{
+								user : {
+									name  : user.name,
+									first : user.first,
+									last  : user.last,
+									email : user.email
+								},
+								subject : "New Issue: \"" + object.user_object.title + "\""
+							}], connection)
+						
+					})
 
 				})
 
@@ -332,6 +372,8 @@ module.exports = function(app, passport, connection) {
 				})
 
 			}
+
+			res.redirect("/admin")
 
 		}
 
@@ -474,8 +516,6 @@ module.exports = function(app, passport, connection) {
 				connection.query(QueryString,
 
 					function(err, rows) {
-
-						console.log("UPVOTE")
 
 						if (err) {
 							console.log(err)
@@ -674,8 +714,6 @@ module.exports = function(app, passport, connection) {
 
 			.then(function(result) {
 				return new Promise(function(resolve, reject) {
-
-					console.log(req.query.issue_id)
 
 					var query = "SELECT users.googleID, users.email, users.name, users.first, users.last, elements.title, elements.id AS elementID\n" +
 								"FROM elements\n" +
