@@ -346,22 +346,26 @@ module.exports = function(app, passport, connection) {
 					
 					object.rows.forEach(user => {
 					
-						//if (user.last === "Elsea")
-						if (true)
-							emailer.sendEmail([{
-								title : "New Issue: \"" + object.user_object.title + "\"",
-								body  : "A new issue, \"" + object.user_object.title + "\", has been posted on the LSMSA SGO website. To view, comment on, or discuss this issue, click this link. ( http://www.lsmsasgo.com/issues/" + object.user_object.id + " ). If you agree, comment to help it get the attention of the administration. If you disagree, comment to explain why.",
-								link  : "issue",
-								issue_id : object.user_object.id
-							}], [{
-								user : {
-									name  : user.name,
-									first : user.first,
-									last  : user.last,
-									email : user.email
-								},
-								subject : "New Issue: \"" + object.user_object.title + "\""
-							}], connection)
+						// TODO: Fix email to all students. Make it
+						// send to multiple receipts instead of sending
+						// one by one to each person
+					
+						////if (user.last === "Elsea")
+						//if (true)
+						//	emailer.sendEmail([{
+						//		title : "New Issue: \"" + object.user_object.title + "\"",
+						//		body  : "A new issue, \"" + object.user_object.title + "\", has been posted on the LSMSA SGO website. To view, comment on, or discuss this issue, click this link. ( http://www.lsmsasgo.com/issues/" + object.user_object.id + " ). If you agree, comment to help it get the attention of the administration. If you disagree, comment to explain why.",
+						//		link  : "issue",
+						//		issue_id : object.user_object.id
+						//	}], [{
+						//		user : {
+						//			name  : user.name,
+						//			first : user.first,
+						//			last  : user.last,
+						//			email : user.email
+						//		},
+						//		subject : "New Issue: \"" + object.user_object.title + "\""
+						//	}], connection)
 						
 					})
 
@@ -714,11 +718,17 @@ module.exports = function(app, passport, connection) {
 
 			.then(function(result) {
 				return new Promise(function(resolve, reject) {
-
-					var query = "SELECT users.googleID, users.email, users.name, users.first, users.last, elements.title, elements.id AS elementID\n" +
-								"FROM elements\n" +
-								"JOIN users ON users.googleID = elements.googleID\n" +
-								"WHERE elements.id = " + req.query.issue_id + ";"
+								
+					var query =
+					`
+						SELECT users.googleID, users.email, users.name,
+								users.first, users.last,
+								elements.title, elements.id AS elementID,
+								elements.googleID
+						FROM elements
+						JOIN users ON users.googleID = elements.googleID
+						WHERE elements.id = ${req.query.issue_id};
+					`
 
 					connection.query(query, function(err, rows) {
 						if (err) reject(err)
@@ -742,7 +752,7 @@ module.exports = function(app, passport, connection) {
 
 					emailer.sendEmail([{
 						title : "A Comment on Your Issue",
-						body  : "Hello " + info.name + ". A comment on your issue ( http://www.lsmsasgo.com/issues/" + info.id + " ) has been approved. To respond or see what this anonymous user commented, click on the link."
+						body  : "Hello " + info.name + ". A comment on your issue  has been approved. To respond or see what this anonymous user commented, click on the link. ( http://www.lsmsasgo.com/issues/" + info.id + " )"
 					}], [{
 						user : {
 							name  : info.name,
@@ -750,7 +760,7 @@ module.exports = function(app, passport, connection) {
 							last  : info.last,
 							email : info.email
 						},
-						subject : "LSMSA SGO Website - Comment on Your Issue"
+						subject : "New Comment on Your Issue"
 					}], connection)
 
 					resolve(info)
@@ -762,9 +772,16 @@ module.exports = function(app, passport, connection) {
 				return new Promise(function(resolve, reject) {
 
 					console.log("UPDATE comments SET approved = 1 WHERE elementID = " + req.query.issue_id)
-
+					
+					var query =
+					`
+						UPDATE comments SET approved = 1
+						WHERE elementID = ${req.query.issue_id}
+						AND id = ${req.query.comment_id};
+					`
+					
 					connection.query(
-						"UPDATE comments SET approved = 1 WHERE elementID = " + req.query.issue_id,
+						query,
 						function(err, rows) {
 							if (err) reject(err)
 							else resolve(rows)

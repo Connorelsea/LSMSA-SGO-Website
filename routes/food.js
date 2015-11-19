@@ -18,15 +18,19 @@ module.exports.postReview = function postReview(review) {
 	})()
 
 	.then(review => {
+	
+		// Curse word filter removed
+		
+		return review;
 
-		var hasWord = false;
-
-		curseWords.forEach(word => {
-			if (review.body.toLowerCase().indexOf(word) > -1) hasWord = true;
-		})
-
-		if (hasWord) throw new Error("Curse Word Detected")
-		else return review;
+		//var hasWord = false;
+		//
+		//curseWords.forEach(word => {
+		//	if (review.body.toLowerCase().indexOf(word) > -1) hasWord = true;
+		//})
+		//
+		//if (hasWord) throw new Error("Curse Word Detected")
+		//else return review;
 
 	})
 
@@ -219,6 +223,20 @@ module.exports.createRoutes = function createRoutes(app, passport) {
 		.catch(err => console.log(err));
 
 	});
+	
+	app.get("/food/stats", (req, res) => {
+	
+		module.exports.getReviewsByDays(10)
+		
+		.then(dates => res.render("food-stats.jade", {
+			mainNavigation : data.mainNavigation,
+			mobileNav      : data.mobileNavigation,
+			title           : "Meal Statistics",
+			user            : req.user,
+			dates           : dates
+		}))
+	
+	})
 	
 	app.get("/food/admin", (req, res) => {
 	
